@@ -1,5 +1,6 @@
 package com.danilafe.cave;
 
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -14,11 +15,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class CaveGame extends ApplicationAdapter {
 	
+	/**
+	 * Ashley engine. This handles all the updates with the Entity / Component systems.
+	 */
+	public PooledEngine pooledEngine;
+	
 	@Override
 	public void create () {
 		/*
 		 * Creation code
 		 */
+		pooledEngine = new PooledEngine();
 	}
 
 	@Override
@@ -30,7 +37,8 @@ public class CaveGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		/*
-		 * Update code goes here 
+		 * Update the engine using the delta time 
 		 */
+		pooledEngine.update(Gdx.graphics.getDeltaTime());
 	}
 }
