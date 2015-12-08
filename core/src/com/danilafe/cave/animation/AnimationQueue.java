@@ -1,0 +1,38 @@
+package com.danilafe.cave.animation;
+
+import java.util.LinkedList;
+
+/**
+ * A Queue for animations - more animations can be added to be performed
+ * in order after the previous one completes.
+ * @author vanilla
+ *
+ */
+public class AnimationQueue {
+	
+	/**
+	 * List of all the animations scheduled.
+	 */
+	public LinkedList<Animation> animationQueue = new LinkedList<Animation>();
+	/**
+	 * Milliseconds left before next frame
+	 */
+	public float deltaTime = 0;
+	
+	/**
+	 * Updates the animation queue. This will trigger frame updates in the animations, and, if necessary,
+	 * @param deltaTime
+	 */
+	public void update(float deltaTime){
+		while((this.deltaTime -= deltaTime) < 0) {
+			if(animationQueue.size() <= 0) return;
+			Animation currentAnimation = animationQueue.getFirst();
+			this.deltaTime += currentAnimation.animationParameter.frameDelta;
+			currentAnimation.texIndex++;
+			if(currentAnimation.texIndex == currentAnimation.animationParameter.textures.length * currentAnimation.animationParameter.textures[0].length){
+				if(currentAnimation.animationParameter.loop) currentAnimation.texIndex = 0;
+				else animationQueue.pop();
+			}
+		}
+	}
+}
