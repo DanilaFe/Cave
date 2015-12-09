@@ -16,13 +16,13 @@ public class Modifier {
 	/**
 	 * The type of the modifier
 	 */
-	public ModifierType modType;
+	public ModifierType modType = ModifierType.NORMAL;
 	/**
 	 * The ID of this modifier.
 	 */
 	public int id = 0;
 	
-	enum ModifierType {
+	public enum ModifierType {
 		NORMAL, // A force used to ensure entities don't push into blocks.
 		INPUT // Force created by inputs
 	}
