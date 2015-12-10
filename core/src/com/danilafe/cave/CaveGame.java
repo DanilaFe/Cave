@@ -22,24 +22,22 @@ public class CaveGame extends ApplicationAdapter {
 		/*
 		 * Creation code
 		 */
+		pooledEngine = new PooledEngine(100, 100, 300, 300);
 	}
 
 	@Override
-	public void render () {
-		/*
-		 * Clear the screen
-		 */
-		
+	public void render () {		
 		/*
 		 * Update the engine using the delta time 
 		 */
+		pooledEngine.update(Gdx.graphics.getDeltaTime());
 	}
 	
 	/**
 	 * Shader function.
 	 * This loads the GLSL shaders for the game.
 	 */
-	public ShaderProgram loadShaders(String shaderName){
+	public static ShaderProgram loadShaders(String shaderName){
 		if(shaderName == null || shaderName.equals("") || !Gdx.files.internal("shaders/" + shaderName).exists()) return null;
 		ShaderProgram.pedantic = false;
 		ShaderProgram newProgram = new ShaderProgram(
