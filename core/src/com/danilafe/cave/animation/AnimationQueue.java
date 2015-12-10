@@ -21,6 +21,7 @@ public class AnimationQueue {
 	
 	/**
 	 * Updates the animation queue. This will trigger frame updates in the animations, and, if necessary,
+	 * switch to the next animation.
 	 * @param deltaTime
 	 */
 	public void update(float deltaTime){
