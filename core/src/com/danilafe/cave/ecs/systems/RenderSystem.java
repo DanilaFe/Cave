@@ -3,34 +3,28 @@ package com.danilafe.cave.ecs.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.danilafe.cave.CaveGame;
+import com.danilafe.cave.Constants;
 import com.danilafe.cave.ecs.components.CAnimation;
 
 public class RenderSystem extends IteratingSystem {
-
-	public OrthographicCamera orthoCam;
-	public SpriteBatch mainSpriteBatch;
-	public SpriteBatch mainFrameBufferBatch;
-	public FrameBuffer mainFrameBuffer;
-	public ShaderProgram shaderProgram;
+	
+	SpriteBatch mainBatch;
+	SpriteBatch bufferBatch;
+	FrameBuffer mainBuffer;
+	Texture testTexture;
 	
 	public RenderSystem() {
 		super(Family.all(CAnimation.class).get());
-		mainSpriteBatch = new SpriteBatch();
-		mainFrameBufferBatch = new SpriteBatch();
-		mainFrameBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-		shaderProgram = CaveGame.loadShaders("default");
-		orthoCam = new OrthographicCamera(640, 480);
-		
-		mainSpriteBatch.setShader(shaderProgram);
+		mainBatch = new SpriteBatch();
+		bufferBatch = new SpriteBatch();
+		bufferBatch.setShader(CaveGame.loadShaders("greyscale"));
+		testTexture = new Texture(Gdx.files.internal("badlogic.jpg"));
 	}
 
 	@Override
@@ -40,26 +34,27 @@ public class RenderSystem extends IteratingSystem {
 	
 	@Override
 	public void update(float deltaTime) {
-		/*
-		 * Clear the buffer, to which everything is drawn in the processEntity 
-		 */
-		mainFrameBuffer.begin();
-		mainFrameBufferBatch.begin();
-		mainFrameBufferBatch.setProjectionMatrix(orthoCam.combined);
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
 		super.update(deltaTime);
-		mainFrameBufferBatch.end();
-		mainFrameBuffer.end();
 		
-		/*
-		 * Clear the actual OpenGl context, and draw the buffer onto it.
-		 */
-		mainSpriteBatch.begin();
+		mainBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+		mainBuffer.begin();
+		Gdx.gl.glViewport(0, 0, mainBuffer.getWidth(), mainBuffer.getHeight());
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT | Gdx.gl.GL_DEPTH_BUFFER_BIT);
+		
+		mainBatch.setProjectionMatrix(CaveGame.instance.orthoCam.combined);
+		mainBatch.begin();
+		mainBatch.draw(testTexture, 0, 0);
+		mainBatch.end();
+		
+		mainBuffer.end();
+		
+		bufferBatch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		bufferBatch.begin();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
-		mainSpriteBatch.draw(mainFrameBuffer.getColorBufferTexture(), 0, 0);
-		mainSpriteBatch.end();
+		bufferBatch.draw(mainBuffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, 1, 1);
+		bufferBatch.end();
 	}
 
 }
