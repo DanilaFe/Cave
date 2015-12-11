@@ -2,6 +2,6 @@ package com.danilafe.cave;
 
 public class Constants {
 
-	public static final float CAMERA_WIDTH = 400;
+	public static final float CAMERA_WIDTH = 100;
 	
 }
