@@ -17,14 +17,11 @@ public class RenderSystem extends IteratingSystem {
 	SpriteBatch mainBatch;
 	SpriteBatch bufferBatch;
 	FrameBuffer mainBuffer;
-	Texture testTexture;
 	
 	public RenderSystem() {
 		super(Family.all(CAnimation.class).get());
 		mainBatch = new SpriteBatch();
 		bufferBatch = new SpriteBatch();
-		bufferBatch.setShader(CaveGame.loadShaders("greyscale"));
-		testTexture = new Texture(Gdx.files.internal("badlogic.jpg"));
 	}
 
 	@Override
@@ -34,8 +31,6 @@ public class RenderSystem extends IteratingSystem {
 	
 	@Override
 	public void update(float deltaTime) {
-		super.update(deltaTime);
-		
 		mainBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		mainBuffer.begin();
 		Gdx.gl.glViewport(0, 0, mainBuffer.getWidth(), mainBuffer.getHeight());
@@ -44,9 +39,9 @@ public class RenderSystem extends IteratingSystem {
 		
 		mainBatch.setProjectionMatrix(CaveGame.instance.orthoCam.combined);
 		mainBatch.begin();
-		mainBatch.draw(testTexture, 0, 0);
-		mainBatch.end();
 		
+		mainBatch.end();
+		super.update(deltaTime);
 		mainBuffer.end();
 		
 		bufferBatch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
