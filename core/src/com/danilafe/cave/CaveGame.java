@@ -13,12 +13,16 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.danilafe.cave.animation.Animation;
 import com.danilafe.cave.animation.AnimationParameter;
 import com.danilafe.cave.ecs.components.CAnimation;
+import com.danilafe.cave.ecs.components.CBounds;
 import com.danilafe.cave.ecs.components.CGravity;
+import com.danilafe.cave.ecs.components.CNormalObject;
+import com.danilafe.cave.ecs.components.CNormalObstacle;
 import com.danilafe.cave.ecs.components.CPosition;
 import com.danilafe.cave.ecs.components.CSpeed;
 import com.danilafe.cave.ecs.systems.BoundsSystem;
 import com.danilafe.cave.ecs.systems.DebugRenderSystem;
 import com.danilafe.cave.ecs.systems.GravitySystem;
+import com.danilafe.cave.ecs.systems.NormalSystem;
 import com.danilafe.cave.ecs.systems.PositionSystem;
 import com.danilafe.cave.ecs.systems.RenderSystem;
 
@@ -43,8 +47,8 @@ public class CaveGame extends ApplicationAdapter {
 	public DebugRenderSystem debugRenderSystem;
 	public GravitySystem gravitySystem;
 	public PositionSystem positionSystem;
+	public NormalSystem normalSystem;
 	public OrthographicCamera orthoCam;
-	
 	
 	@Override
 	public void create () {
@@ -58,6 +62,7 @@ public class CaveGame extends ApplicationAdapter {
 		debugRenderSystem = new DebugRenderSystem();
 		gravitySystem = new GravitySystem();
 		positionSystem = new PositionSystem();
+		normalSystem = new NormalSystem();
 		
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 		
@@ -65,7 +70,45 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(boundsSystem);
 		pooledEngine.addSystem(debugRenderSystem);
 		pooledEngine.addSystem(gravitySystem);
+		pooledEngine.addSystem(normalSystem);
 		pooledEngine.addSystem(positionSystem);
+		
+		AnimationParameter placeholderAnimationParameter = new AnimationParameter();
+		placeholderAnimationParameter.textures = TextureRegion.split(new Texture(Gdx.files.internal("badlogic.jpg")), 16, 16);
+		placeholderAnimationParameter.loop = true;
+		placeholderAnimationParameter.frameDelta = 1F / 5;
+		Animation placeholderAnimation = new Animation();
+		placeholderAnimation.animationParameter = placeholderAnimationParameter;
+		
+		Entity playerChar = pooledEngine.createEntity();
+		CPosition position = pooledEngine.createComponent(CPosition.class);
+		position.position.set(50, 35);
+		CSpeed speed = pooledEngine.createComponent(CSpeed.class);
+		CAnimation animation = pooledEngine.createComponent(CAnimation.class);
+		animation.animationQueue.animationQueue.add(placeholderAnimation);
+		CBounds bounds = pooledEngine.createComponent(CBounds.class);
+		bounds.bounds.set(50, 35, 16, 16);
+		CGravity gravity = pooledEngine.createComponent(CGravity.class);
+		gravity.gravity.set(0, -1);
+		CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
+		playerChar.add(position);
+		playerChar.add(speed);
+		playerChar.add(animation);
+		playerChar.add(bounds);
+		playerChar.add(gravity);
+		playerChar.add(normalObject);
+		pooledEngine.addEntity(playerChar);
+		
+		Entity firstWall = pooledEngine.createEntity();
+		CPosition wallPos = pooledEngine.createComponent(CPosition.class);
+		wallPos.position.set(50, 50);
+		CBounds wallBds = pooledEngine.createComponent(CBounds.class);
+		wallBds.bounds.set(0, 50, 16, 16);
+		CNormalObstacle wallNob = pooledEngine.createComponent(CNormalObstacle.class);
+		firstWall.add(wallPos);
+		firstWall.add(wallBds);
+		firstWall.add(wallNob);
+		pooledEngine.addEntity(firstWall);
 	}
 
 	@Override
