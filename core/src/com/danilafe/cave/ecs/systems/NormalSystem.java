@@ -2,6 +2,7 @@ package com.danilafe.cave.ecs.systems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.ecs.components.CBounds;
@@ -38,6 +39,7 @@ public class NormalSystem extends FamilySystem {
 				CPosition obstaclePosition = obstacleEntity.getComponent(CPosition.class);
 		
 				if(obstacleBounds.bounds.overlaps(projectedBounds)){
+					Gdx.app.debug("Collision Detection", "Intresection");
 					moveOutside(projectedBounds, obstacleBounds.bounds, normalEntityPosition.position);
 				}	
 								
@@ -48,7 +50,8 @@ public class NormalSystem extends FamilySystem {
 					projectedBounds.set(normalEntityBounds.bounds);
 					projectedBounds.setCenter(normalEntityPosition.position.cpy().add(normalEntitySpeed.speed.cpy().scl(deltaTime).x, 0));
 					if(Math.abs(normalEntitySpeed.speed.x) > 0.01F && obstacleBounds.bounds.overlaps(projectedBounds)){
-						normalEntityPosition.position.y = ((projectedBounds.x < obstacleBounds.bounds.x) ? obstacleBounds.bounds.x - projectedBounds.width : obstacleBounds.bounds.x + obstacleBounds.bounds.width) + (projectedBounds.width / 2);
+						Gdx.app.debug("Collision Detection", "Imminent collision on x-axis");
+						normalEntityPosition.position.x = ((projectedBounds.x < obstacleBounds.bounds.x) ? obstacleBounds.bounds.x - projectedBounds.width : obstacleBounds.bounds.x + obstacleBounds.bounds.width) + (projectedBounds.width / 2);
 						normalEntitySpeed.speed.x = 0;
 					}
 					// We might have moved...
@@ -57,6 +60,7 @@ public class NormalSystem extends FamilySystem {
 					projectedBounds.set(normalEntityBounds.bounds);
 					projectedBounds.setCenter(normalEntityPosition.position.cpy().add(0, normalEntitySpeed.speed.cpy().scl(deltaTime).y));
 					if(Math.abs(normalEntitySpeed.speed.y) > 0.01F && obstacleBounds.bounds.overlaps(projectedBounds)){
+						Gdx.app.debug("Collision Detection", "Imminent collision on y-axis");
 						normalEntityPosition.position.y = ((projectedBounds.y < obstacleBounds.bounds.y) ? obstacleBounds.bounds.y - projectedBounds.height : obstacleBounds.bounds.y + obstacleBounds.bounds.height) + (projectedBounds.height / 2);
 						normalEntitySpeed.speed.y = 0;
 					}
@@ -84,6 +88,7 @@ public class NormalSystem extends FamilySystem {
 		float yMutliplier = (rectY > movingBounds.y) ? -1 : 1;
 		if(rectWidth < rectHeight) movingPosition.x += rectWidth * xMutliplier;
 		else movingPosition.y += rectHeight * yMutliplier;
+		Gdx.app.debug("CollisionDetection: ", "rectWidth < rectHeight == " + Boolean.toString((rectWidth < rectHeight)));
 	}
 
 }
