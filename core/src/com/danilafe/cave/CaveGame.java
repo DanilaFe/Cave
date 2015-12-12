@@ -82,14 +82,15 @@ public class CaveGame extends ApplicationAdapter {
 		
 		Entity playerChar = pooledEngine.createEntity();
 		CPosition position = pooledEngine.createComponent(CPosition.class);
-		position.position.set(50, 35);
+		position.position.set(50, 50);
 		CSpeed speed = pooledEngine.createComponent(CSpeed.class);
+		speed.speed.set(0, 100);
 		CAnimation animation = pooledEngine.createComponent(CAnimation.class);
 		animation.animationQueue.animationQueue.add(placeholderAnimation);
 		CBounds bounds = pooledEngine.createComponent(CBounds.class);
-		bounds.bounds.set(50, 35, 16, 16);
+		bounds.bounds.set(50, 50, 16, 16);
 		CGravity gravity = pooledEngine.createComponent(CGravity.class);
-		gravity.gravity.set(0, -1);
+		gravity.gravity.set(0, -100);
 		CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
 		playerChar.add(position);
 		playerChar.add(speed);
@@ -100,14 +101,17 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addEntity(playerChar);
 		
 		Entity firstWall = pooledEngine.createEntity();
+		CSpeed wallSpeed = pooledEngine.createComponent(CSpeed.class);
+		wallSpeed.speed.set(0, 10);
 		CPosition wallPos = pooledEngine.createComponent(CPosition.class);
-		wallPos.position.set(50, 50);
+		wallPos.position.set(50, 0);
 		CBounds wallBds = pooledEngine.createComponent(CBounds.class);
-		wallBds.bounds.set(0, 50, 16, 16);
+		wallBds.bounds.set(50, 0, 16, 16);
 		CNormalObstacle wallNob = pooledEngine.createComponent(CNormalObstacle.class);
 		firstWall.add(wallPos);
 		firstWall.add(wallBds);
 		firstWall.add(wallNob);
+		firstWall.add(wallSpeed);
 		pooledEngine.addEntity(firstWall);
 	}
 
