@@ -52,6 +52,8 @@ public class CaveGame extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+		Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
+		
 		/*
 		 * Creation code
 		 */
@@ -90,7 +92,7 @@ public class CaveGame extends ApplicationAdapter {
 		CBounds bounds = pooledEngine.createComponent(CBounds.class);
 		bounds.bounds.set(50, 50, 16, 16);
 		CGravity gravity = pooledEngine.createComponent(CGravity.class);
-		gravity.gravity.set(0, -100);
+		gravity.gravity.set(1, -100);
 		CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
 		playerChar.add(position);
 		playerChar.add(speed);
@@ -101,8 +103,6 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addEntity(playerChar);
 		
 		Entity firstWall = pooledEngine.createEntity();
-		CSpeed wallSpeed = pooledEngine.createComponent(CSpeed.class);
-		wallSpeed.speed.set(0, 10);
 		CPosition wallPos = pooledEngine.createComponent(CPosition.class);
 		wallPos.position.set(50, 0);
 		CBounds wallBds = pooledEngine.createComponent(CBounds.class);
@@ -111,7 +111,6 @@ public class CaveGame extends ApplicationAdapter {
 		firstWall.add(wallPos);
 		firstWall.add(wallBds);
 		firstWall.add(wallNob);
-		firstWall.add(wallSpeed);
 		pooledEngine.addEntity(firstWall);
 	}
 
