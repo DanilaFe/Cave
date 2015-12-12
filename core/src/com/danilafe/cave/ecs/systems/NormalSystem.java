@@ -38,7 +38,6 @@ public class NormalSystem extends FamilySystem {
 				CPosition obstaclePosition = obstacleEntity.getComponent(CPosition.class);
 		
 				if(obstacleBounds.bounds.overlaps(projectedBounds)){
-					System.out.println("Interesection");
 					moveOutside(projectedBounds, obstacleBounds.bounds, normalEntityPosition.position);
 				}	
 								
@@ -83,8 +82,8 @@ public class NormalSystem extends FamilySystem {
 		float rectY = maxY;
 		float xMutliplier = (rectX > movingBounds.x) ? -1 : 1;
 		float yMutliplier = (rectY > movingBounds.y) ? -1 : 1;
-		float smallerMovement = (rectWidth < rectHeight) ? rectWidth : rectHeight;
-		movingPosition.add(smallerMovement * xMutliplier, smallerMovement * yMutliplier);
+		if(rectWidth < rectHeight) movingPosition.x += rectWidth * xMutliplier;
+		else movingPosition.y += rectHeight * yMutliplier;
 	}
 
 }
