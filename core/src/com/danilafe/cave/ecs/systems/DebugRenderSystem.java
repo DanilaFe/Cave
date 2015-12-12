@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.danilafe.cave.CaveGame;
 import com.danilafe.cave.ecs.components.CBounds;
 
 public class DebugRenderSystem extends IteratingSystem {
@@ -24,6 +25,7 @@ public class DebugRenderSystem extends IteratingSystem {
 	@Override
 	public void update(float deltaTime) {
 		shapeRenderer.setAutoShapeType(true);
+		shapeRenderer.setProjectionMatrix(CaveGame.instance.orthoCam.combined);
 		shapeRenderer.begin();
 		super.update(deltaTime);
 		shapeRenderer.end();
