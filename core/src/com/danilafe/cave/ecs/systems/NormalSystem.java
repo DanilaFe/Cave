@@ -3,7 +3,9 @@ package com.danilafe.cave.ecs.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.ecs.components.CBounds;
+import com.danilafe.cave.ecs.components.CGravity;
 import com.danilafe.cave.ecs.components.CNormalObject;
 import com.danilafe.cave.ecs.components.CNormalObstacle;
 import com.danilafe.cave.ecs.components.CPosition;
@@ -23,6 +25,7 @@ public class NormalSystem extends FamilySystem {
 			CBounds normalEntityBounds = normalEntity.getComponent(CBounds.class);
 			CPosition normalEntityPosition = normalEntity.getComponent(CPosition.class);
 			CSpeed normalEntitySpeed = normalEntity.getComponent(CSpeed.class);
+			CGravity normalEntityGravity = normalEntity.getComponent(CGravity.class);
 			Rectangle projectedBounds = new Rectangle(normalEntityBounds.bounds);
 			for(int j = 0; j < entitiesB.size(); j++){
 				// We might have moved. Update projectedBounds and bounds
@@ -35,23 +38,8 @@ public class NormalSystem extends FamilySystem {
 				CPosition obstaclePosition = obstacleEntity.getComponent(CPosition.class);
 		
 				if(obstacleBounds.bounds.overlaps(projectedBounds)){
-					boolean boundsXBigger = obstacleBounds.bounds.x < projectedBounds.x;
-					boolean boundsYBigger = obstacleBounds.bounds.y < projectedBounds.y;
-					float minX = (boundsXBigger) ? obstacleBounds.bounds.x : projectedBounds.x;
-					float minY = (boundsYBigger) ? obstacleBounds.bounds.y : projectedBounds.y;
-					float maxX = (!boundsXBigger) ? obstacleBounds.bounds.x : projectedBounds.x;
-					float maxY = (!boundsYBigger) ? obstacleBounds.bounds.y : projectedBounds.y;
-					float wMin = (boundsXBigger) ? obstacleBounds.bounds.width : projectedBounds.width;
-					float hMin = (boundsYBigger) ? obstacleBounds.bounds.height : projectedBounds.height;
-					
-					float rectWidth = wMin - (maxX - minX);
-					float rectHeight = hMin - (maxY - minY);
-					float rectX = maxX;
-					float rectY = maxY;
-					float xMutliplier = (rectX > projectedBounds.x) ? -1 : 1;
-					float yMutliplier = (rectY > projectedBounds.y) ? -1 : 1;
-					float smallerMovement = (rectWidth < rectHeight) ? rectWidth : rectHeight;
-					normalEntityPosition.position.add(smallerMovement * xMutliplier, smallerMovement * yMutliplier);
+					System.out.println("Interesection");
+					moveOutside(projectedBounds, obstacleBounds.bounds, normalEntityPosition.position);
 				}	
 								
 				if(normalEntitySpeed != null) {
@@ -60,24 +48,8 @@ public class NormalSystem extends FamilySystem {
 					normalEntityBounds.bounds.setCenter(normalEntityPosition.position.x, normalEntityPosition.position.y);
 					projectedBounds.set(normalEntityBounds.bounds);
 					projectedBounds.setCenter(normalEntityPosition.position.cpy().add(normalEntitySpeed.speed.cpy().scl(deltaTime).x, 0));
-					if(obstacleBounds.bounds.overlaps(projectedBounds)){
-						boolean boundsXBigger = obstacleBounds.bounds.x < projectedBounds.x;
-						boolean boundsYBigger = obstacleBounds.bounds.y < projectedBounds.y;
-						float minX = (boundsXBigger) ? obstacleBounds.bounds.x : projectedBounds.x;
-						float minY = (boundsYBigger) ? obstacleBounds.bounds.y : projectedBounds.y;
-						float maxX = (!boundsXBigger) ? obstacleBounds.bounds.x : projectedBounds.x;
-						float maxY = (!boundsYBigger) ? obstacleBounds.bounds.y : projectedBounds.y;
-						float wMin = (boundsXBigger) ? obstacleBounds.bounds.width : projectedBounds.width;
-						float hMin = (boundsYBigger) ? obstacleBounds.bounds.height : projectedBounds.height;
-						
-						float rectWidth = wMin - (maxX - minX);
-						float rectHeight = hMin - (maxY - minY);
-						float rectX = maxX;
-						float rectY = maxY;
-						float xMutliplier = (rectX > projectedBounds.x) ? -1 : 1;
-						float yMutliplier = (rectY > projectedBounds.x) ? -1 : 1;
-						float smallerMovement = (rectWidth < rectHeight) ? rectWidth : rectHeight;
-						normalEntityPosition.position.add(smallerMovement * xMutliplier, smallerMovement * yMutliplier);
+					if(Math.abs(normalEntitySpeed.speed.x) > 0.01F && obstacleBounds.bounds.overlaps(projectedBounds)){
+						normalEntityPosition.position.y = ((projectedBounds.x < obstacleBounds.bounds.x) ? obstacleBounds.bounds.x - projectedBounds.width : obstacleBounds.bounds.x + obstacleBounds.bounds.width) + (projectedBounds.width / 2);
 						normalEntitySpeed.speed.x = 0;
 					}
 					// We might have moved...
@@ -85,30 +57,34 @@ public class NormalSystem extends FamilySystem {
 					normalEntityBounds.bounds.setCenter(normalEntityPosition.position.x, normalEntityPosition.position.y);
 					projectedBounds.set(normalEntityBounds.bounds);
 					projectedBounds.setCenter(normalEntityPosition.position.cpy().add(0, normalEntitySpeed.speed.cpy().scl(deltaTime).y));
-					if(obstacleBounds.bounds.overlaps(projectedBounds)){
-						boolean boundsXBigger = obstacleBounds.bounds.x < projectedBounds.x;
-						boolean boundsYBigger = obstacleBounds.bounds.y < projectedBounds.y;
-						float minX = (boundsXBigger) ? obstacleBounds.bounds.x : projectedBounds.x;
-						float minY = (boundsYBigger) ? obstacleBounds.bounds.y : projectedBounds.y;
-						float maxX = (!boundsXBigger) ? obstacleBounds.bounds.x : projectedBounds.x;
-						float maxY = (!boundsYBigger) ? obstacleBounds.bounds.y : projectedBounds.y;
-						float wMin = (boundsXBigger) ? obstacleBounds.bounds.width : projectedBounds.width;
-						float hMin = (boundsYBigger) ? obstacleBounds.bounds.height : projectedBounds.height;
-						
-						float rectWidth = wMin - (maxX - minX);
-						float rectHeight = hMin - (maxY - minY);
-						float rectX = maxX;
-						float rectY = maxY;
-						float xMutliplier = (rectX > projectedBounds.x) ? -1 : 1;
-						float yMutliplier = (rectY > projectedBounds.x) ? -1 : 1;
-						float smallerMovement = (rectWidth < rectHeight) ? rectWidth : rectHeight;
-						normalEntityPosition.position.add(smallerMovement * xMutliplier, smallerMovement * yMutliplier);
+					if(Math.abs(normalEntitySpeed.speed.y) > 0.01F && obstacleBounds.bounds.overlaps(projectedBounds)){
+						normalEntityPosition.position.y = ((projectedBounds.y < obstacleBounds.bounds.y) ? obstacleBounds.bounds.y - projectedBounds.height : obstacleBounds.bounds.y + obstacleBounds.bounds.height) + (projectedBounds.height / 2);
 						normalEntitySpeed.speed.y = 0;
 					}
 				}				
 				
 			}
 		}
+	}
+	
+	private void moveOutside(Rectangle movingBounds, Rectangle otherBounds, Vector2 movingPosition){
+		boolean boundsXBigger = otherBounds.x < movingBounds.x;
+		boolean boundsYBigger = otherBounds.y < movingBounds.y;
+		float minX = (boundsXBigger) ? otherBounds.x : movingBounds.x;
+		float minY = (boundsYBigger) ? otherBounds.y : movingBounds.y;
+		float maxX = (!boundsXBigger) ? otherBounds.x : movingBounds.x;
+		float maxY = (!boundsYBigger) ? otherBounds.y : movingBounds.y;
+		float wMin = (boundsXBigger) ? otherBounds.width : movingBounds.width;
+		float hMin = (boundsYBigger) ? otherBounds.height : movingBounds.height;
+		
+		float rectWidth = wMin - (maxX - minX);
+		float rectHeight = hMin - (maxY - minY);
+		float rectX = maxX;
+		float rectY = maxY;
+		float xMutliplier = (rectX > movingBounds.x) ? -1 : 1;
+		float yMutliplier = (rectY > movingBounds.y) ? -1 : 1;
+		float smallerMovement = (rectWidth < rectHeight) ? rectWidth : rectHeight;
+		movingPosition.add(smallerMovement * xMutliplier, smallerMovement * yMutliplier);
 	}
 
 }
