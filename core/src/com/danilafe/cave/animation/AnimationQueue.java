@@ -22,7 +22,7 @@ public class AnimationQueue {
 	/**
 	 * Updates the animation queue. This will trigger frame updates in the animations, and, if necessary,
 	 * switch to the next animation.
-	 * @param deltaTime
+	 * @param deltaTime the delta time to use in this update.
 	 */
 	public void update(float deltaTime){
 		while((this.deltaTime -= deltaTime) < 0) {
