@@ -79,6 +79,8 @@ public class RenderSystem extends IteratingSystem {
 		
 		bufferBatch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		bufferBatch.begin();
+		shaderProgram.setUniformi("u_textureWidth", (int) CaveGame.instance.orthoCam.viewportWidth * 2);
+		shaderProgram.setUniformi("u_textureHeight", (int) CaveGame.instance.orthoCam.viewportHeight * 2);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
 		bufferBatch.draw(mainBuffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, 1, 1);
