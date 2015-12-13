@@ -1,17 +1,23 @@
 package com.danilafe.cave;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Rectangle;
 import com.danilafe.cave.animation.Animation;
 import com.danilafe.cave.animation.AnimationParameter;
+import com.danilafe.cave.creation.CreationManager;
+import com.danilafe.cave.creation.EntityDescriptor;
 import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CBounds;
 import com.danilafe.cave.ecs.components.CFrictionCause;
@@ -21,6 +27,7 @@ import com.danilafe.cave.ecs.components.CNormalObject;
 import com.danilafe.cave.ecs.components.CNormalObstacle;
 import com.danilafe.cave.ecs.components.CPosition;
 import com.danilafe.cave.ecs.components.CSpeed;
+import com.danilafe.cave.ecs.components.CStepper;
 import com.danilafe.cave.ecs.systems.BoundsSystem;
 import com.danilafe.cave.ecs.systems.DebugRenderSystem;
 import com.danilafe.cave.ecs.systems.FrictionSystem;
@@ -28,6 +35,8 @@ import com.danilafe.cave.ecs.systems.GravitySystem;
 import com.danilafe.cave.ecs.systems.NormalSystem;
 import com.danilafe.cave.ecs.systems.PositionSystem;
 import com.danilafe.cave.ecs.systems.RenderSystem;
+import com.danilafe.cave.ecs.systems.StepperSystem;
+import com.danilafe.cave.runnable.ECSRunnable;
 
 /**
  * CaveGame - Main class of Cave.
@@ -71,13 +80,19 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public FrictionSystem frictionSystem;
 	/**
+	 * StepperSystem - steps all custom code entities.
+	 */
+	public StepperSystem stepperSystem;
+	/**
 	 * Camera used to look into the game world.
 	 */
 	public OrthographicCamera orthoCam;
+	public CreationManager creationManager;
+	public AssetManager assetManager;
 	
 	@Override
 	public void create () {
-		Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
+		// Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
 		
 		/*
 		 * Creation code
@@ -91,6 +106,7 @@ public class CaveGame extends ApplicationAdapter {
 		positionSystem = new PositionSystem();
 		normalSystem = new NormalSystem();
 		frictionSystem = new FrictionSystem();
+		stepperSystem = new StepperSystem();
 		
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 		
@@ -101,49 +117,115 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(normalSystem);
 		pooledEngine.addSystem(positionSystem);
 		pooledEngine.addSystem(frictionSystem);
+		pooledEngine.addSystem(stepperSystem);
 		
+		assetManager = new AssetManager();
+		creationManager = new CreationManager();
+		
+		loadAssets();
+		loadCreation();
+		
+		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderPlayer").create(50, 50));
+		for(int i = 0; i < 10; i ++){
+			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(16 * i, 0));
+			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(0, 16 * (i + 1)));
+			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(96, 16 * (i + 1)));
+		}
+		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(16, 16 * 2));
+	}
+
+	private void loadCreation() {
+		/*
+		 * Animations
+		 */
 		AnimationParameter placeholderAnimationParameter = new AnimationParameter();
-		placeholderAnimationParameter.textures = TextureRegion.split(new Texture(Gdx.files.internal("badlogic.jpg")), 16, 16);
+		placeholderAnimationParameter.textures = TextureRegion.split(assetManager.get("badlogic.jpg", Texture.class), 16, 16);
 		placeholderAnimationParameter.loop = true;
 		placeholderAnimationParameter.frameDelta = 1F / 5;
-		Animation placeholderAnimation = new Animation();
-		placeholderAnimation.animationParameter = placeholderAnimationParameter;
+		creationManager.animationParams.put("placeholder", placeholderAnimationParameter);
 		
-		Entity playerChar = pooledEngine.createEntity();
-		CPosition position = pooledEngine.createComponent(CPosition.class);
-		position.position.set(50, 50);
-		CSpeed speed = pooledEngine.createComponent(CSpeed.class);
-		speed.speed.set(10, 100);
-		CAnimation animation = pooledEngine.createComponent(CAnimation.class);
-		animation.animationQueue.animationQueue.add(placeholderAnimation);
-		CBounds bounds = pooledEngine.createComponent(CBounds.class);
-		bounds.bounds.set(50, 50, 16, 16);
-		CGravity gravity = pooledEngine.createComponent(CGravity.class);
-		gravity.gravity.set(0, -100);
-		CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
-		CFrictionObject frictionObject = pooledEngine.createComponent(CFrictionObject.class);
-		playerChar.add(position);
-		playerChar.add(speed);
-		playerChar.add(animation);
-		playerChar.add(bounds);
-		playerChar.add(gravity);
-		playerChar.add(normalObject);
-		playerChar.add(frictionObject);
-		pooledEngine.addEntity(playerChar);
-		
-		Entity firstWall = pooledEngine.createEntity();
-		CPosition wallPos = pooledEngine.createComponent(CPosition.class);
-		wallPos.position.set(50, 0);
-		CBounds wallBds = pooledEngine.createComponent(CBounds.class);
-		wallBds.bounds.set(50, 0, 300, 16);
-		CNormalObstacle wallNob = pooledEngine.createComponent(CNormalObstacle.class);
-		CFrictionCause wallFrc = pooledEngine.createComponent(CFrictionCause.class);
-		wallFrc.frictionMultiplier.x = .1F;
-		firstWall.add(wallPos);
-		firstWall.add(wallBds);
-		firstWall.add(wallNob);
-		firstWall.add(wallFrc);
-		pooledEngine.addEntity(firstWall);
+		/*
+		 * Entities
+		 */
+		EntityDescriptor playerholderPlayer = new EntityDescriptor() {	
+			@Override
+			public Entity create(float x, float y) {
+				Animation placeholderAnimation = new Animation();
+				placeholderAnimation.animationParameter = creationManager.animationParams.get("placeholder");
+				
+				Entity entity = pooledEngine.createEntity();
+				CPosition position = pooledEngine.createComponent(CPosition.class);
+				position.position.set(x, y);
+				CSpeed speed = pooledEngine.createComponent(CSpeed.class);
+				speed.speed.set(10, 100);
+				CAnimation animation = pooledEngine.createComponent(CAnimation.class);
+				animation.animationQueue.animationQueue.add(placeholderAnimation);
+				CBounds bounds = pooledEngine.createComponent(CBounds.class);
+				bounds.bounds.set(x, y, 16, 16);
+				CGravity gravity = pooledEngine.createComponent(CGravity.class);
+				gravity.gravity.set(0, -250);
+				CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
+				CFrictionObject frictionObject = pooledEngine.createComponent(CFrictionObject.class);
+				CStepper stepper = pooledEngine.createComponent(CStepper.class);
+				stepper.runnable = new ECSRunnable() {	
+					@Override
+					public void update(Entity me, Engine myEngine, float deltaTime) {
+						CSpeed mySpeed = me.getComponent(CSpeed.class);
+						CFrictionObject myFriction = me.getComponent(CFrictionObject.class);
+						CBounds myBounds = me.getComponent(CBounds.class);
+						CGravity myGravit = me.getComponent(CGravity.class);
+						boolean enableFriction = true;
+						if(Gdx.input.isKeyPressed(Keys.RIGHT) && Math.abs(mySpeed.speed.x) < 75 ) {
+							mySpeed.speed.x += 100F * deltaTime;
+							enableFriction = false;
+						}
+						if(Gdx.input.isKeyPressed(Keys.LEFT) && Math.abs(mySpeed.speed.x) < 75) {
+							mySpeed.speed.x -= 100F * deltaTime;
+							enableFriction = false;
+						}
+						if(Gdx.input.isKeyPressed(Keys.SPACE) && checkNormalCollision(new Rectangle(myBounds.bounds).setPosition(myBounds.bounds.x + myGravit.gravity.x * deltaTime, myBounds.bounds.y + myGravit.gravity.y * deltaTime))){
+							mySpeed.speed.y += 20; 
+						}
+						myFriction.frictionCoefficient.x = (enableFriction) ? 1 : 0;
+					}
+				};
+				entity.add(position);
+				entity.add(speed);
+				entity.add(animation);
+				entity.add(bounds);
+				entity.add(gravity);
+				entity.add(normalObject);
+				entity.add(frictionObject);
+				entity.add(stepper);
+				return entity;
+			}
+		};
+		creationManager.entityDescriptors.put("placeholderPlayer", playerholderPlayer);
+		EntityDescriptor placeholderWall = new EntityDescriptor() {
+			
+			@Override
+			public Entity create(float x, float y) {
+				Entity entity = pooledEngine.createEntity();
+				CPosition position = pooledEngine.createComponent(CPosition.class);
+				position.position.set(x, y);
+				CBounds bounds = pooledEngine.createComponent(CBounds.class);
+				bounds.bounds.set(x, y, 16, 16);
+				CNormalObstacle normalObstacle = pooledEngine.createComponent(CNormalObstacle.class);
+				CFrictionCause frictionCause = pooledEngine.createComponent(CFrictionCause.class);
+				frictionCause.frictionMultiplier.x = .01F;
+				entity.add(position);
+				entity.add(bounds);
+				entity.add(normalObstacle);
+				entity.add(frictionCause);
+				return entity;
+			}
+		};
+		creationManager.entityDescriptors.put("placeholderWall", placeholderWall);
+	}
+
+	private void loadAssets() {
+		assetManager.load("badlogic.jpg", Texture.class);
+		while(!assetManager.update());
 	}
 
 	@Override
@@ -152,11 +234,14 @@ public class CaveGame extends ApplicationAdapter {
 		 * Update the engine using the delta time 
 		 */
 		pooledEngine.update(Gdx.graphics.getDeltaTime());
+		Gdx.app.debug("FPS", Gdx.graphics.getFramesPerSecond() + " Frames Per Second");
 	}
 	
 	/**
 	 * Shader function.
 	 * This loads the GLSL shaders for the game.
+	 * @param shaderName the name of the shader to load.
+	 * @return the loaded and compiled shader program, or null of compilation failed.
 	 */
 	public static ShaderProgram loadShaders(String shaderName){
 		if(shaderName == null || shaderName.equals("") || !Gdx.files.internal("shaders/" + shaderName).exists()) return null;
@@ -171,9 +256,16 @@ public class CaveGame extends ApplicationAdapter {
 		return newProgram;
 	}
 	
+	public boolean checkNormalCollision(Rectangle rect){
+		for (Entity e : normalSystem.entitiesB){
+			if(e.getComponent(CBounds.class).bounds.overlaps(rect)) return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		orthoCam.setToOrtho(false, Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * height / width);
+		orthoCam.setToOrtho(false, Constants.CAMERA_WIDTH, Math.round(Constants.CAMERA_WIDTH * height / width));
 	}
 }
