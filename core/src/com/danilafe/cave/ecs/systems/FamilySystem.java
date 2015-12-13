@@ -50,6 +50,8 @@ public class FamilySystem extends EntitySystem {
 		listenFor = engine;
 		engine.addEntityListener(familyA, listenerA);
 		engine.addEntityListener(familyB, listenerB);
+		entitiesA = listenFor.getEntitiesFor(familyA);
+		entitiesB = listenFor.getEntitiesFor(familyB);
 	}
 	
 	@Override
@@ -58,6 +60,8 @@ public class FamilySystem extends EntitySystem {
 		listenFor = null;
 		engine.removeEntityListener(listenerA);
 		engine.removeEntityListener(listenerB);
+		entitiesA = null;
+		entitiesB = null;
 	}
 	
 }
