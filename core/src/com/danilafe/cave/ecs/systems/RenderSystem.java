@@ -44,7 +44,7 @@ public class RenderSystem extends IteratingSystem {
 		super(Family.all(CAnimation.class, CPosition.class).get());
 		mainBatch = new SpriteBatch();
 		bufferBatch = new SpriteBatch();
-		shaderProgram = CaveGame.loadShaders("greyscale");
+		shaderProgram = CaveGame.loadShaders("debug");
 		
 		bufferBatch.setShader(shaderProgram);
 	}
