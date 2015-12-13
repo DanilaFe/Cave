@@ -46,12 +46,33 @@ public class CaveGame extends ApplicationAdapter {
 	 * RenderSystem - renders stuff
 	 */
 	public RenderSystem renderSystem;
+	/**
+	 * BoundsSystem - updates bounds to position
+	 */
 	public BoundsSystem boundsSystem;
+	/**
+	 * DebugRenderSystem - renders collision boxes and debug info
+	 */
 	public DebugRenderSystem debugRenderSystem;
+	/**
+	 * GravitySystem - ..gravity
+	 */
 	public GravitySystem gravitySystem;
+	/**
+	 * PositionSystem - updates position based on speed
+	 */
 	public PositionSystem positionSystem;
+	/**
+	 * NormalSystem - stops intersections and clipping 
+	 */
 	public NormalSystem normalSystem;
+	/**
+	 * FrictionSystem - applies friction
+	 */
 	public FrictionSystem frictionSystem;
+	/**
+	 * Camera used to look into the game world.
+	 */
 	public OrthographicCamera orthoCam;
 	
 	@Override

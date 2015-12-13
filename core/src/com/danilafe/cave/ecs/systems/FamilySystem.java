@@ -7,16 +7,49 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 
+/**
+ * FamilySystem - A parent class meant to be overridden.
+ * This entity keeps track of two families of entities, allowing for efficient operation on two 
+ * related sets of entities 
+ * @author vanilla
+ *
+ */
 public class FamilySystem extends EntitySystem {
 
+	/**
+	 * Listener used to update list of entities in family A
+	 */
 	public EntityListener listenerA;
+	/**
+	 * Listener used to update list of entities in family B
+	 */
 	public EntityListener listenerB;
+	/**
+	 * First family to keep track of.
+	 */
 	public Family familyA;
+	/**
+	 * Second family to keep track of.
+	 */
 	public Family familyB;
+	/**
+	 * Updated list of entities in FamilyA
+	 */
 	public ImmutableArray<Entity> entitiesA;
+	/**
+	 * Updated list of entities in FamilyB
+	 */
 	public ImmutableArray<Entity> entitiesB;
+	/**
+	 * The engine this entity is attached to.
+	 */
 	public Engine listenFor;
 	
+	/**
+	 * Creates a new FamilySystem operating on families A and B
+	 * @param a family A to keep track of
+	 * @param b family B to keep track of
+	 */
 	public FamilySystem(Family a, Family b){
 		familyA = a;
 		familyB = b;

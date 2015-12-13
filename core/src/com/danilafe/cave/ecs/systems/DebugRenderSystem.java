@@ -7,10 +7,21 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.danilafe.cave.CaveGame;
 import com.danilafe.cave.ecs.components.CBounds;
 
+/**
+ * DebugSystem - This system renders collision boxes of entities and other debug information to the screen.
+ * @author vanilla
+ *
+ */
 public class DebugRenderSystem extends IteratingSystem {
 
+	/**
+	 * The shape renderer used to render collision boxes.
+	 */
 	public ShapeRenderer shapeRenderer;
 	
+	/**
+	 * Creates a new DebugRenderSystem
+	 */
 	public DebugRenderSystem() {
 		super(Family.all(CBounds.class).get());
 		shapeRenderer = new ShapeRenderer();

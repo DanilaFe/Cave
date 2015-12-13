@@ -12,8 +12,18 @@ import com.danilafe.cave.ecs.components.CNormalObstacle;
 import com.danilafe.cave.ecs.components.CPosition;
 import com.danilafe.cave.ecs.components.CSpeed;
 
+/**
+ * NormalSystem - Used for all things relating to the "normal force", 
+ * such as stopping entities before collision and separating clipping entities.
+ * This operates only on entities with NormalObject and NormalObstacle flags.
+ * @author vanilla
+ *
+ */
 public class NormalSystem extends FamilySystem {
 
+	/**
+	 * Creates a new NormalSystem
+	 */
 	public NormalSystem() {
 		super(Family.all(CNormalObject.class, CBounds.class).get(), Family.all(CNormalObstacle.class, CBounds.class).get());
 	}
@@ -70,6 +80,12 @@ public class NormalSystem extends FamilySystem {
 		}
 	}
 	
+	/**
+	 * Movies the position provided in the direction to ensure the two given bounds don't overlap.
+	 * @param movingBounds the bounds that will be moved. 
+	 * @param otherBounds the bounds that are static
+	 * @param movingPosition the position of the moving bounds
+	 */
 	private void moveOutside(Rectangle movingBounds, Rectangle otherBounds, Vector2 movingPosition){
 		boolean boundsXBigger = otherBounds.x < movingBounds.x;
 		boolean boundsYBigger = otherBounds.y < movingBounds.y;

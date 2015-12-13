@@ -16,11 +16,28 @@ import com.danilafe.cave.animation.Animation;
 import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CPosition;
 
+/**
+ * RenderSystem - renders the game.
+ * @author vanilla
+ *
+ */
 public class RenderSystem extends IteratingSystem {
 	
+	/**
+	 * The batch used in the FrameBuffer. Can have its own shader.
+	 */
 	SpriteBatch mainBatch;
+	/**
+	 * The batch used to render buffer contents.
+	 */
 	SpriteBatch bufferBatch;
+	/**
+	 * The shader used by the bufferBatch
+	 */
 	ShaderProgram shaderProgram;
+	/**
+	 * The framebuffer used to render everything before shader is applied.
+	 */
 	FrameBuffer mainBuffer;
 	
 	public RenderSystem() {

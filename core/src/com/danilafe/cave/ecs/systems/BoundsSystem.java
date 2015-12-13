@@ -6,8 +6,16 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.danilafe.cave.ecs.components.CBounds;
 import com.danilafe.cave.ecs.components.CPosition;
 
+/**
+ * BoundsSystem - Takes position and bounds, and sets the bounds' center to the position.
+ * @author vanilla
+ *
+ */
 public class BoundsSystem extends IteratingSystem {
 
+	/**
+	 * Creates a new BoundsSystem.
+	 */
 	public BoundsSystem() {
 		super(Family.all(CBounds.class, CPosition.class).get());
 	}

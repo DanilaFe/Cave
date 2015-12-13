@@ -11,8 +11,17 @@ import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
 import com.danilafe.cave.ecs.components.CSpeed;
 
+/**
+ * FrictionSystem - Applies friction to entities with the FrictionObject flag.
+ * The friction is caused by FrictionCause entities and is applied only if the entities' sides touch.
+ * @author vanilla
+ *
+ */
 public class FrictionSystem extends FamilySystem {
 
+	/**
+	 * Creates a new FrictionSystem
+	 */
 	public FrictionSystem() {
 		super(Family.all(CSpeed.class, CFrictionObject.class, CBounds.class).get(), Family.all(CBounds.class, CFrictionCause.class).get());
 	}

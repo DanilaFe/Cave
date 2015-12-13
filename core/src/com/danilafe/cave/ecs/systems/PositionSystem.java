@@ -6,8 +6,16 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.danilafe.cave.ecs.components.CPosition;
 import com.danilafe.cave.ecs.components.CSpeed;
 
+/**
+ * PositionSystem - adds the speed to the entity's position.
+ * @author vanilla
+ *
+ */
 public class PositionSystem extends IteratingSystem {
 
+	/**
+	 * Creates a new PositionSystem
+	 */
 	public PositionSystem() {
 		super(Family.all(CPosition.class).all(CSpeed.class).get());
 	}
@@ -16,10 +24,7 @@ public class PositionSystem extends IteratingSystem {
 	protected void processEntity(Entity entity, float deltaTime) {
 		CSpeed entitySpeed = entity.getComponent(CSpeed.class);
 		CPosition entityPosition = entity.getComponent(CPosition.class);
-		
-		/*
-		 * Add the speed to position.
-		 */
+
 		if (entitySpeed != null)  entityPosition.position.add(entitySpeed.speed.cpy().scl(deltaTime));
 	}
 

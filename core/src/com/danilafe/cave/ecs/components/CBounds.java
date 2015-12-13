@@ -18,7 +18,7 @@ public class CBounds implements Poolable, Component {
 	
 	@Override
 	public void reset() {
-		
+		bounds.set(0, 0, 0, 0);
 	}
 
 }

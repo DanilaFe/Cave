@@ -6,8 +6,16 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.danilafe.cave.ecs.components.CGravity;
 import com.danilafe.cave.ecs.components.CSpeed;
 
+/**
+ * GravitySystem - adds the gravity value to the speed value.
+ * @author vanilla
+ *
+ */
 public class GravitySystem extends IteratingSystem{
 
+	/**
+	 * Creates a new GravitySystem
+	 */
 	public GravitySystem() {
 		super(Family.all(CSpeed.class, CGravity.class).get());
 	}
