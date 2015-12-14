@@ -17,7 +17,8 @@ void main() {
 	vec3 totalLights = vec3(0.0, 0.0, 0.0);
 	vec2 worldPos = vec2(floor(v_texCoords.x * float(u_textureWidth)) + float(u_texOffsetX), floor(v_texCoords.y * float(u_textureHeight)) + float(u_texOffsety));
 	for(int i = 0; i < u_numLights; i++){
-		float light_percent = u_lightProps[i].z / (distance(u_lightProps[i].xy, worldPos) + 1.0);
+		float dist = distance(u_lightProps[i].xy, worldPos);
+		float light_percent = 1.0 - pow(dist / u_lightProps[i].z, .4);
 		totalLights = totalLights + (u_lightColors[i] * light_percent);
 	}
 	normalize(totalLights);
