@@ -50,7 +50,7 @@ public class RenderSystem extends IteratingSystem {
 		bufferBatch = new SpriteBatch();
 		shaderProgram = CaveGame.loadShaders("debug");
 		lightManager = new LightManager();
-		lightManager.lights.add(Light.create(80, 20, 10, .4F, 1F, 1F));
+		lightManager.lights.add(Light.create(80, 20, 30, .3F, .8F, .7F));
 		
 		bufferBatch.setShader(shaderProgram);
 	}
@@ -72,7 +72,7 @@ public class RenderSystem extends IteratingSystem {
 		mainBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		mainBuffer.begin();
 		Gdx.gl.glViewport(0, 0, mainBuffer.getWidth(), mainBuffer.getHeight());
-		Gdx.gl.glClearColor(.5F, .5F, .5F, 1);
+		Gdx.gl.glClearColor(1F, 1F, 1F, 1);
 		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT | Gdx.gl.GL_DEPTH_BUFFER_BIT);
 		
 		mainBatch.setProjectionMatrix(CaveGame.instance.orthoCam.combined);
