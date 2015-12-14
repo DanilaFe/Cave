@@ -43,6 +43,7 @@ public class RenderSystem extends IteratingSystem {
 	 */
 	FrameBuffer mainBuffer;
 	LightManager lightManager;
+	Texture texture;
 	
 	public RenderSystem() {
 		super(Family.all(CAnimation.class, CPosition.class).get());
@@ -50,14 +51,15 @@ public class RenderSystem extends IteratingSystem {
 		bufferBatch = new SpriteBatch();
 		shaderProgram = CaveGame.loadShaders("debug");
 		lightManager = new LightManager();
-		lightManager.lights.add(Light.create(80, 20, 5, .3F, .8F, .7F));
-		lightManager.lights.add(Light.create(70, 20, 5, .4F, .7F, .6F));
-		lightManager.lights.add(Light.create(60, 20, 5, .5F, .6F, .5F));
-		lightManager.lights.add(Light.create(50, 20, 5, .6F, .5F, .4F));
-		lightManager.lights.add(Light.create(40, 20, 5, .7F, .4F, .3F));
-		lightManager.lights.add(Light.create(30, 20, 5, .8F, .3F, .2F));
-		lightManager.lights.add(Light.create(20, 20, 5, .9F, .2F, .1F));
-
+		lightManager.lights.add(Light.create(80, 20, 16, .5F, .5F, 1F));
+		lightManager.lights.add(Light.create(70, 20, 16, .6F, .6F, .9F));
+		lightManager.lights.add(Light.create(60, 20, 16, .7F, .7F, .8F));
+		lightManager.lights.add(Light.create(50, 20, 16, .8F, .8F, .7F));
+		lightManager.lights.add(Light.create(40, 20, 16, .9F, .9F, .6F));
+		lightManager.lights.add(Light.create(30, 20, 16, 1F, 1F, .5F));
+		lightManager.lights.add(Light.create(20, 20, 16, 1F, 1F, .4F));
+		lightManager.lights.add(Light.create(10, 20, 16, 1F, 1F, .3F));
+		texture = new Texture(Gdx.files.internal("badlogic_small.jpg"));
 		
 		bufferBatch.setShader(shaderProgram);
 	}
