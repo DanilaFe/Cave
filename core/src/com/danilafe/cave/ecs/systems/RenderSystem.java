@@ -51,12 +51,13 @@ public class RenderSystem extends IteratingSystem {
 		bufferBatch = new SpriteBatch();
 		shaderProgram = CaveGame.loadShaders("debug");
 		lightManager = new LightManager();
+		lightManager.lights.add(Light.create(90, 20, 16, .5F, .5F, 1F));
 		lightManager.lights.add(Light.create(80, 20, 16, .5F, .5F, 1F));
-		lightManager.lights.add(Light.create(70, 20, 16, .6F, .6F, .9F));
-		lightManager.lights.add(Light.create(60, 20, 16, .7F, .7F, .8F));
-		lightManager.lights.add(Light.create(50, 20, 16, .8F, .8F, .7F));
-		lightManager.lights.add(Light.create(40, 20, 16, .9F, .9F, .6F));
-		lightManager.lights.add(Light.create(30, 20, 16, 1F, 1F, .5F));
+		lightManager.lights.add(Light.create(70, 40, 16, .6F, .6F, .9F));
+		lightManager.lights.add(Light.create(60, 60, 16, .7F, .7F, .8F));
+		lightManager.lights.add(Light.create(50, 80, 16, .8F, .8F, .7F));
+		lightManager.lights.add(Light.create(40, 60, 16, .9F, .9F, .6F));
+		lightManager.lights.add(Light.create(30, 40, 16, 1F, 1F, .5F));
 		lightManager.lights.add(Light.create(20, 20, 16, 1F, 1F, .4F));
 		lightManager.lights.add(Light.create(10, 20, 16, 1F, 1F, .3F));
 		texture = new Texture(Gdx.files.internal("badlogic_small.jpg"));
@@ -98,17 +99,12 @@ public class RenderSystem extends IteratingSystem {
 		shaderProgram.setUniformi("u_textureHeight", (int) CaveGame.instance.orthoCam.viewportHeight);
 		shaderProgram.setUniformi("u_texOffsetX", (int) (CaveGame.instance.orthoCam.position.x - CaveGame.instance.orthoCam.viewportWidth / 2));
 		shaderProgram.setUniformi("u_texOffsetY", (int) (CaveGame.instance.orthoCam.position.y - CaveGame.instance.orthoCam.viewportHeight / 2));
-		Gdx.app.log("Lights", "Rendering " + lightManager.lights.size() + " lights");
+		Gdx.app.debug("Lights", "Rendering " + lightManager.lights.size() + " lights");
 		lightManager.sortByDistance(new Vector2(CaveGame.instance.orthoCam.position.x, CaveGame.instance.orthoCam.position.y));
 		shaderProgram.setUniformi("u_numLights", (lightManager.maxLights < lightManager.lights.size()) ? lightManager.maxLights : lightManager.lights.size());
 		for(int i = 0; i < lightManager.lights.size() && i < lightManager.maxLights; i++){
-			System.out.println(i);
 			shaderProgram.setUniform3fv("u_lightColors[" + i + "]", lightManager.lights.get(i).rgb , 0, 3);
 			shaderProgram.setUniform3fv("u_lightProps[" + i + "]", lightManager.lights.get(i).getPropertyArray(), 0, 3);
-			for(float f : lightManager.lights.get(i).getPropertyArray()){
-				System.out.print(f);
-			}
-			System.out.println();
 		}
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
