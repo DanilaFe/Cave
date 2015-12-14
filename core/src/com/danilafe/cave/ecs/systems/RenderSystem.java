@@ -50,7 +50,14 @@ public class RenderSystem extends IteratingSystem {
 		bufferBatch = new SpriteBatch();
 		shaderProgram = CaveGame.loadShaders("debug");
 		lightManager = new LightManager();
-		lightManager.lights.add(Light.create(80, 20, 30, .3F, .8F, .7F));
+		lightManager.lights.add(Light.create(80, 20, 5, .3F, .8F, .7F));
+		lightManager.lights.add(Light.create(70, 20, 5, .4F, .7F, .6F));
+		lightManager.lights.add(Light.create(60, 20, 5, .5F, .6F, .5F));
+		lightManager.lights.add(Light.create(50, 20, 5, .6F, .5F, .4F));
+		lightManager.lights.add(Light.create(40, 20, 5, .7F, .4F, .3F));
+		lightManager.lights.add(Light.create(30, 20, 5, .8F, .3F, .2F));
+		lightManager.lights.add(Light.create(20, 20, 5, .9F, .2F, .1F));
+
 		
 		bufferBatch.setShader(shaderProgram);
 	}
@@ -93,8 +100,13 @@ public class RenderSystem extends IteratingSystem {
 		lightManager.sortByDistance(new Vector2(CaveGame.instance.orthoCam.position.x, CaveGame.instance.orthoCam.position.y));
 		shaderProgram.setUniformi("u_numLights", (lightManager.maxLights < lightManager.lights.size()) ? lightManager.maxLights : lightManager.lights.size());
 		for(int i = 0; i < lightManager.lights.size() && i < lightManager.maxLights; i++){
+			System.out.println(i);
 			shaderProgram.setUniform3fv("u_lightColors[" + i + "]", lightManager.lights.get(i).rgb , 0, 3);
 			shaderProgram.setUniform3fv("u_lightProps[" + i + "]", lightManager.lights.get(i).getPropertyArray(), 0, 3);
+			for(float f : lightManager.lights.get(i).getPropertyArray()){
+				System.out.print(f);
+			}
+			System.out.println();
 		}
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
