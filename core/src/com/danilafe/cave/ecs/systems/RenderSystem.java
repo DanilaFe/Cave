@@ -54,9 +54,7 @@ public class RenderSystem extends IteratingSystem {
 		normalBatch = new SpriteBatch();
 		shaderProgram = CaveGame.loadShaders("debug");
 		lightManager = new LightManager();
-		lightManager.lights.add(Light.create(0, 24, 200, .5F, .5F, 1F));
-		lightManager.lights.add(Light.create(50, 24, 200, .5F, .5F, .5F));
-		lightManager.lights.add(Light.create(100, 24, 200, .5F, .2F, .2F));
+		lightManager.lights.add(Light.create(50, 24, 200, 1F, 1F, 1F));
 		texture = new Texture(Gdx.files.internal("badlogic_small.jpg"));
 		
 		bufferBatch.setShader(shaderProgram);
