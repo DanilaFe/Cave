@@ -143,7 +143,7 @@ public class CaveGame extends ApplicationAdapter {
 		/*
 		 * Animations
 		 */
-		creationManager.animationParams.put("placeholder", AnimationParameter.create("tests/balltest.png", true, 16, 16, 1F / 5));
+		creationManager.animationParams.put("ground", AnimationParameter.create("tiles/ground.png", true, 16, 16, 1F / 5));
 		
 		/*
 		 * Entities
@@ -152,7 +152,7 @@ public class CaveGame extends ApplicationAdapter {
 			@Override
 			public Entity create(float x, float y) {
 				Animation placeholderAnimation = new Animation();
-				placeholderAnimation.animationParameter = creationManager.animationParams.get("placeholder");
+				placeholderAnimation.animationParameter = creationManager.animationParams.get("ground");
 				
 				Entity entity = pooledEngine.createEntity();
 				CPosition position = pooledEngine.createComponent(CPosition.class);
@@ -217,6 +217,11 @@ public class CaveGame extends ApplicationAdapter {
 				CNormalObstacle normalObstacle = pooledEngine.createComponent(CNormalObstacle.class);
 				CFrictionCause frictionCause = pooledEngine.createComponent(CFrictionCause.class);
 				frictionCause.frictionMultiplier.x = .01F;
+				CAnimation animation = new CAnimation();
+				Animation an = new Animation();
+				an.animationParameter = creationManager.animationParams.get("ground");
+				animation.animationQueue.animationQueue.add(an);
+				entity.add(animation);
 				entity.add(position);
 				entity.add(bounds);
 				entity.add(normalObstacle);
@@ -230,6 +235,8 @@ public class CaveGame extends ApplicationAdapter {
 	private void loadAssets() {
 		assetManager.load("textures/tests/balltest.png", Texture.class);
 		assetManager.load("normals/tests/balltest.png", Texture.class);
+		assetManager.load("textures/tiles/ground.png", Texture.class);
+		assetManager.load("normals/tiles/ground.png", Texture.class);
 		while(!assetManager.update());
 	}
 
