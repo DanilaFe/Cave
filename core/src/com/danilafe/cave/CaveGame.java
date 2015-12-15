@@ -20,6 +20,7 @@ import com.danilafe.cave.creation.CreationManager;
 import com.danilafe.cave.creation.EntityDescriptor;
 import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CBounds;
+import com.danilafe.cave.ecs.components.CCameraView;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
 import com.danilafe.cave.ecs.components.CGravity;
@@ -29,6 +30,7 @@ import com.danilafe.cave.ecs.components.CPosition;
 import com.danilafe.cave.ecs.components.CSpeed;
 import com.danilafe.cave.ecs.components.CStepper;
 import com.danilafe.cave.ecs.systems.BoundsSystem;
+import com.danilafe.cave.ecs.systems.CameraSystem;
 import com.danilafe.cave.ecs.systems.DebugRenderSystem;
 import com.danilafe.cave.ecs.systems.FrictionSystem;
 import com.danilafe.cave.ecs.systems.GravitySystem;
@@ -83,6 +85,7 @@ public class CaveGame extends ApplicationAdapter {
 	 * StepperSystem - steps all custom code entities.
 	 */
 	public StepperSystem stepperSystem;
+	public CameraSystem cameraSystem;
 	/**
 	 * Camera used to look into the game world.
 	 */
@@ -107,6 +110,7 @@ public class CaveGame extends ApplicationAdapter {
 		normalSystem = new NormalSystem();
 		frictionSystem = new FrictionSystem();
 		stepperSystem = new StepperSystem();
+		cameraSystem = new CameraSystem();
 		
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 		
@@ -118,6 +122,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(positionSystem);
 		pooledEngine.addSystem(frictionSystem);
 		pooledEngine.addSystem(stepperSystem);
+		pooledEngine.addSystem(cameraSystem);
 		
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();
@@ -189,6 +194,9 @@ public class CaveGame extends ApplicationAdapter {
 						myFriction.frictionCoefficient.x = (enableFriction) ? 1 : 0;
 					}
 				};
+				CCameraView camView = pooledEngine.createComponent(CCameraView.class);
+				camView.camera = orthoCam;
+				entity.add(camView);
 				entity.add(position);
 				entity.add(speed);
 				entity.add(animation);
