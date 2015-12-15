@@ -54,15 +54,9 @@ public class RenderSystem extends IteratingSystem {
 		normalBatch = new SpriteBatch();
 		shaderProgram = CaveGame.loadShaders("debug");
 		lightManager = new LightManager();
-		/*lightManager.lights.add(Light.create(90, 20, 16, .5F, .5F, 1F));
-		lightManager.lights.add(Light.create(80, 20, 16, .5F, .5F, 1F));
-		lightManager.lights.add(Light.create(70, 40, 16, .6F, .6F, .9F));
-		lightManager.lights.add(Light.create(60, 60, 16, .7F, .7F, .8F));*/
-		lightManager.lights.add(Light.create(50, 24, 100, .5F, .5F, 1F));
-		/*lightManager.lights.add(Light.create(40, 60, 16, .9F, .9F, .6F));
-		lightManager.lights.add(Light.create(30, 40, 16, 1F, 1F, .5F));
-		lightManager.lights.add(Light.create(20, 20, 16, 1F, 1F, .4F));
-		lightManager.lights.add(Light.create(10, 20, 16, 1F, 1F, .3F));*/
+		lightManager.lights.add(Light.create(0, 24, 200, .5F, .5F, 1F));
+		lightManager.lights.add(Light.create(50, 24, 200, .5F, .5F, .5F));
+		lightManager.lights.add(Light.create(100, 24, 200, .5F, .2F, .2F));
 		texture = new Texture(Gdx.files.internal("badlogic_small.jpg"));
 		
 		bufferBatch.setShader(shaderProgram);
