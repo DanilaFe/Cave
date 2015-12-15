@@ -5,14 +5,12 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.CaveGame;
-import com.danilafe.cave.Constants;
 import com.danilafe.cave.animation.Animation;
 import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CPosition;
@@ -45,7 +43,6 @@ public class RenderSystem extends IteratingSystem {
 	FrameBuffer mainBuffer;
 	FrameBuffer normalBuffer;
 	LightManager lightManager;
-	Texture texture;
 	
 	public RenderSystem() {
 		super(Family.all(CAnimation.class, CPosition.class).get());
@@ -55,7 +52,6 @@ public class RenderSystem extends IteratingSystem {
 		shaderProgram = CaveGame.loadShaders("debug");
 		lightManager = new LightManager();
 		lightManager.lights.add(Light.create(50, 24, 200, 1F, 1F, 1F));
-		texture = new Texture(Gdx.files.internal("badlogic_small.jpg"));
 		
 		bufferBatch.setShader(shaderProgram);
 	}
