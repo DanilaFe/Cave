@@ -1,5 +1,8 @@
 package com.danilafe.cave;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
@@ -230,10 +233,26 @@ public class CaveGame extends ApplicationAdapter {
 	}
 
 	private void loadAssets() {
-		assetManager.load("textures/tests/balltest.png", Texture.class);
-		assetManager.load("normals/tests/balltest.png", Texture.class);
-		assetManager.load("textures/tests/ground.png", Texture.class);
-		assetManager.load("normals/tests/ground.png", Texture.class);
+		String assets = Gdx.files.internal("assets.txt").readString();
+		System.out.println(assets);
+		Pattern pattern = Pattern.compile("\\[NormalTexture\\]\\n([^\\[]*)\\n?\\[RegularTexture\\]([^\\[]*)?\\n?");
+		Matcher matcher = pattern.matcher(assets);
+		if(!matcher.find()) Gdx.app.debug("Asset Loading", "No matches.");;
+		
+		String normalTextures = matcher.group(1);
+		System.out.println(normalTextures);
+		String regularTextures = matcher.group(2);
+		System.out.println(regularTextures);
+		if(normalTextures.length() != 0)
+		for(String s : normalTextures.split("\n")){
+			assetManager.load("textures/" + s, Texture.class);
+			assetManager.load("normals/" + s, Texture.class);
+		}
+		if(regularTextures.length() != 0)
+			for(String s : regularTextures.split("\n")){
+				assetManager.load("textures/" + s, Texture.class);
+			}
+		
 		while(!assetManager.update());
 	}
 
