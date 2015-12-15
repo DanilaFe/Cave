@@ -8,14 +8,14 @@ uniform sampler2D u_texture;
 uniform int u_textureWidth;
 uniform int u_textureHeight;
 uniform int u_texOffsetX;
-uniform int u_texOffsety;
+uniform int u_texOffsetY;
 uniform int u_numLights;
 uniform vec3 u_lightColors[128];
 uniform vec3 u_lightProps[128];
 
 void main() {
 	vec3 totalLights = vec3(0.0, 0.0, 0.0);
-	vec2 worldPos = vec2(floor(v_texCoords.x * float(u_textureWidth)) + float(u_texOffsetX), floor(v_texCoords.y * float(u_textureHeight)) + float(u_texOffsety));
+	vec2 worldPos = vec2(floor(v_texCoords.x * float(u_textureWidth)) + float(u_texOffsetX), floor(v_texCoords.y * float(u_textureHeight)) + float(u_texOffsetY));
 	for(int i = 0; i < u_numLights; i++){
 		float light_percent = 1.0 - pow(distance(u_lightProps[i].xy, worldPos) / u_lightProps[i].z, .3);
 		if(light_percent < 0.0) light_percent = 0.0;
