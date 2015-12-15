@@ -28,4 +28,8 @@ public class Animation {
 		return animationParameter.textures[index / animationParameter.textures[0].length][index % animationParameter.textures[0].length];
 	}
 	
+	public TextureRegion getNormalAt(int index){
+		return animationParameter.normalTextures[index / animationParameter.normalTextures[0].length][index % animationParameter.normalTextures[0].length];
+	}
+	
 }
