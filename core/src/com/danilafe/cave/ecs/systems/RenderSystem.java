@@ -34,6 +34,7 @@ public class RenderSystem extends IteratingSystem {
 	 * The batch used to render buffer contents.
 	 */
 	SpriteBatch bufferBatch;
+	SpriteBatch normalBatch;
 	/**
 	 * The shader used by the bufferBatch
 	 */
@@ -42,6 +43,7 @@ public class RenderSystem extends IteratingSystem {
 	 * The framebuffer used to render everything before shader is applied.
 	 */
 	FrameBuffer mainBuffer;
+	FrameBuffer normalBuffer;
 	LightManager lightManager;
 	Texture texture;
 	
@@ -49,17 +51,18 @@ public class RenderSystem extends IteratingSystem {
 		super(Family.all(CAnimation.class, CPosition.class).get());
 		mainBatch = new SpriteBatch();
 		bufferBatch = new SpriteBatch();
+		normalBatch = new SpriteBatch();
 		shaderProgram = CaveGame.loadShaders("debug");
 		lightManager = new LightManager();
-		lightManager.lights.add(Light.create(90, 20, 16, .5F, .5F, 1F));
+		/*lightManager.lights.add(Light.create(90, 20, 16, .5F, .5F, 1F));
 		lightManager.lights.add(Light.create(80, 20, 16, .5F, .5F, 1F));
 		lightManager.lights.add(Light.create(70, 40, 16, .6F, .6F, .9F));
-		lightManager.lights.add(Light.create(60, 60, 16, .7F, .7F, .8F));
-		lightManager.lights.add(Light.create(50, 80, 16, .8F, .8F, .7F));
-		lightManager.lights.add(Light.create(40, 60, 16, .9F, .9F, .6F));
+		lightManager.lights.add(Light.create(60, 60, 16, .7F, .7F, .8F));*/
+		lightManager.lights.add(Light.create(50, 24, 100, .5F, .5F, 1F));
+		/*lightManager.lights.add(Light.create(40, 60, 16, .9F, .9F, .6F));
 		lightManager.lights.add(Light.create(30, 40, 16, 1F, 1F, .5F));
 		lightManager.lights.add(Light.create(20, 20, 16, 1F, 1F, .4F));
-		lightManager.lights.add(Light.create(10, 20, 16, 1F, 1F, .3F));
+		lightManager.lights.add(Light.create(10, 20, 16, 1F, 1F, .3F));*/
 		texture = new Texture(Gdx.files.internal("badlogic_small.jpg"));
 		
 		bufferBatch.setShader(shaderProgram);
@@ -83,23 +86,42 @@ public class RenderSystem extends IteratingSystem {
 		mainBuffer.begin();
 		Gdx.gl.glViewport(0, 0, mainBuffer.getWidth(), mainBuffer.getHeight());
 		Gdx.gl.glClearColor(1F, 1F, 1F, 1);
-		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT | Gdx.gl.GL_DEPTH_BUFFER_BIT);
-		
-		mainBatch.setProjectionMatrix(CaveGame.instance.orthoCam.combined);
-		
+		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT | Gdx.gl.GL_DEPTH_BUFFER_BIT);	
+		mainBatch.setProjectionMatrix(CaveGame.instance.orthoCam.combined);	
 		mainBatch.begin();
 		super.update(deltaTime);
 		mainBatch.end();
-		
 		mainBuffer.end();
+		
+		normalBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+		normalBuffer.begin();
+		Gdx.gl.glViewport(0, 0, normalBuffer.getWidth(), normalBuffer.getHeight());
+		Gdx.gl.glClearColor(.5F, .5F, 1F, 1);
+		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT | Gdx.gl.GL_DEPTH_BUFFER_BIT);	
+		normalBatch.setProjectionMatrix(CaveGame.instance.orthoCam.combined);	
+		normalBatch.begin();
+		for(Entity e : getEntities()){
+			CAnimation animation = e.getComponent(CAnimation.class);
+			CPosition position = e.getComponent(CPosition.class);
+			Animation animationObject = animation.animationQueue.animationQueue.peek();
+			if (animationObject != null){
+				TextureRegion toRender = animationObject.getNormalAt(animationObject.texIndex);
+				normalBatch.draw(toRender, Math.round(position.position.x - toRender.getRegionWidth() / 2), Math.round(position.position.y - toRender.getRegionHeight() / 2));
+			}
+		}
+		normalBatch.end();
+		normalBuffer.end();
 		
 		bufferBatch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		bufferBatch.begin();
+		normalBuffer.getColorBufferTexture().bind(1);
+		Gdx.gl.glActiveTexture(Gdx.gl.GL_TEXTURE0);
+		Gdx.app.debug("Lights", "Rendering " + lightManager.lights.size() + " lights");
+		shaderProgram.setUniformi("u_normalTexture", 1);
 		shaderProgram.setUniformi("u_textureWidth", (int) CaveGame.instance.orthoCam.viewportWidth);
 		shaderProgram.setUniformi("u_textureHeight", (int) CaveGame.instance.orthoCam.viewportHeight);
 		shaderProgram.setUniformi("u_texOffsetX", (int) (CaveGame.instance.orthoCam.position.x - CaveGame.instance.orthoCam.viewportWidth / 2));
 		shaderProgram.setUniformi("u_texOffsetY", (int) (CaveGame.instance.orthoCam.position.y - CaveGame.instance.orthoCam.viewportHeight / 2));
-		Gdx.app.debug("Lights", "Rendering " + lightManager.lights.size() + " lights");
 		lightManager.sortByDistance(new Vector2(CaveGame.instance.orthoCam.position.x, CaveGame.instance.orthoCam.position.y));
 		shaderProgram.setUniformi("u_numLights", (lightManager.maxLights < lightManager.lights.size()) ? lightManager.maxLights : lightManager.lights.size());
 		for(int i = 0; i < lightManager.lights.size() && i < lightManager.maxLights; i++){
@@ -110,7 +132,9 @@ public class RenderSystem extends IteratingSystem {
 		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
 		bufferBatch.draw(mainBuffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, 1, 1);
 		bufferBatch.end();
+		
 		mainBuffer.dispose();
+		normalBuffer.dispose();
 	}
 
 }
