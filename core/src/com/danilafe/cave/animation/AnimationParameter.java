@@ -1,5 +1,7 @@
 package com.danilafe.cave.animation;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.danilafe.cave.CaveGame;
 
 /**
  * AnimationParameter - Defines the properties of an animation. 
@@ -15,6 +17,10 @@ public class AnimationParameter {
 	 */
 	public TextureRegion[][] textures;
 	/**
+	 * Normal maps associated with this animation
+	 */
+	public TextureRegion[][] normalTextures;
+	/**
 	 * Whether this animation should loop or not
 	 */
 	public boolean loop = false;
@@ -22,5 +28,14 @@ public class AnimationParameter {
 	 * Milliseconds between each frame
 	 */
 	public float frameDelta;
+	
+	public static AnimationParameter create(String texturePath, boolean loop, int texWidth, int texHeight, float frameDelta){
+		AnimationParameter animationParameter = new AnimationParameter();
+		animationParameter.textures = TextureRegion.split(CaveGame.instance.assetManager.get("textures/" + texturePath, Texture.class), texWidth, texHeight);
+		animationParameter.normalTextures =  TextureRegion.split(CaveGame.instance.assetManager.get("normals/" + texturePath, Texture.class), texWidth, texHeight);
+		animationParameter.frameDelta = frameDelta;
+		animationParameter.loop = loop;
+		return animationParameter;
+	}
 	
 }
