@@ -143,11 +143,7 @@ public class CaveGame extends ApplicationAdapter {
 		/*
 		 * Animations
 		 */
-		AnimationParameter placeholderAnimationParameter = new AnimationParameter();
-		placeholderAnimationParameter.textures = TextureRegion.split(assetManager.get("badlogic.jpg", Texture.class), 16, 16);
-		placeholderAnimationParameter.loop = true;
-		placeholderAnimationParameter.frameDelta = 1F / 5;
-		creationManager.animationParams.put("placeholder", placeholderAnimationParameter);
+		creationManager.animationParams.put("placeholder", AnimationParameter.create("tests/balltest.png", true, 16, 16, 1F / 5));
 		
 		/*
 		 * Entities
@@ -168,7 +164,7 @@ public class CaveGame extends ApplicationAdapter {
 				CBounds bounds = pooledEngine.createComponent(CBounds.class);
 				bounds.bounds.set(x, y, 16, 16);
 				CGravity gravity = pooledEngine.createComponent(CGravity.class);
-				gravity.gravity.set(0, -250);
+				gravity.gravity.set(0, -500);
 				CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
 				CFrictionObject frictionObject = pooledEngine.createComponent(CFrictionObject.class);
 				CStepper stepper = pooledEngine.createComponent(CStepper.class);
@@ -189,7 +185,7 @@ public class CaveGame extends ApplicationAdapter {
 							enableFriction = false;
 						}
 						if(Gdx.input.isKeyPressed(Keys.SPACE) && checkNormalCollision(new Rectangle(myBounds.bounds).setPosition(myBounds.bounds.x + myGravit.gravity.x * deltaTime, myBounds.bounds.y + myGravit.gravity.y * deltaTime))){
-							mySpeed.speed.y += 20; 
+							mySpeed.speed.y = 100; 
 						}
 						myFriction.frictionCoefficient.x = (enableFriction) ? 1 : 0;
 					}
@@ -232,7 +228,8 @@ public class CaveGame extends ApplicationAdapter {
 	}
 
 	private void loadAssets() {
-		assetManager.load("badlogic.jpg", Texture.class);
+		assetManager.load("textures/tests/balltest.png", Texture.class);
+		assetManager.load("normals/tests/balltest.png", Texture.class);
 		while(!assetManager.update());
 	}
 
