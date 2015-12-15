@@ -132,11 +132,11 @@ public class CaveGame extends ApplicationAdapter {
 		
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderPlayer").create(50, 50));
 		for(int i = 0; i < 10; i ++){
-			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(16 * i, 0));
-			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(0, 16 * (i + 1)));
-			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(96, 16 * (i + 1)));
+			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(8 * i, 0));
+			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(0, 8 * (i + 1)));
+			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(72, 8 * (i + 1)));
 		}
-		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(16, 16 * 2));
+		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(8, 8 * 2));
 	}
 
 	private void loadCreation() {
@@ -162,7 +162,7 @@ public class CaveGame extends ApplicationAdapter {
 				CAnimation animation = pooledEngine.createComponent(CAnimation.class);
 				animation.animationQueue.animationQueue.add(placeholderAnimation);
 				CBounds bounds = pooledEngine.createComponent(CBounds.class);
-				bounds.bounds.set(x, y, 16, 16);
+				bounds.bounds.set(x, y, 8, 8);
 				CGravity gravity = pooledEngine.createComponent(CGravity.class);
 				gravity.gravity.set(0, -500);
 				CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
@@ -213,7 +213,7 @@ public class CaveGame extends ApplicationAdapter {
 				CPosition position = pooledEngine.createComponent(CPosition.class);
 				position.position.set(x, y);
 				CBounds bounds = pooledEngine.createComponent(CBounds.class);
-				bounds.bounds.set(x, y, 16, 16);
+				bounds.bounds.set(x, y, 8, 8);
 				CNormalObstacle normalObstacle = pooledEngine.createComponent(CNormalObstacle.class);
 				CFrictionCause frictionCause = pooledEngine.createComponent(CFrictionCause.class);
 				frictionCause.frictionMultiplier.x = .01F;
