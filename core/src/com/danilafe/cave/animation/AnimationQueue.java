@@ -25,7 +25,8 @@ public class AnimationQueue {
 	 * @param deltaTime the delta time to use in this update.
 	 */
 	public void update(float deltaTime){
-		while((this.deltaTime -= deltaTime) < 0) {
+		this.deltaTime -= deltaTime;
+		while(this.deltaTime <= 0 && animationQueue.getFirst().animationParameter.frameDelta != 0) {
 			if(animationQueue.size() <= 0) return;
 			Animation currentAnimation = animationQueue.getFirst();
 			this.deltaTime += currentAnimation.animationParameter.frameDelta;
