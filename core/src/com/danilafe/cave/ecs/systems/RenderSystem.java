@@ -32,6 +32,9 @@ public class RenderSystem extends IteratingSystem {
 	 * The batch used to render buffer contents.
 	 */
 	SpriteBatch bufferBatch;
+	/**
+	 * The batch used to render normal maps
+	 */
 	SpriteBatch normalBatch;
 	/**
 	 * The shader used by the bufferBatch
@@ -41,7 +44,13 @@ public class RenderSystem extends IteratingSystem {
 	 * The framebuffer used to render everything before shader is applied.
 	 */
 	FrameBuffer mainBuffer;
+	/**
+	 * Buffer used for normal maps
+	 */
 	FrameBuffer normalBuffer;
+	/**
+	 * Class to manage lights
+	 */
 	LightManager lightManager;
 	
 	public RenderSystem() {
