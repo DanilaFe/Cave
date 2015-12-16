@@ -1,2 +1,3 @@
 [NormalTexture]
+cavewall.png
 [RegularTexture]
