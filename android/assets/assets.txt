@@ -1,3 +1,2 @@
 [NormalTexture]
-tests/ground.png
 [RegularTexture]

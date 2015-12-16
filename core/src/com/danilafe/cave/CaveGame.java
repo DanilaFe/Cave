@@ -144,26 +144,16 @@ public class CaveGame extends ApplicationAdapter {
 
 	private void loadCreation() {
 		/*
-		 * Animations
-		 */
-		creationManager.animationParams.put("placeholder", AnimationParameter.create("tests/ground.png", true, 16, 16, 1F / 5));
-		
-		/*
 		 * Entities
 		 */
 		EntityDescriptor playerholderPlayer = new EntityDescriptor() {	
 			@Override
 			public Entity create(float x, float y) {
-				Animation placeholderAnimation = new Animation();
-				placeholderAnimation.animationParameter = creationManager.animationParams.get("placeholder");
-				
 				Entity entity = pooledEngine.createEntity();
 				CPosition position = pooledEngine.createComponent(CPosition.class);
 				position.position.set(x, y);
 				CSpeed speed = pooledEngine.createComponent(CSpeed.class);
 				speed.speed.set(10, 100);
-				CAnimation animation = pooledEngine.createComponent(CAnimation.class);
-				animation.animationQueue.animationQueue.add(placeholderAnimation);
 				CBounds bounds = pooledEngine.createComponent(CBounds.class);
 				bounds.bounds.set(x, y, 8, 8);
 				CGravity gravity = pooledEngine.createComponent(CGravity.class);
@@ -198,7 +188,6 @@ public class CaveGame extends ApplicationAdapter {
 				entity.add(camView);
 				entity.add(position);
 				entity.add(speed);
-				entity.add(animation);
 				entity.add(bounds);
 				entity.add(gravity);
 				entity.add(normalObject);
