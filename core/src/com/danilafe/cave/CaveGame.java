@@ -209,8 +209,6 @@ public class CaveGame extends ApplicationAdapter {
 				CNormalObstacle normalObstacle = pooledEngine.createComponent(CNormalObstacle.class);
 				CFrictionCause frictionCause = pooledEngine.createComponent(CFrictionCause.class);
 				frictionCause.frictionMultiplier.x = .01F;
-				CAnimation animation = new CAnimation();
-				entity.add(animation);
 				entity.add(position);
 				entity.add(bounds);
 				entity.add(normalObstacle);
