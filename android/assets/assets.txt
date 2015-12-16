@@ -1,3 +1,4 @@
 [NormalTexture]
 cavewall.png
+floortiles.png
 [RegularTexture]
