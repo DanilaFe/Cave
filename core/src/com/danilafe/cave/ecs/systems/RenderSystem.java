@@ -51,7 +51,7 @@ public class RenderSystem extends IteratingSystem {
 		normalBatch = new SpriteBatch();
 		shaderProgram = CaveGame.loadShaders("debug");
 		lightManager = new LightManager();
-		lightManager.lights.add(Light.create(50, 24, 200, 1F, 1F, 1F));
+		lightManager.lights.add(Light.create(50, 24, 200, 1F, .85F, .7F));
 		
 		bufferBatch.setShader(shaderProgram);
 	}
