@@ -98,7 +98,8 @@ public class CaveGame extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-		// Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
+		if(Constants.DEBUG)
+			Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
 		
 		/*
 		 * Creation code
@@ -119,7 +120,8 @@ public class CaveGame extends ApplicationAdapter {
 		
 		pooledEngine.addSystem(renderSystem);
 		pooledEngine.addSystem(boundsSystem);
-		pooledEngine.addSystem(debugRenderSystem);
+		if(Constants.DEBUG)
+			pooledEngine.addSystem(debugRenderSystem);
 		pooledEngine.addSystem(gravitySystem);
 		pooledEngine.addSystem(normalSystem);
 		pooledEngine.addSystem(positionSystem);

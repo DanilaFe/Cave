@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.CaveGame;
+import com.danilafe.cave.Constants;
 import com.danilafe.cave.animation.Animation;
 import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CPosition;
@@ -94,19 +95,21 @@ public class RenderSystem extends IteratingSystem {
 		normalBuffer.begin();
 		Gdx.gl.glViewport(0, 0, normalBuffer.getWidth(), normalBuffer.getHeight());
 		Gdx.gl.glClearColor(.5F, .5F, 1F, 1);
-		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT | Gdx.gl.GL_DEPTH_BUFFER_BIT);	
-		normalBatch.setProjectionMatrix(CaveGame.instance.orthoCam.combined);	
-		normalBatch.begin();
-		for(Entity e : getEntities()){
-			CAnimation animation = e.getComponent(CAnimation.class);
-			CPosition position = e.getComponent(CPosition.class);
-			Animation animationObject = animation.animationQueue.animationQueue.peek();
-			if (animationObject != null){
-				TextureRegion toRender = animationObject.getNormalAt(animationObject.texIndex);
-				normalBatch.draw(toRender, Math.round(position.position.x - toRender.getRegionWidth() / 2), Math.round(position.position.y - toRender.getRegionHeight() / 2));
+		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT | Gdx.gl.GL_DEPTH_BUFFER_BIT);
+		if(Constants.NORMAL){
+			normalBatch.setProjectionMatrix(CaveGame.instance.orthoCam.combined);	
+			normalBatch.begin();
+			for(Entity e : getEntities()){
+				CAnimation animation = e.getComponent(CAnimation.class);
+				CPosition position = e.getComponent(CPosition.class);
+				Animation animationObject = animation.animationQueue.animationQueue.peek();
+				if (animationObject != null){
+					TextureRegion toRender = animationObject.getNormalAt(animationObject.texIndex);
+					normalBatch.draw(toRender, Math.round(position.position.x - toRender.getRegionWidth() / 2), Math.round(position.position.y - toRender.getRegionHeight() / 2));
+				}
 			}
+			normalBatch.end();
 		}
-		normalBatch.end();
 		normalBuffer.end();
 		
 		bufferBatch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
