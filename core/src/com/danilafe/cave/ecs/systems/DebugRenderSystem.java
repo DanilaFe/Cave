@@ -35,11 +35,13 @@ public class DebugRenderSystem extends IteratingSystem {
 	
 	@Override
 	public void update(float deltaTime) {
-		shapeRenderer.setAutoShapeType(true);
-		shapeRenderer.setProjectionMatrix(CaveGame.instance.orthoCam.combined);
-		shapeRenderer.begin();
-		super.update(deltaTime);
-		shapeRenderer.end();
+		if(CaveGame.instance.debug){
+			shapeRenderer.setAutoShapeType(true);
+			shapeRenderer.setProjectionMatrix(CaveGame.instance.orthoCam.combined);
+			shapeRenderer.begin();
+			super.update(deltaTime);
+			shapeRenderer.end();
+		}
 	}
 
 }

@@ -93,14 +93,21 @@ public class CaveGame extends ApplicationAdapter {
 	 * Camera used to look into the game world.
 	 */
 	public OrthographicCamera orthoCam;
+	/**
+	 * Creation Manager used to load previously created data 
+	 */
 	public CreationManager creationManager;
+	/**
+	 * The asset manager used to load textures
+	 */
 	public AssetManager assetManager;
+	/**
+	 * Whether the game is in debug mode.
+	 */
+	public boolean debug = Constants.DEBUG;
 	
 	@Override
 	public void create () {
-		if(Constants.DEBUG)
-			Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
-		
 		/*
 		 * Creation code
 		 */
@@ -120,8 +127,7 @@ public class CaveGame extends ApplicationAdapter {
 		
 		pooledEngine.addSystem(renderSystem);
 		pooledEngine.addSystem(boundsSystem);
-		if(Constants.DEBUG)
-			pooledEngine.addSystem(debugRenderSystem);
+		pooledEngine.addSystem(debugRenderSystem);
 		pooledEngine.addSystem(gravitySystem);
 		pooledEngine.addSystem(normalSystem);
 		pooledEngine.addSystem(positionSystem);
@@ -247,6 +253,7 @@ public class CaveGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {		
+		Gdx.app.setLogLevel(debug ? Gdx.app.LOG_DEBUG : Gdx.app.LOG_INFO);
 		/*
 		 * Update the engine using the delta time 
 		 */

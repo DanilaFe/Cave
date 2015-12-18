@@ -20,16 +20,22 @@ public class Animation {
 	public int texIndex = 0;
 	
 	/**
-	 * Gets the frame at the current index
+	 * Gets the frame of the regular texture at the current index
 	 * @param index - the index of the frame
 	 * @return TextureRegion of the current frame.
 	 */
 	public TextureRegion getTextureAt(int index){
-		return animationParameter.textures[index / animationParameter.textures[0].length][index % animationParameter.textures[0].length];
+		return animationParameter.getTextureAt(index);
 	}
 	
+	/**
+	 * Gets the frame of the normal map at the current index
+	 * @param index - the index of the frame
+	 * @return TextureRegion of the current frame.
+	 */
 	public TextureRegion getNormalAt(int index){
-		return animationParameter.normalTextures[index / animationParameter.normalTextures[0].length][index % animationParameter.normalTextures[0].length];
+		return animationParameter.getNormalAt(index);
 	}
+	
 	
 }

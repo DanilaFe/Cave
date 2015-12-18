@@ -29,6 +29,15 @@ public class AnimationParameter {
 	 */
 	public float frameDelta;
 	
+	/**
+	 * Creates a new animation parameter from the given arguments.
+	 * @param texturePath The path to the texture load from
+	 * @param loop whether or not the animation should loop
+	 * @param texWidth the width of the sub frames
+	 * @param texHeight the height of the sub frames
+	 * @param frameDelta the delta time between frames
+	 * @return the newly created AnimationParameter
+	 */
 	public static AnimationParameter create(String texturePath, boolean loop, int texWidth, int texHeight, float frameDelta){
 		AnimationParameter animationParameter = new AnimationParameter();
 		animationParameter.textures = TextureRegion.split(CaveGame.instance.assetManager.get("textures/" + texturePath, Texture.class), texWidth, texHeight);
@@ -38,4 +47,21 @@ public class AnimationParameter {
 		return animationParameter;
 	}
 	
+	/**
+	 * Gets the texture region of the regular texture at the given index. 
+	 * @param index the index of the region, beginning at 0 and increasing left to right, and down to up
+	 * @return the texture region at the given location
+	 */
+	public TextureRegion getTextureAt(int index){
+		return textures[index / textures[0].length][index % textures[0].length];
+	}
+	
+	/**
+	 * Gets the texture region of the normal map at the given index
+	 * @param index index the index of the image, beginning at 0 and increasing left to right, and down to up
+	 * @return the texture region at the given location
+	 */
+	public TextureRegion getNormalAt(int index){
+		return normalTextures[index / normalTextures[0].length][index % normalTextures[0].length];
+	}
 }

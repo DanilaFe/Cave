@@ -37,4 +37,12 @@ public class AnimationQueue {
 			}
 		}
 	}
+	
+	/**
+	 * Convenience method to schedule an animation.
+	 * @param animation
+	 */
+	public void add(Animation animation){
+		animationQueue.add(animation);
+	}
 }
