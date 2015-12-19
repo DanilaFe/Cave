@@ -15,10 +15,10 @@ public class CPosition implements Poolable, Component {
 	 * Vector2 holding the x and y coordinates in the game world.
 	 */
 	public Vector2 position = new Vector2(0, 0);
-	
+
 	@Override
 	public void reset() {
 		position.set(0, 0);
-	}	
-	
+	}
+
 }

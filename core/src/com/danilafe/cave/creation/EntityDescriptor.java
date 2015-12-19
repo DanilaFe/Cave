@@ -17,5 +17,5 @@ public abstract class EntityDescriptor {
 	 * @return the created entity
 	 */
 	public abstract Entity create(float x, float y);
-	
+
 }

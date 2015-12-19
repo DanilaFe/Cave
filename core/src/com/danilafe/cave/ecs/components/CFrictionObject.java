@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 public class CFrictionObject implements Poolable, Component {
 
 	public Vector2 frictionCoefficient = new Vector2(1, 1);
-	
+
 	@Override
 	public void reset() {
 		frictionCoefficient.set(1, 1);

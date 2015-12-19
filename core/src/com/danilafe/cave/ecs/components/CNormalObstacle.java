@@ -12,7 +12,7 @@ public class CNormalObstacle implements Poolable, Component {
 
 	@Override
 	public void reset() {
-		
+
 	}
 
 }

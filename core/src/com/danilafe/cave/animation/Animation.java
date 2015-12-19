@@ -18,7 +18,7 @@ public class Animation {
 	 * Index of current frame
 	 */
 	public int texIndex = 0;
-	
+
 	/**
 	 * Gets the frame of the regular texture at the current index
 	 * @param index - the index of the frame
@@ -27,7 +27,7 @@ public class Animation {
 	public TextureRegion getTextureAt(int index){
 		return animationParameter.getTextureAt(index);
 	}
-	
+
 	/**
 	 * Gets the frame of the normal map at the current index
 	 * @param index - the index of the frame
@@ -36,6 +36,6 @@ public class Animation {
 	public TextureRegion getNormalAt(int index){
 		return animationParameter.getNormalAt(index);
 	}
-	
-	
+
+
 }

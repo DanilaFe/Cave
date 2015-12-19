@@ -11,17 +11,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
-import com.danilafe.cave.animation.Animation;
-import com.danilafe.cave.animation.AnimationParameter;
 import com.danilafe.cave.creation.CreationManager;
 import com.danilafe.cave.creation.EntityDescriptor;
-import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CBounds;
 import com.danilafe.cave.ecs.components.CCameraView;
 import com.danilafe.cave.ecs.components.CFrictionCause;
@@ -55,7 +49,7 @@ public class CaveGame extends ApplicationAdapter {
 	 * Ashley engine. This handles all the updates with the Entity / Component systems.
 	 */
 	public PooledEngine pooledEngine;
-	
+
 	/**
 	 * RenderSystem - renders stuff
 	 */
@@ -77,7 +71,7 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public PositionSystem positionSystem;
 	/**
-	 * NormalSystem - stops intersections and clipping 
+	 * NormalSystem - stops intersections and clipping
 	 */
 	public NormalSystem normalSystem;
 	/**
@@ -94,7 +88,7 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public OrthographicCamera orthoCam;
 	/**
-	 * Creation Manager used to load previously created data 
+	 * Creation Manager used to load previously created data
 	 */
 	public CreationManager creationManager;
 	/**
@@ -105,7 +99,7 @@ public class CaveGame extends ApplicationAdapter {
 	 * Whether the game is in debug mode.
 	 */
 	public boolean debug = Constants.DEBUG;
-	
+
 	@Override
 	public void create () {
 		/*
@@ -122,9 +116,9 @@ public class CaveGame extends ApplicationAdapter {
 		frictionSystem = new FrictionSystem();
 		stepperSystem = new StepperSystem();
 		cameraSystem = new CameraSystem();
-		
+
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
-		
+
 		pooledEngine.addSystem(renderSystem);
 		pooledEngine.addSystem(boundsSystem);
 		pooledEngine.addSystem(debugRenderSystem);
@@ -134,13 +128,13 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(frictionSystem);
 		pooledEngine.addSystem(stepperSystem);
 		pooledEngine.addSystem(cameraSystem);
-		
+
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();
-		
+
 		loadAssets();
 		loadCreation();
-		
+
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderPlayer").create(50, 50));
 		for(int i = 0; i < 10; i ++){
 			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(8 * i, 0));
@@ -154,7 +148,7 @@ public class CaveGame extends ApplicationAdapter {
 		/*
 		 * Entities
 		 */
-		EntityDescriptor playerholderPlayer = new EntityDescriptor() {	
+		EntityDescriptor playerholderPlayer = new EntityDescriptor() {
 			@Override
 			public Entity create(float x, float y) {
 				Entity entity = pooledEngine.createEntity();
@@ -169,7 +163,7 @@ public class CaveGame extends ApplicationAdapter {
 				CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
 				CFrictionObject frictionObject = pooledEngine.createComponent(CFrictionObject.class);
 				CStepper stepper = pooledEngine.createComponent(CStepper.class);
-				stepper.runnable = new ECSRunnable() {	
+				stepper.runnable = new ECSRunnable() {
 					@Override
 					public void update(Entity me, Engine myEngine, float deltaTime) {
 						CSpeed mySpeed = me.getComponent(CSpeed.class);
@@ -186,7 +180,7 @@ public class CaveGame extends ApplicationAdapter {
 							enableFriction = false;
 						}
 						if(Gdx.input.isKeyPressed(Keys.SPACE) && checkNormalCollision(new Rectangle(myBounds.bounds).setPosition(myBounds.bounds.x + myGravit.gravity.x * deltaTime, myBounds.bounds.y + myGravit.gravity.y * deltaTime))){
-							mySpeed.speed.y = 100; 
+							mySpeed.speed.y = 100;
 						}
 						myFriction.frictionCoefficient.x = (enableFriction) ? 1 : 0;
 					}
@@ -206,7 +200,7 @@ public class CaveGame extends ApplicationAdapter {
 		};
 		creationManager.entityDescriptors.put("placeholderPlayer", playerholderPlayer);
 		EntityDescriptor placeholderWall = new EntityDescriptor() {
-			
+
 			@Override
 			public Entity create(float x, float y) {
 				Entity entity = pooledEngine.createEntity();
@@ -233,34 +227,34 @@ public class CaveGame extends ApplicationAdapter {
 		Pattern pattern = Pattern.compile("\\[NormalTexture\\]\\n([^\\[]*)\\n?\\[RegularTexture\\]([^\\[]*)?\\n?");
 		Matcher matcher = pattern.matcher(assets);
 		if(!matcher.find()) Gdx.app.debug("Asset Loading", "No matches.");;
-		
+
 		String normalTextures = matcher.group(1);
 		System.out.println(normalTextures);
 		String regularTextures = matcher.group(2);
 		System.out.println(regularTextures);
 		if(normalTextures.length() != 0)
-		for(String s : normalTextures.split("\n")){
-			assetManager.load("textures/" + s, Texture.class);
-			assetManager.load("normals/" + s, Texture.class);
-		}
+			for(String s : normalTextures.split("\n")){
+				assetManager.load("textures/" + s, Texture.class);
+				assetManager.load("normals/" + s, Texture.class);
+			}
 		if(regularTextures.length() != 0)
 			for(String s : regularTextures.split("\n")){
 				assetManager.load("textures/" + s, Texture.class);
 			}
-		
+
 		while(!assetManager.update());
 	}
 
 	@Override
-	public void render () {		
+	public void render () {
 		Gdx.app.setLogLevel(debug ? Gdx.app.LOG_DEBUG : Gdx.app.LOG_INFO);
 		/*
-		 * Update the engine using the delta time 
+		 * Update the engine using the delta time
 		 */
 		pooledEngine.update(Gdx.graphics.getDeltaTime());
 		Gdx.app.debug("FPS", Gdx.graphics.getFramesPerSecond() + " Frames Per Second");
 	}
-	
+
 	/**
 	 * Shader function.
 	 * This loads the GLSL shaders for the game.
@@ -279,14 +273,14 @@ public class CaveGame extends ApplicationAdapter {
 		}
 		return newProgram;
 	}
-	
+
 	public boolean checkNormalCollision(Rectangle rect){
 		for (Entity e : normalSystem.entitiesB){
 			if(e.getComponent(CBounds.class).bounds.overlaps(rect)) return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);

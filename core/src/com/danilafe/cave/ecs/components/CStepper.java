@@ -10,7 +10,7 @@ import com.danilafe.cave.runnable.ECSRunnable;
  *
  */
 public class CStepper implements Poolable, Component {
-	
+
 	/**
 	 * The runnable that will be executed.
 	 */

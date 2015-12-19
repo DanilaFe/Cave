@@ -6,7 +6,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.danilafe.cave.ecs.components.CStepper;
 
 /**
- * StepperSystem - calls the update function of all stepper component. 
+ * StepperSystem - calls the update function of all stepper component.
  * @author vanilla
  *
  */

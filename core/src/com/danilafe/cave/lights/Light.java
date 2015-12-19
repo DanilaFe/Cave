@@ -25,10 +25,10 @@ public class Light {
 	 * This field is used to return data to the render system; when querried, it will be populated with position and brightness.
 	 */
 	private float[] propertyArray = new float[3];
-	
+
 	/**
 	 * Gets the other three floats necessary for the GPU to render this.
-	 * @return
+	 * @return the property array passed by the render system to the GPU
 	 */
 	public float[] getPropertyArray(){
 		propertyArray[0] = position.x;
@@ -36,7 +36,7 @@ public class Light {
 		propertyArray[2] = brightness;
 		return propertyArray;
 	}
-	
+
 	/**
 	 * Creates a new light with the given properties
 	 * @param x the x-coordinate of the light
@@ -56,5 +56,5 @@ public class Light {
 		light.position = new Vector2(x,y);
 		return light;
 	}
-	
+
 }

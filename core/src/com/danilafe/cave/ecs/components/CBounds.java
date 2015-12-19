@@ -15,7 +15,7 @@ public class CBounds implements Poolable, Component {
 	 * The rectangle that defines the bounds of this entity.
 	 */
 	public Rectangle bounds = new Rectangle(0, 0, 0, 0);
-	
+
 	@Override
 	public void reset() {
 		bounds.set(0, 0, 0, 0);

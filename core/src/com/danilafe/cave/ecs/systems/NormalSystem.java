@@ -13,7 +13,7 @@ import com.danilafe.cave.ecs.components.CPosition;
 import com.danilafe.cave.ecs.components.CSpeed;
 
 /**
- * NormalSystem - Used for all things relating to the "normal force", 
+ * NormalSystem - Used for all things relating to the "normal force",
  * such as stopping entities before collision and separating clipping entities.
  * This operates only on entities with NormalObject and NormalObstacle flags.
  * @author vanilla
@@ -27,7 +27,7 @@ public class NormalSystem extends FamilySystem {
 	public NormalSystem() {
 		super(Family.all(CNormalObject.class, CBounds.class).get(), Family.all(CNormalObstacle.class, CBounds.class).get());
 	}
-	
+
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
@@ -36,23 +36,23 @@ public class NormalSystem extends FamilySystem {
 			CBounds normalEntityBounds = normalEntity.getComponent(CBounds.class);
 			CPosition normalEntityPosition = normalEntity.getComponent(CPosition.class);
 			CSpeed normalEntitySpeed = normalEntity.getComponent(CSpeed.class);
-			CGravity normalEntityGravity = normalEntity.getComponent(CGravity.class);
+			normalEntity.getComponent(CGravity.class);
 			Rectangle projectedBounds = new Rectangle(normalEntityBounds.bounds);
 			for(int j = 0; j < entitiesB.size(); j++){
 				// We might have moved. Update projectedBounds and bounds
 				normalEntityBounds.bounds.setCenter(normalEntityPosition.position.x, normalEntityPosition.position.y);
 				projectedBounds.set(normalEntityBounds.bounds);
-				
+
 				// Check if we're already inside
 				Entity obstacleEntity = entitiesB.get(j);
 				CBounds obstacleBounds = obstacleEntity.getComponent(CBounds.class);
-				CPosition obstaclePosition = obstacleEntity.getComponent(CPosition.class);
-		
+				obstacleEntity.getComponent(CPosition.class);
+
 				if(obstacleBounds.bounds.overlaps(projectedBounds)){
 					Gdx.app.debug("Collision Detection", "Intresection");
 					moveOutside(projectedBounds, obstacleBounds.bounds, normalEntityPosition.position);
-				}	
-								
+				}
+
 				if(normalEntitySpeed != null) {
 					// We might have moved...
 					// Update position and the bounds.
@@ -74,15 +74,15 @@ public class NormalSystem extends FamilySystem {
 						normalEntityPosition.position.y = ((projectedBounds.y < obstacleBounds.bounds.y) ? obstacleBounds.bounds.y - projectedBounds.height : obstacleBounds.bounds.y + obstacleBounds.bounds.height) + (projectedBounds.height / 2);
 						normalEntitySpeed.speed.y = 0;
 					}
-				}				
-				
+				}
+
 			}
 		}
 	}
-	
+
 	/**
 	 * Movies the position provided in the direction to ensure the two given bounds don't overlap.
-	 * @param movingBounds the bounds that will be moved. 
+	 * @param movingBounds the bounds that will be moved.
 	 * @param otherBounds the bounds that are static
 	 * @param movingPosition the position of the moving bounds
 	 */
@@ -95,7 +95,7 @@ public class NormalSystem extends FamilySystem {
 		float maxY = (!boundsYBigger) ? otherBounds.y : movingBounds.y;
 		float wMin = (boundsXBigger) ? otherBounds.width : movingBounds.width;
 		float hMin = (boundsYBigger) ? otherBounds.height : movingBounds.height;
-		
+
 		float rectWidth = wMin - (maxX - minX);
 		float rectHeight = hMin - (maxY - minY);
 		float rectX = maxX;

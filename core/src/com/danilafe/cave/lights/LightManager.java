@@ -3,7 +3,6 @@ package com.danilafe.cave.lights;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -22,7 +21,7 @@ public class LightManager {
 	 * The list of lights to be rendered
 	 */
 	public ArrayList<Light> lights = new ArrayList<Light>();
-	
+
 	/**
 	 * Sorts the lights in this manager by how far they are from the position. This is used in order to limit the lights rendered.
 	 * @param position the center from which distance to the light is taken.
@@ -35,5 +34,5 @@ public class LightManager {
 			}
 		});
 	}
-	
+
 }

@@ -13,5 +13,5 @@ public class Constants {
 	public static final float CAMERA_WIDTH = 100;
 	public static final boolean DEBUG = true;
 	public static final boolean NORMAL = false;
-	
+
 }

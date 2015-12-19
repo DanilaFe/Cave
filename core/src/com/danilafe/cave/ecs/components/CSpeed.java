@@ -15,11 +15,11 @@ public class CSpeed implements Poolable, Component{
 	 * The vector that holds the speed.
 	 */
 	public Vector2 speed = new Vector2(0, 0);
-	
+
 	@Override
 	public void reset() {
 		speed.set(0, 0);
 	}
-	
-	
+
+
 }

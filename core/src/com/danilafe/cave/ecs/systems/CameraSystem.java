@@ -11,7 +11,7 @@ public class CameraSystem extends IteratingSystem {
 	public CameraSystem() {
 		super(Family.all(CPosition.class, CCameraView.class).get());
 	}
-	
+
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		CCameraView camView = entity.getComponent(CCameraView.class);

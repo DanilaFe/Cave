@@ -9,8 +9,8 @@ import com.badlogic.ashley.utils.ImmutableArray;
 
 /**
  * FamilySystem - A parent class meant to be overridden.
- * This entity keeps track of two families of entities, allowing for efficient operation on two 
- * related sets of entities 
+ * This entity keeps track of two families of entities, allowing for efficient operation on two
+ * related sets of entities
  * @author vanilla
  *
  */
@@ -44,7 +44,7 @@ public class FamilySystem extends EntitySystem {
 	 * The engine this entity is attached to.
 	 */
 	public Engine listenFor;
-	
+
 	/**
 	 * Creates a new FamilySystem operating on families A and B
 	 * @param a family A to keep track of
@@ -53,30 +53,30 @@ public class FamilySystem extends EntitySystem {
 	public FamilySystem(Family a, Family b){
 		familyA = a;
 		familyB = b;
-		listenerA = new EntityListener() {		
+		listenerA = new EntityListener() {
 			@Override
 			public void entityRemoved(Entity entity) {
 				entitiesA = listenFor.getEntitiesFor(familyA);
 			}
-			
+
 			@Override
 			public void entityAdded(Entity entity) {
 				entitiesA = listenFor.getEntitiesFor(familyA);
 			}
 		};
-		listenerB = new EntityListener() {		
+		listenerB = new EntityListener() {
 			@Override
 			public void entityRemoved(Entity entity) {
 				entitiesB = listenFor.getEntitiesFor(familyB);
 			}
-			
+
 			@Override
 			public void entityAdded(Entity entity) {
 				entitiesB = listenFor.getEntitiesFor(familyB);
 			}
 		};
 	}
-	
+
 	@Override
 	public void addedToEngine(Engine engine) {
 		super.addedToEngine(engine);
@@ -86,7 +86,7 @@ public class FamilySystem extends EntitySystem {
 		entitiesA = listenFor.getEntitiesFor(familyA);
 		entitiesB = listenFor.getEntitiesFor(familyB);
 	}
-	
+
 	@Override
 	public void removedFromEngine(Engine engine) {
 		super.removedFromEngine(engine);
@@ -96,5 +96,5 @@ public class FamilySystem extends EntitySystem {
 		entitiesA = null;
 		entitiesB = null;
 	}
-	
+
 }

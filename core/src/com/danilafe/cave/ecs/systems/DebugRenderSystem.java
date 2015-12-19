@@ -18,7 +18,7 @@ public class DebugRenderSystem extends IteratingSystem {
 	 * The shape renderer used to render collision boxes.
 	 */
 	public ShapeRenderer shapeRenderer;
-	
+
 	/**
 	 * Creates a new DebugRenderSystem
 	 */
@@ -30,9 +30,9 @@ public class DebugRenderSystem extends IteratingSystem {
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		CBounds entityBounds = entity.getComponent(CBounds.class);
-		shapeRenderer.rect(entityBounds.bounds.x, entityBounds.bounds.y, entityBounds.bounds.width, entityBounds.bounds.height);	
+		shapeRenderer.rect(entityBounds.bounds.x, entityBounds.bounds.y, entityBounds.bounds.width, entityBounds.bounds.height);
 	}
-	
+
 	@Override
 	public void update(float deltaTime) {
 		if(CaveGame.instance.debug){

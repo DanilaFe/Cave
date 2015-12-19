@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.danilafe.cave.CaveGame;
 
 /**
- * AnimationParameter - Defines the properties of an animation. 
+ * AnimationParameter - Defines the properties of an animation.
  * There should be only one object of this type per each type of animation,
  * and for tracking the current frame etc an Animation has to be used.
  * @author vanilla
@@ -28,7 +28,7 @@ public class AnimationParameter {
 	 * Milliseconds between each frame
 	 */
 	public float frameDelta;
-	
+
 	/**
 	 * Creates a new animation parameter from the given arguments.
 	 * @param texturePath The path to the texture load from
@@ -46,16 +46,16 @@ public class AnimationParameter {
 		animationParameter.loop = loop;
 		return animationParameter;
 	}
-	
+
 	/**
-	 * Gets the texture region of the regular texture at the given index. 
+	 * Gets the texture region of the regular texture at the given index.
 	 * @param index the index of the region, beginning at 0 and increasing left to right, and down to up
 	 * @return the texture region at the given location
 	 */
 	public TextureRegion getTextureAt(int index){
 		return textures[index / textures[0].length][index % textures[0].length];
 	}
-	
+
 	/**
 	 * Gets the texture region of the normal map at the given index
 	 * @param index index the index of the image, beginning at 0 and increasing left to right, and down to up

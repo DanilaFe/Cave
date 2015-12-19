@@ -15,11 +15,11 @@ public class CGravity implements Poolable, Component {
 	 * The gravity value to add.
 	 */
 	public Vector2 gravity = new Vector2(0, 0);
-	
+
 	@Override
 	public void reset() {
 		gravity.set(0, 0);
 	}
-	
-	
+
+
 }

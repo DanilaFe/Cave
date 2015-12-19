@@ -15,7 +15,7 @@ public class CFrictionCause implements Poolable, Component {
 	 * By how much the friction slows the other entity down.
 	 */
 	public Vector2 frictionMultiplier = new Vector2(1, 1);
-	
+
 	@Override
 	public void reset() {
 		frictionMultiplier.set(1, 1);

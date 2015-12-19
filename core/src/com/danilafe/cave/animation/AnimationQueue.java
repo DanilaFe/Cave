@@ -9,7 +9,7 @@ import java.util.LinkedList;
  *
  */
 public class AnimationQueue {
-	
+
 	/**
 	 * List of all the animations scheduled.
 	 */
@@ -18,7 +18,7 @@ public class AnimationQueue {
 	 * Milliseconds left before next frame
 	 */
 	public float deltaTime = 0;
-	
+
 	/**
 	 * Updates the animation queue. This will trigger frame updates in the animations, and, if necessary,
 	 * switch to the next animation.
@@ -37,10 +37,10 @@ public class AnimationQueue {
 			}
 		}
 	}
-	
+
 	/**
 	 * Convenience method to schedule an animation.
-	 * @param animation
+	 * @param animation the animation to schedule.
 	 */
 	public void add(Animation animation){
 		animationQueue.add(animation);

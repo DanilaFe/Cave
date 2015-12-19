@@ -17,5 +17,5 @@ public abstract class ECSRunnable {
 	 * @param deltaTime the delta time of the step
 	 */
 	public abstract void update(Entity me, Engine myEngine, float deltaTime);
-	
+
 }
