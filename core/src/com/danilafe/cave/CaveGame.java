@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -16,16 +17,20 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 import com.danilafe.cave.creation.CreationManager;
 import com.danilafe.cave.creation.EntityDescriptor;
+import com.danilafe.cave.ecs.components.CAcceleration;
 import com.danilafe.cave.ecs.components.CBounds;
 import com.danilafe.cave.ecs.components.CCameraView;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
 import com.danilafe.cave.ecs.components.CGravity;
+import com.danilafe.cave.ecs.components.CLight;
+import com.danilafe.cave.ecs.components.CMarked;
 import com.danilafe.cave.ecs.components.CNormalObject;
 import com.danilafe.cave.ecs.components.CNormalObstacle;
 import com.danilafe.cave.ecs.components.CPosition;
 import com.danilafe.cave.ecs.components.CSpeed;
 import com.danilafe.cave.ecs.components.CStepper;
+import com.danilafe.cave.ecs.systems.AccelerationSystem;
 import com.danilafe.cave.ecs.systems.BoundsSystem;
 import com.danilafe.cave.ecs.systems.CameraSystem;
 import com.danilafe.cave.ecs.systems.DebugRenderSystem;
@@ -92,6 +97,10 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public LightSystem lightSystem;
 	/**
+	 * AccelerationSystem - accelerate things
+	 */
+	public AccelerationSystem accelerationSystem;
+	/**
 	 * Camera used to look into the game world.
 	 */
 	public OrthographicCamera orthoCam;
@@ -125,6 +134,7 @@ public class CaveGame extends ApplicationAdapter {
 		stepperSystem = new StepperSystem();
 		cameraSystem = new CameraSystem();
 		lightSystem = new LightSystem();
+		accelerationSystem = new AccelerationSystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
@@ -138,6 +148,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(stepperSystem);
 		pooledEngine.addSystem(cameraSystem);
 		pooledEngine.addSystem(lightSystem);
+		pooledEngine.addSystem(accelerationSystem);
 
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();
@@ -169,7 +180,7 @@ public class CaveGame extends ApplicationAdapter {
 				CBounds bounds = pooledEngine.createComponent(CBounds.class);
 				bounds.bounds.set(x, y, 8, 8);
 				CGravity gravity = pooledEngine.createComponent(CGravity.class);
-				gravity.gravity.set(0, -500);
+				gravity.gravity.set(0, Constants.DEFAULT_GRAVITY);
 				CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
 				CFrictionObject frictionObject = pooledEngine.createComponent(CFrictionObject.class);
 				CStepper stepper = pooledEngine.createComponent(CStepper.class);
@@ -229,6 +240,53 @@ public class CaveGame extends ApplicationAdapter {
 			}
 		};
 		creationManager.entityDescriptors.put("placeholderWall", placeholderWall);
+		EntityDescriptor lightball = new EntityDescriptor() {
+			@Override
+			public Entity create(float x, float y) {
+				Entity entity = pooledEngine.createEntity();
+				CLight light = pooledEngine.createComponent(CLight.class);
+				light.light.set(0, 0, 10, .1F, .3F, .3F);
+				CPosition position = pooledEngine.createComponent(CPosition.class);
+				position.position.set(x, y);
+				CSpeed speed = pooledEngine.createComponent(CSpeed.class);
+				CStepper stepper =  pooledEngine.createComponent(CStepper.class);
+				CMarked mark = pooledEngine.createComponent(CMarked.class);
+				mark.marks.put("floater", true);
+				stepper.runnable = new ECSRunnable() {
+					@Override
+					public void update(Entity me, Engine myEngine, float deltaTime) {
+						CBounds myBounds = me.getComponent(CBounds.class);
+						CSpeed mySpeed = me.getComponent(CSpeed.class);
+						for(Entity e : myEngine.getEntitiesFor(Family.all(CPosition.class, CSpeed.class, CBounds.class).get())){
+							if(Family.all(CMarked.class).get().matches(e) && e.getComponent(CMarked.class).marks.get("floater").booleanValue()) continue;
+							CBounds otherBounds = e.getComponent(CBounds.class);
+							CSpeed otherSpeed = e.getComponent(CSpeed.class);
+							if(myBounds.bounds.overlaps(otherBounds.bounds)){
+								mySpeed.speed.add(otherSpeed.speed.cpy().scl(deltaTime).scl(.1F));
+							}
+						}
+					}
+				};
+				CBounds bounds = pooledEngine.createComponent(CBounds.class);
+				bounds.bounds.setSize(5, 5);
+				CAcceleration acceleration = pooledEngine.createComponent(CAcceleration.class);
+				acceleration.scalarAcceleration.set(.8F, .8F);
+				CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
+				CGravity gravity = pooledEngine.createComponent(CGravity.class);
+				gravity.gravity.set(0, -0.1F);
+				entity.add(gravity);
+				entity.add(mark);
+				entity.add(bounds);
+				entity.add(stepper);
+				entity.add(speed);
+				entity.add(position);
+				entity.add(light);
+				entity.add(acceleration);
+				entity.add(normalObject);
+				return entity;
+			}
+		};
+		creationManager.entityDescriptors.put("placeholderLightball", lightball);
 	}
 
 	private void loadAssets() {
