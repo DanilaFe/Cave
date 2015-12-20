@@ -57,4 +57,22 @@ public class Light {
 		return light;
 	}
 
+	/**
+	 * Sets the light's properties to the passed in ones. Meant to imitate the create method.
+	 * @param x the x-coordinate of the light
+	 * @param y the y-coordinate of the light
+	 * @param brightness the brigthness of the light
+	 * @param r the red color in the light (between 0 and 1)
+	 * @param g the green color in the light (between 0 and 1)
+	 * @param b the blue color in the light (between 0 and 1)
+	 * @return the newly created light
+	 */
+	public void set(float x, float y, float brightness, float r, float g, float b){
+		rgb[0] = r;
+		rgb[1] = g;
+		rgb[2] = b;
+		this.brightness = brightness;
+		position.set(x, y);
+	}
+
 }
