@@ -65,7 +65,6 @@ public class Light {
 	 * @param r the red color in the light (between 0 and 1)
 	 * @param g the green color in the light (between 0 and 1)
 	 * @param b the blue color in the light (between 0 and 1)
-	 * @return the newly created light
 	 */
 	public void set(float x, float y, float brightness, float r, float g, float b){
 		rgb[0] = r;
