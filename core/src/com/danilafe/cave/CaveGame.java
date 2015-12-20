@@ -291,15 +291,12 @@ public class CaveGame extends ApplicationAdapter {
 
 	private void loadAssets() {
 		String assets = Gdx.files.internal("assets.txt").readString();
-		System.out.println(assets);
 		Pattern pattern = Pattern.compile("\\[NormalTexture\\]\\n([^\\[]*)\\n?\\[RegularTexture\\]([^\\[]*)?\\n?");
 		Matcher matcher = pattern.matcher(assets);
 		if(!matcher.find()) Gdx.app.debug("Asset Loading", "No matches.");
 
 		String normalTextures = matcher.group(1);
-		System.out.println(normalTextures);
 		String regularTextures = matcher.group(2);
-		System.out.println(regularTextures);
 		if(normalTextures.length() != 0)
 			for(String s : normalTextures.split("\n")){
 				assetManager.load("textures/" + s, Texture.class);
@@ -336,7 +333,7 @@ public class CaveGame extends ApplicationAdapter {
 				Gdx.files.internal("shaders/" + shaderName + "/vertex.glsl").readString(),
 				Gdx.files.internal("shaders/" + shaderName + "/fragment.glsl").readString());
 		if (!newProgram.isCompiled()) {
-			System.out.println(newProgram.getLog());
+			Gdx.app.error("Shader Loading", newProgram.getLog());
 			return null;
 		}
 		return newProgram;
