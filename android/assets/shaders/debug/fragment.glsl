@@ -21,9 +21,11 @@ void main() {
 	normalVec.xy -= .5;
     normalVec = normalize(normalVec);
 	for(int i = 0; i < u_numLights; i++){
-		float light_percent = 1.0 - pow(distance(u_lightProps[i].xy, worldPos) / u_lightProps[i].z, .3);
+        vec3 light = u_lightProps[i];
+        light.xy = floor(light.xy);
+		float light_percent = 1.0 - pow(distance(light.xy, worldPos) / light.z, .3);
 		if(light_percent < 0.0) light_percent = 0.0;
-		vec3 lightVec = normalize(vec3(u_lightProps[i].x - worldPos.x, u_lightProps[i].y - worldPos.y, 30));
+		vec3 lightVec = normalize(vec3(light.x - worldPos.x, light.y - worldPos.y, 30));
 		float diffuse = max(dot(normalVec, lightVec), 0.0);
 		totalLights = totalLights + (u_lightColors[i] * light_percent * diffuse);
 	}
