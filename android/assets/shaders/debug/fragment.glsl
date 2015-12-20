@@ -8,15 +8,15 @@ uniform sampler2D u_texture;
 uniform sampler2D u_normalTexture;
 uniform int u_textureWidth;
 uniform int u_textureHeight;
-uniform int u_texOffsetX;
-uniform int u_texOffsetY;
+uniform float u_texOffsetX;
+uniform float u_texOffsetY;
 uniform int u_numLights;
 uniform vec3 u_lightColors[128];
 uniform vec3 u_lightProps[128];
 
 void main() {
 	vec3 totalLights = vec3(0.0, 0.0, 0.0);
-	vec2 worldPos = vec2(floor(v_texCoords.x * float(u_textureWidth)) + float(u_texOffsetX), floor(v_texCoords.y * float(u_textureHeight)) + float(u_texOffsetY));
+	vec2 worldPos = floor(vec2(v_texCoords.x * float(u_textureWidth) + u_texOffsetX, v_texCoords.y * float(u_textureHeight) + u_texOffsetY);
 	vec3 normalVec = texture2D(u_normalTexture, v_texCoords).xyz;
 	normalVec.xy -= .5;
     normalVec = normalize(normalVec);

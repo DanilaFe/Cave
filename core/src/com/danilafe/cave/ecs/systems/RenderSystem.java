@@ -61,7 +61,7 @@ public class RenderSystem extends IteratingSystem {
 		normalBatch = new SpriteBatch();
 		shaderProgram = CaveGame.loadShaders("debug");
 		lightManager = new LightManager();
-		lightManager.lights.add(Light.create(50, 24, 200, 1F, .85F, .7F));
+		lightManager.lights.add(Light.create(50.5F, 24, 200, 1F, .85F, .7F));
 
 		bufferBatch.setShader(shaderProgram);
 	}
@@ -73,7 +73,7 @@ public class RenderSystem extends IteratingSystem {
 		Animation animationObject = animation.animationQueue.animationQueue.peek();
 		if (animationObject != null){
 			TextureRegion toRender = animationObject.getTextureAt(animationObject.texIndex);
-			mainBatch.draw(toRender, Math.round(position.position.x - toRender.getRegionWidth() / 2), Math.round(position.position.y - toRender.getRegionHeight() / 2));
+			mainBatch.draw(toRender, (int)Math.floor(position.position.x - toRender.getRegionWidth() / 2), (int) Math.floor(position.position.y - toRender.getRegionHeight() / 2));
 		}
 		animation.animationQueue.update(deltaTime);
 	}
@@ -105,7 +105,7 @@ public class RenderSystem extends IteratingSystem {
 				Animation animationObject = animation.animationQueue.animationQueue.peek();
 				if (animationObject != null){
 					TextureRegion toRender = animationObject.getNormalAt(animationObject.texIndex);
-					normalBatch.draw(toRender, Math.round(position.position.x - toRender.getRegionWidth() / 2), Math.round(position.position.y - toRender.getRegionHeight() / 2));
+					normalBatch.draw(toRender, (int) Math.floor(position.position.x - toRender.getRegionWidth() / 2), (int) Math.floor(position.position.y - toRender.getRegionHeight() / 2));
 				}
 			}
 			normalBatch.end();
@@ -120,8 +120,8 @@ public class RenderSystem extends IteratingSystem {
 		shaderProgram.setUniformi("u_normalTexture", 1);
 		shaderProgram.setUniformi("u_textureWidth", (int) CaveGame.instance.orthoCam.viewportWidth);
 		shaderProgram.setUniformi("u_textureHeight", (int) CaveGame.instance.orthoCam.viewportHeight);
-		shaderProgram.setUniformi("u_texOffsetX", (int) (CaveGame.instance.orthoCam.position.x - CaveGame.instance.orthoCam.viewportWidth / 2));
-		shaderProgram.setUniformi("u_texOffsetY", (int) (CaveGame.instance.orthoCam.position.y - CaveGame.instance.orthoCam.viewportHeight / 2));
+		shaderProgram.setUniformf("u_texOffsetX", (CaveGame.instance.orthoCam.position.x - CaveGame.instance.orthoCam.viewportWidth / 2));
+		shaderProgram.setUniformf("u_texOffsetY", (CaveGame.instance.orthoCam.position.y - CaveGame.instance.orthoCam.viewportHeight / 2));
 		lightManager.sortByDistance(new Vector2(CaveGame.instance.orthoCam.position.x, CaveGame.instance.orthoCam.position.y));
 		shaderProgram.setUniformi("u_numLights", (lightManager.maxLights < lightManager.lights.size()) ? lightManager.maxLights : lightManager.lights.size());
 		for(int i = 0; i < lightManager.lights.size() && i < lightManager.maxLights; i++){
