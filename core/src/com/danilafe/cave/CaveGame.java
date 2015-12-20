@@ -294,7 +294,7 @@ public class CaveGame extends ApplicationAdapter {
 		System.out.println(assets);
 		Pattern pattern = Pattern.compile("\\[NormalTexture\\]\\n([^\\[]*)\\n?\\[RegularTexture\\]([^\\[]*)?\\n?");
 		Matcher matcher = pattern.matcher(assets);
-		if(!matcher.find()) Gdx.app.debug("Asset Loading", "No matches.");;
+		if(!matcher.find()) Gdx.app.debug("Asset Loading", "No matches.");
 
 		String normalTextures = matcher.group(1);
 		System.out.println(normalTextures);

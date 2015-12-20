@@ -16,7 +16,7 @@ uniform vec3 u_lightProps[128];
 
 void main() {
 	vec3 totalLights = vec3(0.0, 0.0, 0.0);
-	vec2 worldPos = floor(vec2(v_texCoords.x * float(u_textureWidth) + u_texOffsetX, v_texCoords.y * float(u_textureHeight) + u_texOffsetY);
+	vec2 worldPos = floor(vec2(v_texCoords.x * float(u_textureWidth) + u_texOffsetX, v_texCoords.y * float(u_textureHeight) + u_texOffsetY));
 	vec3 normalVec = texture2D(u_normalTexture, v_texCoords).xyz;
 	normalVec.xy -= .5;
     normalVec = normalize(normalVec);
