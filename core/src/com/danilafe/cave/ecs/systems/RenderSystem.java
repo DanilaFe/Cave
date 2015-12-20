@@ -28,31 +28,31 @@ public class RenderSystem extends IteratingSystem {
 	/**
 	 * The batch used in the FrameBuffer. Can have its own shader.
 	 */
-	SpriteBatch mainBatch;
+	public SpriteBatch mainBatch;
 	/**
 	 * The batch used to render buffer contents.
 	 */
-	SpriteBatch bufferBatch;
+	public SpriteBatch bufferBatch;
 	/**
 	 * The batch used to render normal maps
 	 */
-	SpriteBatch normalBatch;
+	public SpriteBatch normalBatch;
 	/**
 	 * The shader used by the bufferBatch
 	 */
-	ShaderProgram shaderProgram;
+	public ShaderProgram shaderProgram;
 	/**
 	 * The framebuffer used to render everything before shader is applied.
 	 */
-	FrameBuffer mainBuffer;
+	public FrameBuffer mainBuffer;
 	/**
 	 * Buffer used for normal maps
 	 */
-	FrameBuffer normalBuffer;
+	public FrameBuffer normalBuffer;
 	/**
 	 * Class to manage lights
 	 */
-	LightManager lightManager;
+	public LightManager lightManager;
 
 	public RenderSystem() {
 		super(Family.all(CAnimation.class, CPosition.class).get());
