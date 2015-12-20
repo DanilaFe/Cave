@@ -31,6 +31,7 @@ import com.danilafe.cave.ecs.systems.CameraSystem;
 import com.danilafe.cave.ecs.systems.DebugRenderSystem;
 import com.danilafe.cave.ecs.systems.FrictionSystem;
 import com.danilafe.cave.ecs.systems.GravitySystem;
+import com.danilafe.cave.ecs.systems.LightSystem;
 import com.danilafe.cave.ecs.systems.NormalSystem;
 import com.danilafe.cave.ecs.systems.PositionSystem;
 import com.danilafe.cave.ecs.systems.RenderSystem;
@@ -82,7 +83,14 @@ public class CaveGame extends ApplicationAdapter {
 	 * StepperSystem - steps all custom code entities.
 	 */
 	public StepperSystem stepperSystem;
+	/**
+	 * CameraSystem - updates the position of the light
+	 */
 	public CameraSystem cameraSystem;
+	/**
+	 * LightSystem - handles moving lights attached to entities.
+	 */
+	public LightSystem lightSystem;
 	/**
 	 * Camera used to look into the game world.
 	 */
@@ -116,6 +124,7 @@ public class CaveGame extends ApplicationAdapter {
 		frictionSystem = new FrictionSystem();
 		stepperSystem = new StepperSystem();
 		cameraSystem = new CameraSystem();
+		lightSystem = new LightSystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
@@ -128,6 +137,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(frictionSystem);
 		pooledEngine.addSystem(stepperSystem);
 		pooledEngine.addSystem(cameraSystem);
+		pooledEngine.addSystem(lightSystem);
 
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();
