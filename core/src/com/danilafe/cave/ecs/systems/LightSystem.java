@@ -8,10 +8,21 @@ import com.danilafe.cave.CaveGame;
 import com.danilafe.cave.ecs.components.CLight;
 import com.danilafe.cave.ecs.components.CPosition;
 
+/**
+ * LightSystem - makes lights follow entities.
+ * @author vanilla
+ *
+ */
 public class LightSystem extends IteratingSystem{
 
+	/**
+	 * Listener used to add and remove lights from entities to the lightmanager. If this didn't exist, lights would have to be added manually.
+	 */
 	public EntityListener lightListener;
 
+	/**
+	 * Creates a new LightSystem.
+	 */
 	public LightSystem() {
 		super(Family.all(CPosition.class, CLight.class).get());
 		lightListener = new EntityListener() {

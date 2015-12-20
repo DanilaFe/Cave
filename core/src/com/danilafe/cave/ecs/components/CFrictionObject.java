@@ -11,6 +11,9 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  */
 public class CFrictionObject implements Poolable, Component {
 
+	/**
+	 * By how much the friction should slow the entity down. This is multiplied by the speed to get the new speed.
+	 */
 	public Vector2 frictionCoefficient = new Vector2(1, 1);
 
 	@Override

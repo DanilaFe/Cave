@@ -6,8 +6,16 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.danilafe.cave.ecs.components.CCameraView;
 import com.danilafe.cave.ecs.components.CPosition;
 
+/**
+ * CameraSystem - makes cameras follow entities.
+ * @author vanilla
+ *
+ */
 public class CameraSystem extends IteratingSystem {
 
+	/**
+	 * Creates a new CameraSystem
+	 */
 	public CameraSystem() {
 		super(Family.all(CPosition.class, CCameraView.class).get());
 	}

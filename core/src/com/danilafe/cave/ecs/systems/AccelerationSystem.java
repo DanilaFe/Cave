@@ -6,8 +6,16 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.danilafe.cave.ecs.components.CAcceleration;
 import com.danilafe.cave.ecs.components.CSpeed;
 
+/**
+ * AccelerationSystem - used to apply acceleration to entities.
+ * @author vanilla
+ *
+ */
 public class AccelerationSystem extends IteratingSystem {
 
+	/**
+	 * Creates a new acceleration system.
+	 */
 	public AccelerationSystem() {
 		super(Family.all(CSpeed.class, CAcceleration.class).get());
 	}
