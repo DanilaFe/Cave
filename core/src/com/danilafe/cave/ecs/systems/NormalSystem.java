@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.danilafe.cave.Utils;
 import com.danilafe.cave.ecs.components.CBounds;
 import com.danilafe.cave.ecs.components.CGravity;
 import com.danilafe.cave.ecs.components.CNormalObject;
@@ -108,6 +109,32 @@ public class NormalSystem extends FamilySystem {
 		if(rectWidth < rectHeight) movingPosition.x += rectWidth * xMutliplier;
 		else movingPosition.y += rectHeight * yMutliplier;
 		Gdx.app.debug("CollisionDetection: ", "rectWidth < rectHeight == " + Boolean.toString((rectWidth < rectHeight)));
+	}
+
+	/**
+	 * Checks whether the given rectangle is colliding with a normal obstacle.
+	 * @param rect the rectangle to check.
+	 * @return true if colliding, false if otherwise.
+	 */
+	public boolean checkNormalCollision(Rectangle rect){
+		for (Entity e : entitiesB){
+			if(e.getComponent(CBounds.class).bounds.overlaps(rect)) return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check if one of the edges of this rectangle touches an edge of a normal obstacle
+	 * @param edgeId the edge ID. see Utils.checkEdgeContact for details.
+	 * @param rect the rectangle to check
+	 * @return true if touching, false if otherwise.
+	 */
+	public boolean checkNormalEdge(int edgeId, Rectangle rect){
+		for (Entity e : entitiesB){
+			Rectangle otherRect = e.getComponent(CBounds.class).bounds;
+			if(Utils.checkEdgeContact(edgeId, rect, otherRect)) return true;
+		}
+		return false;
 	}
 
 }
