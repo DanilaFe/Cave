@@ -62,21 +62,33 @@ public class NormalSystem extends FamilySystem {
 					// Update position and the bounds.
 					normalEntityBounds.bounds.setCenter(normalEntityPosition.position.x, normalEntityPosition.position.y);
 					projectedBounds.set(normalEntityBounds.bounds);
-					projectedBounds.setCenter(normalEntityPosition.position.cpy().add(normalEntitySpeed.speed.cpy().scl(deltaTime).x, 0));
-					if(Math.abs(normalEntitySpeed.speed.x) > 0.01F && obstacleBounds.bounds.overlaps(projectedBounds)){
-						Gdx.app.debug("Collision Detection", "Imminent collision on x-axis");
-						normalEntityPosition.position.x = ((projectedBounds.x < obstacleBounds.bounds.x) ? obstacleBounds.bounds.x - projectedBounds.width : obstacleBounds.bounds.x + obstacleBounds.bounds.width) + (projectedBounds.width / 2);
-						normalEntitySpeed.speed.x = 0;
+
+					float xMove = normalEntitySpeed.speed.cpy().scl(deltaTime).x;
+					float widths = Math.abs(xMove) / normalEntityBounds.bounds.width;
+					float requiredChecksX = (float) (Math.ceil(widths));
+					for(int check = 1; check <= requiredChecksX; check++){
+						projectedBounds.setCenter(normalEntityPosition.position.cpy().add(xMove * check / requiredChecksX, 0));
+						if(Math.abs(normalEntitySpeed.speed.x) > 0.01F && obstacleBounds.bounds.overlaps(projectedBounds)){
+							Gdx.app.debug("Collision Detection", "Imminent collision on x-axis");
+							normalEntityPosition.position.x = ((projectedBounds.x < obstacleBounds.bounds.x) ? obstacleBounds.bounds.x - projectedBounds.width : obstacleBounds.bounds.x + obstacleBounds.bounds.width) + (projectedBounds.width / 2);
+							normalEntitySpeed.speed.x = 0;
+						}
 					}
 					// We might have moved...
 					// Update position and the bounds.
 					normalEntityBounds.bounds.setCenter(normalEntityPosition.position.x, normalEntityPosition.position.y);
 					projectedBounds.set(normalEntityBounds.bounds);
-					projectedBounds.setCenter(normalEntityPosition.position.cpy().add(0, normalEntitySpeed.speed.cpy().scl(deltaTime).y));
-					if(Math.abs(normalEntitySpeed.speed.y) > 0.01F && obstacleBounds.bounds.overlaps(projectedBounds)){
-						Gdx.app.debug("Collision Detection", "Imminent collision on y-axis");
-						normalEntityPosition.position.y = ((projectedBounds.y < obstacleBounds.bounds.y) ? obstacleBounds.bounds.y - projectedBounds.height : obstacleBounds.bounds.y + obstacleBounds.bounds.height) + (projectedBounds.height / 2);
-						normalEntitySpeed.speed.y = 0;
+
+					float yMove = normalEntitySpeed.speed.cpy().scl(deltaTime).y;
+					float heights = Math.abs(yMove) / normalEntityBounds.bounds.height;
+					float requiredChecksY = (float) Math.ceil(heights);
+					for(int check = 1; check <= requiredChecksY; check++){
+						projectedBounds.setCenter(normalEntityPosition.position.cpy().add(0, yMove * check / requiredChecksY));
+						if(Math.abs(normalEntitySpeed.speed.y) > 0.01F && obstacleBounds.bounds.overlaps(projectedBounds)){
+							Gdx.app.debug("Collision Detection", "Imminent collision on y-axis");
+							normalEntityPosition.position.y = ((projectedBounds.y < obstacleBounds.bounds.y) ? obstacleBounds.bounds.y - projectedBounds.height : obstacleBounds.bounds.y + obstacleBounds.bounds.height) + (projectedBounds.height / 2);
+							normalEntitySpeed.speed.y = 0;
+						}
 					}
 				}
 
