@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.CaveGame;
 import com.danilafe.cave.Constants;
+import com.danilafe.cave.Utils;
 import com.danilafe.cave.animation.Animation;
 import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CPosition;
@@ -58,7 +59,7 @@ public class RenderSystem extends IteratingSystem {
 		mainBatch = new SpriteBatch();
 		bufferBatch = new SpriteBatch();
 		normalBatch = new SpriteBatch();
-		shaderProgram = CaveGame.loadShaders("debug");
+		shaderProgram = Utils.loadShaders("debug");
 		lightManager = new LightManager();
 
 		bufferBatch.setShader(shaderProgram);
