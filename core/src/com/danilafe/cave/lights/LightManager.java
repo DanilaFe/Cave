@@ -30,7 +30,7 @@ public class LightManager {
 		Collections.sort(lights, new Comparator<Light>() {
 			@Override
 			public int compare(Light o1, Light o2) {
-				return (int) (position.dst(o1.position) - position.dst(o2.position));
+				return Float.compare(position.dst(o1.position),  position.dst(o2.position));
 			}
 		});
 	}
