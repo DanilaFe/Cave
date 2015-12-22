@@ -15,7 +15,6 @@ import com.danilafe.cave.Constants;
 import com.danilafe.cave.animation.Animation;
 import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CPosition;
-import com.danilafe.cave.lights.Light;
 import com.danilafe.cave.lights.LightManager;
 
 /**
@@ -61,7 +60,6 @@ public class RenderSystem extends IteratingSystem {
 		normalBatch = new SpriteBatch();
 		shaderProgram = CaveGame.loadShaders("debug");
 		lightManager = new LightManager();
-		lightManager.lights.add(Light.create(50.5F, 24, 200, 1F, .85F, .7F, 30, .005F, 0, 0));
 
 		bufferBatch.setShader(shaderProgram);
 	}
