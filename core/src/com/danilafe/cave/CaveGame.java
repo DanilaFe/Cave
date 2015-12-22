@@ -114,7 +114,13 @@ public class CaveGame extends ApplicationAdapter {
 	 * Whether the game is in debug mode.
 	 */
 	public boolean debug = Constants.DEBUG;
+	/**
+	 * Whether the collision boxes should be rendered (when debugging)
+	 */
 	public boolean collisionBoxes = true;
+	/**
+	 * Whether the debug output should be allowed (when debugging)
+	 */
 	public boolean debugOutput = false;
 
 	@Override
