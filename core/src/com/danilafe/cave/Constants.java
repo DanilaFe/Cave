@@ -18,7 +18,7 @@ public class Constants {
 	/**
 	 * Whether the game should start in debug mode or not.
 	 */
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	/**
 	 * Whether normal maps should be used.
 	 */
