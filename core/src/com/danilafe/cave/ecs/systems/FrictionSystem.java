@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
+import com.danilafe.cave.Utils;
 import com.danilafe.cave.ecs.components.CBounds;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
@@ -37,17 +38,13 @@ public class FrictionSystem extends FamilySystem {
 				Entity oe = entitiesB.get(j);
 				CBounds oeb = oe.getComponent(CBounds.class);
 				CFrictionCause oef = oe.getComponent(CFrictionCause.class);
-				if (ffo.frictionCoefficient.y > 0 && ((oeb.bounds.x == feb.bounds.x + feb.bounds.width
-						&& (feb.bounds.y + feb.bounds.height >= oeb.bounds.y && feb.bounds.y <= oeb.bounds.y + oeb.bounds.height))
-						|| (feb.bounds.x == oeb.bounds.x + oeb.bounds.width
-						&& (oeb.bounds.y + oeb.bounds.height >= feb.bounds.y && oeb.bounds.y <= feb.bounds.y + feb.bounds.height)))){
+				if (ffo.frictionCoefficient.y > 0 && (Utils.checkEdgeContact(1, feb.bounds, oeb.bounds)
+						|| Utils.checkEdgeContact(1, oeb.bounds, feb.bounds))) {
 					Gdx.app.debug("Friction Detection", "Vertical Friction");
 					fes.speed.y *= Math.pow(oef.frictionMultiplier.y, deltaTime) / ffo.frictionCoefficient.y;
 				}
-				if (ffo.frictionCoefficient.x > 0 &&((oeb.bounds.y == feb.bounds.y + feb.bounds.height
-						&& (feb.bounds.x + feb.bounds.width >= oeb.bounds.x && feb.bounds.x <= oeb.bounds.x + oeb.bounds.width))
-						|| (feb.bounds.y == oeb.bounds.y + oeb.bounds.height
-						&& (oeb.bounds.x + oeb.bounds.width >= feb.bounds.x && oeb.bounds.x <= feb.bounds.x + feb.bounds.width)))){
+				if (ffo.frictionCoefficient.x > 0 && (Utils.checkEdgeContact(0, feb.bounds, oeb.bounds)
+						|| Utils.checkEdgeContact(0, oeb.bounds, feb.bounds))){
 					Gdx.app.debug("Friction Detection", "Horizontal Friction");
 					fes.speed.x *= Math.pow(oef.frictionMultiplier.x, deltaTime) / ffo.frictionCoefficient.x;
 				}

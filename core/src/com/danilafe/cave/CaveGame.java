@@ -13,8 +13,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.Rectangle;
 import com.danilafe.cave.creation.CreationManager;
 import com.danilafe.cave.creation.EntityDescriptor;
 import com.danilafe.cave.ecs.components.CAcceleration;
@@ -197,7 +195,6 @@ public class CaveGame extends ApplicationAdapter {
 						CSpeed mySpeed = me.getComponent(CSpeed.class);
 						CFrictionObject myFriction = me.getComponent(CFrictionObject.class);
 						CBounds myBounds = me.getComponent(CBounds.class);
-						CGravity myGravit = me.getComponent(CGravity.class);
 						boolean enableFriction = true;
 						if(Gdx.input.isKeyPressed(Keys.RIGHT) && Math.abs(mySpeed.speed.x) < 75 ) {
 							mySpeed.speed.x += 100F * deltaTime;
@@ -207,8 +204,8 @@ public class CaveGame extends ApplicationAdapter {
 							mySpeed.speed.x -= 100F * deltaTime;
 							enableFriction = false;
 						}
-						if(Gdx.input.isKeyPressed(Keys.SPACE) && checkNormalCollision(new Rectangle(myBounds.bounds).setPosition(myBounds.bounds.x + myGravit.gravity.x * deltaTime, myBounds.bounds.y + myGravit.gravity.y * deltaTime))){
-							mySpeed.speed.y = 100;
+						if(Gdx.input.isKeyPressed(Keys.SPACE) && normalSystem.checkNormalEdge(2, myBounds.bounds)){
+							mySpeed.speed.y += 100;
 						}
 						myFriction.frictionCoefficient.x = (enableFriction) ? 1 : 0;
 					}
@@ -327,31 +324,6 @@ public class CaveGame extends ApplicationAdapter {
 		Gdx.app.debug("FPS", Gdx.graphics.getFramesPerSecond() + " Frames Per Second");
 	}
 
-	/**
-	 * Shader function.
-	 * This loads the GLSL shaders for the game.
-	 * @param shaderName the name of the shader to load.
-	 * @return the loaded and compiled shader program, or null of compilation failed.
-	 */
-	public static ShaderProgram loadShaders(String shaderName){
-		if(shaderName == null || shaderName.equals("") || !Gdx.files.internal("shaders/" + shaderName).exists()) return null;
-		ShaderProgram.pedantic = false;
-		ShaderProgram newProgram = new ShaderProgram(
-				Gdx.files.internal("shaders/" + shaderName + "/vertex.glsl").readString(),
-				Gdx.files.internal("shaders/" + shaderName + "/fragment.glsl").readString());
-		if (!newProgram.isCompiled()) {
-			Gdx.app.error("Shader Loading", newProgram.getLog());
-			return null;
-		}
-		return newProgram;
-	}
-
-	public boolean checkNormalCollision(Rectangle rect){
-		for (Entity e : normalSystem.entitiesB){
-			if(e.getComponent(CBounds.class).bounds.overlaps(rect)) return true;
-		}
-		return false;
-	}
 
 	@Override
 	public void resize(int width, int height) {
