@@ -38,15 +38,18 @@ public class NormalSystem extends FamilySystem {
 			CSpeed normalEntitySpeed = normalEntity.getComponent(CSpeed.class);
 			normalEntity.getComponent(CGravity.class);
 			Rectangle projectedBounds = new Rectangle(normalEntityBounds.bounds);
+			float speed = normalEntitySpeed.speed.len();
+			float width = normalEntityBounds.bounds.width;
+			float height = normalEntityBounds.bounds.height;
 			for(int j = 0; j < entitiesB.size(); j++){
-				// We might have moved. Update projectedBounds and bounds
-				normalEntityBounds.bounds.setCenter(normalEntityPosition.position.x, normalEntityPosition.position.y);
-				projectedBounds.set(normalEntityBounds.bounds);
-
 				// Check if we're already inside
 				Entity obstacleEntity = entitiesB.get(j);
 				CBounds obstacleBounds = obstacleEntity.getComponent(CBounds.class);
-				obstacleEntity.getComponent(CPosition.class);
+				if(obstacleEntity.getComponent(CPosition.class).position.dst(normalEntityPosition.position) > speed + width + height) continue;
+
+				// We might have moved. Update projectedBounds and bounds
+				normalEntityBounds.bounds.setCenter(normalEntityPosition.position.x, normalEntityPosition.position.y);
+				projectedBounds.set(normalEntityBounds.bounds);
 
 				if(obstacleBounds.bounds.overlaps(projectedBounds)){
 					Gdx.app.debug("Collision Detection", "Intresection");
