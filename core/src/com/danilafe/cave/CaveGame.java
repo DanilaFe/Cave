@@ -116,6 +116,8 @@ public class CaveGame extends ApplicationAdapter {
 	 * Whether the game is in debug mode.
 	 */
 	public boolean debug = Constants.DEBUG;
+	public boolean collisionBoxes = true;
+	public boolean debugOutput = false;
 
 	@Override
 	public void create () {
@@ -317,7 +319,7 @@ public class CaveGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		Gdx.app.setLogLevel(debug ? Gdx.app.LOG_DEBUG : Gdx.app.LOG_INFO);
+		Gdx.app.setLogLevel(debug && debugOutput ? Gdx.app.LOG_DEBUG : Gdx.app.LOG_INFO);
 		/*
 		 * Update the engine using the delta time
 		 */
