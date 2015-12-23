@@ -1,6 +1,5 @@
 package com.danilafe.cave.runnable;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 
 /**
@@ -16,6 +15,6 @@ public abstract class ECSRunnable {
 	 * @param myEngine the current engine
 	 * @param deltaTime the delta time of the step
 	 */
-	public abstract void update(Entity me, Engine myEngine, float deltaTime);
+	public abstract void update(Entity me, float deltaTime);
 
 }

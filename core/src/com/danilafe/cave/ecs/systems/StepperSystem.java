@@ -22,7 +22,7 @@ public class StepperSystem extends IteratingSystem {
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		CStepper stepper = entity.getComponent(CStepper.class);
-		if(stepper.runnable != null) stepper.runnable.update(entity, getEngine(), deltaTime);
+		if(stepper.runnable != null) stepper.runnable.update(entity, deltaTime);
 	}
 
 }

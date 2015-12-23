@@ -3,7 +3,6 @@ package com.danilafe.cave;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
@@ -38,6 +37,7 @@ import com.danilafe.cave.ecs.systems.LightSystem;
 import com.danilafe.cave.ecs.systems.NormalSystem;
 import com.danilafe.cave.ecs.systems.PositionSystem;
 import com.danilafe.cave.ecs.systems.RenderSystem;
+import com.danilafe.cave.ecs.systems.SelectableElementSystem;
 import com.danilafe.cave.ecs.systems.StepperSystem;
 import com.danilafe.cave.runnable.ECSRunnable;
 
@@ -99,6 +99,10 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public AccelerationSystem accelerationSystem;
 	/**
+	 * SelectableSystem - update selectable stuff.
+	 */
+	public SelectableElementSystem selectableElementSytem;
+	/**
 	 * Camera used to look into the game world.
 	 */
 	public OrthographicCamera orthoCam;
@@ -141,6 +145,7 @@ public class CaveGame extends ApplicationAdapter {
 		cameraSystem = new CameraSystem();
 		lightSystem = new LightSystem();
 		accelerationSystem = new AccelerationSystem();
+		selectableElementSytem = new SelectableElementSystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
@@ -155,6 +160,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(cameraSystem);
 		pooledEngine.addSystem(lightSystem);
 		pooledEngine.addSystem(accelerationSystem);
+		pooledEngine.addSystem(selectableElementSytem);
 
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();
@@ -197,7 +203,7 @@ public class CaveGame extends ApplicationAdapter {
 				CStepper stepper = pooledEngine.createComponent(CStepper.class);
 				stepper.runnable = new ECSRunnable() {
 					@Override
-					public void update(Entity me, Engine myEngine, float deltaTime) {
+					public void update(Entity me, float deltaTime) {
 						CSpeed mySpeed = me.getComponent(CSpeed.class);
 						CFrictionObject myFriction = me.getComponent(CFrictionObject.class);
 						CBounds myBounds = me.getComponent(CBounds.class);
@@ -264,10 +270,10 @@ public class CaveGame extends ApplicationAdapter {
 				mark.marks.put("floater", true);
 				stepper.runnable = new ECSRunnable() {
 					@Override
-					public void update(Entity me, Engine myEngine, float deltaTime) {
+					public void update(Entity me, float deltaTime) {
 						CBounds myBounds = me.getComponent(CBounds.class);
 						CSpeed mySpeed = me.getComponent(CSpeed.class);
-						for(Entity e : myEngine.getEntitiesFor(Family.all(CPosition.class, CSpeed.class, CBounds.class).get())){
+						for(Entity e : pooledEngine.getEntitiesFor(Family.all(CPosition.class, CSpeed.class, CBounds.class).get())){
 							if(Family.all(CMarked.class).get().matches(e) && e.getComponent(CMarked.class).marks.get("floater").booleanValue()) continue;
 							CBounds otherBounds = e.getComponent(CBounds.class);
 							CSpeed otherSpeed = e.getComponent(CSpeed.class);
