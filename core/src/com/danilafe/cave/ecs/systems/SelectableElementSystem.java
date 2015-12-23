@@ -44,7 +44,7 @@ public class SelectableElementSystem extends IteratingSystem {
 
 			newElement.curDelta = newElement.maxDelta;
 			newElement.selected = true;
-			newElement.onSelect.update(groupElement.entityList.get(newIndex), deltaTime);
+			if(newElement.onSelect != null) newElement.onSelect.update(groupElement.entityList.get(newIndex), deltaTime);
 			groupElement.selected = false;
 		}
 	}
