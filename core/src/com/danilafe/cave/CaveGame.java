@@ -31,6 +31,7 @@ import com.danilafe.cave.ecs.systems.AccelerationSystem;
 import com.danilafe.cave.ecs.systems.BoundsSystem;
 import com.danilafe.cave.ecs.systems.CameraSystem;
 import com.danilafe.cave.ecs.systems.DebugRenderSystem;
+import com.danilafe.cave.ecs.systems.FollowingSystem;
 import com.danilafe.cave.ecs.systems.FrictionSystem;
 import com.danilafe.cave.ecs.systems.GravitySystem;
 import com.danilafe.cave.ecs.systems.LightSystem;
@@ -102,6 +103,7 @@ public class CaveGame extends ApplicationAdapter {
 	 * SelectableSystem - update selectable stuff.
 	 */
 	public SelectableElementSystem selectableElementSytem;
+	public FollowingSystem followingSystem;
 	/**
 	 * Camera used to look into the game world.
 	 */
@@ -146,6 +148,7 @@ public class CaveGame extends ApplicationAdapter {
 		lightSystem = new LightSystem();
 		accelerationSystem = new AccelerationSystem();
 		selectableElementSytem = new SelectableElementSystem();
+		followingSystem = new FollowingSystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
@@ -161,6 +164,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(lightSystem);
 		pooledEngine.addSystem(accelerationSystem);
 		pooledEngine.addSystem(selectableElementSytem);
+		pooledEngine.addSystem(followingSystem);
 
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();
