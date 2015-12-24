@@ -24,7 +24,7 @@ void main() {
         vec3 light = u_lightProps[i];
         light.xy = floor(light.xy);
 		float light_percent = 1.0 - pow(distance(light.xy, worldPos) / light.z, .3);
-		if(light_percent < 0.0) light_percent = 0.0;
+        light_percent = max(light_percent, 0.0);
 		vec3 lightVec = normalize(vec3(light.x - worldPos.x, light.y - worldPos.y, 30));
 		float diffuse = max(dot(normalVec, lightVec), 0.0);
 		totalLights = totalLights + (u_lightColors[i] * light_percent * diffuse);
