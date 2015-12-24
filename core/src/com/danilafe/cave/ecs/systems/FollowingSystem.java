@@ -6,8 +6,16 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.danilafe.cave.ecs.components.CFollow;
 import com.danilafe.cave.ecs.components.CPosition;
 
+/**
+ * FollowingSystem - in charge of updating the positions of the Following entities.
+ * @author vanilla
+ *
+ */
 public class FollowingSystem extends IteratingSystem {
 
+	/**
+	 * Creates a new FollowingSystem
+	 */
 	public FollowingSystem() {
 		super(Family.all(CFollow.class, CPosition.class).get());
 	}
