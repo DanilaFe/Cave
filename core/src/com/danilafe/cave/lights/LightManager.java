@@ -16,7 +16,7 @@ public class LightManager {
 	/**
 	 * The maximum number of lights on the screen.
 	 */
-	public int maxLights = 128;
+	public int maxLights = 16;
 	/**
 	 * The list of lights to be rendered
 	 */

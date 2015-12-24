@@ -11,8 +11,8 @@ uniform int u_textureHeight;
 uniform float u_texOffsetX;
 uniform float u_texOffsetY;
 uniform int u_numLights;
-uniform vec3 u_lightColors[128];
-uniform vec3 u_lightProps[128];
+uniform vec3 u_lightColors[64];
+uniform vec3 u_lightProps[64];
 
 void main() {
 	vec3 totalLights = vec3(0.0, 0.0, 0.0);
