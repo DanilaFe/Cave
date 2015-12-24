@@ -79,7 +79,10 @@ public class RenderSystem extends IteratingSystem {
 
 	@Override
 	public void update(float deltaTime) {
-		mainBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+		int orthoCamWidth = Math.round(CaveGame.instance.orthoCam.viewportWidth);
+		int orthoCamHeight = Math.round(CaveGame.instance.orthoCam.viewportHeight);
+
+		mainBuffer = new FrameBuffer(Format.RGBA8888, orthoCamWidth, orthoCamHeight, true);
 		mainBuffer.begin();
 		Gdx.gl.glViewport(0, 0, mainBuffer.getWidth(), mainBuffer.getHeight());
 		Gdx.gl.glClearColor(1F, 1F, 1F, 1);
@@ -90,7 +93,7 @@ public class RenderSystem extends IteratingSystem {
 		mainBatch.end();
 		mainBuffer.end();
 
-		normalBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+		normalBuffer = new FrameBuffer(Format.RGBA8888, orthoCamWidth, orthoCamHeight, true);
 		normalBuffer.begin();
 		Gdx.gl.glViewport(0, 0, normalBuffer.getWidth(), normalBuffer.getHeight());
 		Gdx.gl.glClearColor(.5F, .5F, 1F, 1);
