@@ -103,6 +103,9 @@ public class CaveGame extends ApplicationAdapter {
 	 * SelectableSystem - update selectable stuff.
 	 */
 	public SelectableElementSystem selectableElementSytem;
+	/**
+	 * FollowingSystem - makes stuff follow other stuff
+	 */
 	public FollowingSystem followingSystem;
 	/**
 	 * Camera used to look into the game world.

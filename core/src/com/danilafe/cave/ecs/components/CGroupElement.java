@@ -60,6 +60,15 @@ public class CGroupElement implements Poolable, Component {
 		curDelta = 0;
 	}
 
+	/**
+	 * Creates group elements from these entities, and returns the group.
+	 * @param prevKey the key to select the previous element
+	 * @param nextKey the key to select the next element
+	 * @param onSelect runnable that executes when the element is selected
+	 * @param maxDelta the delay between switches
+	 * @param entities the entities to group
+	 * @return the created group
+	 */
 	public static ArrayList<Entity> createGroup(int prevKey, int nextKey, ECSRunnable onSelect, float maxDelta, Entity ...entities){
 		ArrayList<Entity> entityList = new ArrayList<Entity>();
 		ArrayList<CGroupElement> groupElements = new ArrayList<CGroupElement>();
