@@ -231,6 +231,8 @@ public class CaveGame extends ApplicationAdapter {
 				};
 				CCameraView camView = pooledEngine.createComponent(CCameraView.class);
 				camView.camera = orthoCam;
+				camView.maxOffsetX = Constants.CAMERA_WIDTH / 4;
+				camView.maxOffsetY = Constants.CAMERA_WIDTH / 6;
 				entity.add(camView);
 				entity.add(position);
 				entity.add(speed);
