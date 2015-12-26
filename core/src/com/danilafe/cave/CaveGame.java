@@ -22,6 +22,7 @@ import com.danilafe.cave.ecs.components.CFrictionObject;
 import com.danilafe.cave.ecs.components.CGravity;
 import com.danilafe.cave.ecs.components.CInteractionCause;
 import com.danilafe.cave.ecs.components.CInteractive;
+import com.danilafe.cave.ecs.components.CItemContainer;
 import com.danilafe.cave.ecs.components.CLight;
 import com.danilafe.cave.ecs.components.CMarked;
 import com.danilafe.cave.ecs.components.CNormalObject;
@@ -43,6 +44,7 @@ import com.danilafe.cave.ecs.systems.PositionSystem;
 import com.danilafe.cave.ecs.systems.RenderSystem;
 import com.danilafe.cave.ecs.systems.SelectableElementSystem;
 import com.danilafe.cave.ecs.systems.StepperSystem;
+import com.danilafe.cave.item.ItemContainer;
 import com.danilafe.cave.runnable.ECSRunnable;
 
 /**
@@ -185,7 +187,7 @@ public class CaveGame extends ApplicationAdapter {
 		loadCreation();
 
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderPlayer").create(50, 50));
-		for(int i = 0; i < 10; i ++){
+		for(int i = 0; i < 9; i ++){
 			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(8 * i, 0));
 			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(0, 8 * (i + 1)));
 			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(72, 8 * (i + 1)));
@@ -197,6 +199,7 @@ public class CaveGame extends ApplicationAdapter {
 			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderLightball").create((float) Math.random() * 80, (float) Math.random() * 50));
 		}
 
+		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderChest").create(72, 80));
 	}
 
 	private void loadCreation() {
@@ -349,6 +352,38 @@ public class CaveGame extends ApplicationAdapter {
 			}
 		};
 		creationManager.entityDescriptors.put("placeholderJumpBoost", jumpBoost);
+		EntityDescriptor chest = new EntityDescriptor() {
+			@Override
+			public Entity create(float x, float y) {
+				Entity entity = pooledEngine.createEntity();
+				CPosition position = pooledEngine.createComponent(CPosition.class);
+				position.position.set(x, y);
+				CItemContainer container = pooledEngine.createComponent(CItemContainer.class);
+				container.container = new ItemContainer();
+				container.container.maxItems = 6;
+				CBounds bounds = pooledEngine.createComponent(CBounds.class);
+				bounds.bounds.setSize(8, 8);
+				CInteractive interactive = pooledEngine.createComponent(CInteractive.class);
+				interactive.maxInteractDelay = .5F;
+				interactive.interactKey = Keys.SHIFT_LEFT;
+				interactive.onInteract = new ECSRunnable() {
+					@Override
+					public void update(Entity me, float deltaTime) {
+						Utils.printContainerContents(me.getComponent(CItemContainer.class).container);
+					}
+				};
+				CLight light = pooledEngine.createComponent(CLight.class);
+				light.light.set(0, 0, 16, 1, 1, .3F, 0, 0, 0, 0);
+				entity.add(light);
+				entity.add(interactive);
+				entity.add(bounds);
+				entity.add(bounds);
+				entity.add(container);
+				entity.add(position);
+				return entity;
+			}
+		};
+		creationManager.entityDescriptors.put("placeholderChest", chest);
 	}
 
 	private void loadAssets() {
