@@ -84,7 +84,7 @@ public class RenderSystem extends IteratingSystem {
 		int orthoCamWidth = Math.round(CaveGame.instance.orthoCam.viewportWidth);
 		int orthoCamHeight = Math.round(CaveGame.instance.orthoCam.viewportHeight);
 
-		mainBuffer = new FrameBuffer(Format.RGBA8888, orthoCamWidth, orthoCamHeight, true);
+		mainBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		mainBuffer.begin();
 		Gdx.gl.glViewport(0, 0, mainBuffer.getWidth(), mainBuffer.getHeight());
 		Gdx.gl.glClearColor(1F, 1F, 1F, 1);
@@ -95,7 +95,7 @@ public class RenderSystem extends IteratingSystem {
 		mainBatch.end();
 		mainBuffer.end();
 
-		normalBuffer = new FrameBuffer(Format.RGBA8888, orthoCamWidth, orthoCamHeight, true);
+		normalBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		normalBuffer.begin();
 		Gdx.gl.glViewport(0, 0, normalBuffer.getWidth(), normalBuffer.getHeight());
 		Gdx.gl.glClearColor(.5F, .5F, 1F, 1);
@@ -107,7 +107,7 @@ public class RenderSystem extends IteratingSystem {
 				CAnimation animation = e.getComponent(CAnimation.class);
 				CPosition position = e.getComponent(CPosition.class);
 				Animation animationObject = animation.animationQueue.animationQueue.peek();
-				if (animationObject != null){
+				if (animationObject != null && animationObject.animationParameter.normalTextures != null){
 					TextureRegion toRender = animationObject.getNormalAt(animationObject.texIndex);
 					normalBatch.draw(toRender, (int) Math.floor(position.position.x - toRender.getRegionWidth() / 2), (int) Math.floor(position.position.y - toRender.getRegionHeight() / 2));
 				}
@@ -126,8 +126,8 @@ public class RenderSystem extends IteratingSystem {
 		Gdx.gl.glActiveTexture(Gdx.gl.GL_TEXTURE0);
 		Gdx.app.debug("Lights", "Rendering " + lightManager.lights.size() + " lights");
 		shaderProgram.setUniformi("u_normalTexture", 1);
-		shaderProgram.setUniformi("u_textureWidth", (int) CaveGame.instance.orthoCam.viewportWidth);
-		shaderProgram.setUniformi("u_textureHeight", (int) CaveGame.instance.orthoCam.viewportHeight);
+		shaderProgram.setUniformi("u_textureWidth", orthoCamWidth);
+		shaderProgram.setUniformi("u_textureHeight", orthoCamHeight);
 		shaderProgram.setUniformf("u_texOffsetX", (CaveGame.instance.orthoCam.position.x - CaveGame.instance.orthoCam.viewportWidth / 2));
 		shaderProgram.setUniformf("u_texOffsetY", (CaveGame.instance.orthoCam.position.y - CaveGame.instance.orthoCam.viewportHeight / 2));
 		lightManager.sortByDistance(new Vector2(CaveGame.instance.orthoCam.position.x, CaveGame.instance.orthoCam.position.y));
