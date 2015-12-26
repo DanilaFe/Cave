@@ -191,6 +191,7 @@ public class CaveGame extends ApplicationAdapter {
 			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(72, 8 * (i + 1)));
 		}
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(8, 8 * 2));
+		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderJumpBoost").create(64, 8));
 
 		for(int i = 0; i < 32; i ++){
 			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderLightball").create((float) Math.random() * 80, (float) Math.random() * 50));
@@ -240,6 +241,9 @@ public class CaveGame extends ApplicationAdapter {
 				};
 				CCameraView camView = pooledEngine.createComponent(CCameraView.class);
 				camView.camera = orthoCam;
+				CInteractionCause interactionCause = pooledEngine.createComponent(CInteractionCause.class);
+				interactionCause.canInteract = true;
+				entity.add(interactionCause);
 				entity.add(camView);
 				entity.add(position);
 				entity.add(speed);
@@ -319,6 +323,30 @@ public class CaveGame extends ApplicationAdapter {
 			}
 		};
 		creationManager.entityDescriptors.put("placeholderLightball", lightball);
+		EntityDescriptor jumpBoost = new EntityDescriptor() {
+			@Override
+			public Entity create(float x, float y) {
+				Entity newEntity = creationManager.entityDescriptors.get("placeholderWall").create(x, y);
+				CLight light = pooledEngine.createComponent(CLight.class);
+				light.light.set(x, y, 16, .5F, .5F, .5F, 4, .5F, .5F, .5F);
+				CInteractive interactive = pooledEngine.createComponent(CInteractive.class);
+				interactive.interactKey = Keys.SPACE;
+				interactive.onInteract = new ECSRunnable() {
+					@Override
+					public void update(Entity me, float deltaTime) {
+						CInteractive myInteractive = me.getComponent(CInteractive.class);
+						CSpeed otherSpeed = myInteractive.currentInteraction.getComponent(CSpeed.class);
+						CBounds myBounds = me.getComponent(CBounds.class);
+						CBounds otherBounds = myInteractive.currentInteraction.getComponent(CBounds.class);
+						if(Utils.checkEdgeContact(0, myBounds.bounds, otherBounds.bounds)) otherSpeed.speed.y += 200;
+					}
+				};
+				newEntity.add(light);
+				newEntity.add(interactive);
+				return newEntity;
+			}
+		};
+		creationManager.entityDescriptors.put("placeholderJumpBoost", jumpBoost);
 	}
 
 	private void loadAssets() {
