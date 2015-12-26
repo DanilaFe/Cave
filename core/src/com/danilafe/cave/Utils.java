@@ -3,6 +3,8 @@ package com.danilafe.cave;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
+import com.danilafe.cave.item.ItemContainer;
+import com.danilafe.cave.item.ItemParameter;
 
 /**
  * Utils class to hold utility methods.
@@ -52,6 +54,16 @@ public class Utils {
 			return null;
 		}
 		return newProgram;
+	}
+
+	/**
+	 * Prints the items in this container. (For debug purposes)
+	 * @param container the container whose contents to print.
+	 */
+	public static void printContainerContents(ItemContainer container){
+		for(ItemParameter key : container.items.keySet()){
+			System.out.println(key.name + " | " + key.description + " | " + container.items.get(key));
+		}
 	}
 
 }
