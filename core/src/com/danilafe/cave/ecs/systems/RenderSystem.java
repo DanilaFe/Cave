@@ -5,6 +5,8 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -116,7 +118,11 @@ public class RenderSystem extends IteratingSystem {
 
 		bufferBatch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		bufferBatch.begin();
-		normalBuffer.getColorBufferTexture().bind(1);
+		Texture normalTexture = normalBuffer.getColorBufferTexture();
+		Texture regularTexture = mainBuffer.getColorBufferTexture();
+		normalTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		regularTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		normalTexture.bind(1);
 		Gdx.gl.glActiveTexture(Gdx.gl.GL_TEXTURE0);
 		Gdx.app.debug("Lights", "Rendering " + lightManager.lights.size() + " lights");
 		shaderProgram.setUniformi("u_normalTexture", 1);
@@ -133,7 +139,7 @@ public class RenderSystem extends IteratingSystem {
 		}
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
-		bufferBatch.draw(mainBuffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, 1, 1);
+		bufferBatch.draw(regularTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, 1, 1);
 		bufferBatch.end();
 
 		mainBuffer.dispose();
