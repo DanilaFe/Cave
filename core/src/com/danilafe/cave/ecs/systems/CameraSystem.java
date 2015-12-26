@@ -25,7 +25,10 @@ public class CameraSystem extends IteratingSystem {
 		CCameraView camView = entity.getComponent(CCameraView.class);
 		CPosition position = entity.getComponent(CPosition.class);
 		if(camView != null){
-			camView.camera.position.set(position.position, 0);
+			if(position.position.x < camView.camera.position.x - camView.maxOffsetX) camView.camera.position.x = position.position.x + camView.maxOffsetX;
+			if(position.position.x > camView.camera.position.x + camView.maxOffsetX) camView.camera.position.x = position.position.x - camView.maxOffsetX;
+			if(position.position.y < camView.camera.position.y - camView.maxOffsetY) camView.camera.position.y = position.position.y + camView.maxOffsetY;
+			if(position.position.y > camView.camera.position.y + camView.maxOffsetY) camView.camera.position.y = position.position.y - camView.maxOffsetY;
 			camView.camera.update();
 		}
 	}

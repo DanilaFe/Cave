@@ -244,6 +244,8 @@ public class CaveGame extends ApplicationAdapter {
 				CInteractionCause interactionCause = pooledEngine.createComponent(CInteractionCause.class);
 				interactionCause.canInteract = true;
 				entity.add(interactionCause);
+				camView.maxOffsetX = Constants.CAMERA_WIDTH / 4;
+				camView.maxOffsetY = Constants.CAMERA_WIDTH / 6;
 				entity.add(camView);
 				entity.add(position);
 				entity.add(speed);
