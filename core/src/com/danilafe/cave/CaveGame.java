@@ -353,7 +353,7 @@ public class CaveGame extends ApplicationAdapter {
 
 	private void loadAssets() {
 		String assets = Gdx.files.internal("assets.txt").readString();
-		Pattern pattern = Pattern.compile("\\[NormalTexture\\]\\n([^\\[]*)\\n?\\[RegularTexture\\]([^\\[]*)?\\n?");
+		Pattern pattern = Pattern.compile("\\[NormalTexture\\]\\n([^\\[]*)\\n?\\[RegularTexture\\]\n([^\\[]*)?\\n?");
 		Matcher matcher = pattern.matcher(assets);
 		if(!matcher.find()) Gdx.app.debug("Asset Loading", "No matches.");
 
