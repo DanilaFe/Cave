@@ -26,8 +26,7 @@ public class AnimationQueue {
 	 */
 	public void update(float deltaTime){
 		this.deltaTime -= deltaTime;
-		while(this.deltaTime <= 0 && animationQueue.getFirst().animationParameter.frameDelta != 0) {
-			if(animationQueue.size() <= 0) return;
+		while(this.deltaTime <= 0 && !(animationQueue.size() <=0) && animationQueue.getFirst().animationParameter.frameDelta != 0) {
 			Animation currentAnimation = animationQueue.getFirst();
 			this.deltaTime += currentAnimation.animationParameter.frameDelta;
 			currentAnimation.texIndex++;
