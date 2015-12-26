@@ -167,8 +167,8 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(boundsSystem);
 		pooledEngine.addSystem(debugRenderSystem);
 		pooledEngine.addSystem(gravitySystem);
-		pooledEngine.addSystem(normalSystem);
 		pooledEngine.addSystem(interactionSystem);
+		pooledEngine.addSystem(normalSystem);
 		pooledEngine.addSystem(positionSystem);
 		pooledEngine.addSystem(frictionSystem);
 		pooledEngine.addSystem(stepperSystem);
