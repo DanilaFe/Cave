@@ -1,5 +1,6 @@
 package com.danilafe.cave;
 
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,9 +13,11 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.danilafe.cave.animation.Animation;
 import com.danilafe.cave.creation.CreationManager;
 import com.danilafe.cave.creation.EntityDescriptor;
 import com.danilafe.cave.ecs.components.CAcceleration;
+import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CBounds;
 import com.danilafe.cave.ecs.components.CCameraView;
 import com.danilafe.cave.ecs.components.CFrictionCause;
@@ -22,6 +25,7 @@ import com.danilafe.cave.ecs.components.CFrictionObject;
 import com.danilafe.cave.ecs.components.CGravity;
 import com.danilafe.cave.ecs.components.CInteractionCause;
 import com.danilafe.cave.ecs.components.CInteractive;
+import com.danilafe.cave.ecs.components.CItem;
 import com.danilafe.cave.ecs.components.CItemContainer;
 import com.danilafe.cave.ecs.components.CLight;
 import com.danilafe.cave.ecs.components.CMarked;
@@ -38,6 +42,7 @@ import com.danilafe.cave.ecs.systems.FollowingSystem;
 import com.danilafe.cave.ecs.systems.FrictionSystem;
 import com.danilafe.cave.ecs.systems.GravitySystem;
 import com.danilafe.cave.ecs.systems.InteractionSystem;
+import com.danilafe.cave.ecs.systems.ItemSystem;
 import com.danilafe.cave.ecs.systems.LightSystem;
 import com.danilafe.cave.ecs.systems.NormalSystem;
 import com.danilafe.cave.ecs.systems.PositionSystem;
@@ -45,6 +50,7 @@ import com.danilafe.cave.ecs.systems.RenderSystem;
 import com.danilafe.cave.ecs.systems.SelectableElementSystem;
 import com.danilafe.cave.ecs.systems.StepperSystem;
 import com.danilafe.cave.item.ItemContainer;
+import com.danilafe.cave.item.ItemParameter;
 import com.danilafe.cave.runnable.ECSRunnable;
 
 /**
@@ -117,6 +123,10 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public InteractionSystem interactionSystem;
 	/**
+	 * System to handle items.
+	 */
+	public ItemSystem itemSystem;
+	/**
 	 * Camera used to look into the game world.
 	 */
 	public OrthographicCamera orthoCam;
@@ -162,6 +172,7 @@ public class CaveGame extends ApplicationAdapter {
 		selectableElementSytem = new SelectableElementSystem();
 		followingSystem = new FollowingSystem();
 		interactionSystem = new InteractionSystem();
+		itemSystem = new ItemSystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
@@ -179,6 +190,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(accelerationSystem);
 		pooledEngine.addSystem(selectableElementSytem);
 		pooledEngine.addSystem(followingSystem);
+		pooledEngine.addSystem(itemSystem);
 
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();
@@ -360,7 +372,25 @@ public class CaveGame extends ApplicationAdapter {
 				position.position.set(x, y);
 				CItemContainer container = pooledEngine.createComponent(CItemContainer.class);
 				container.container = new ItemContainer();
-				container.container.maxItems = 6;
+				container.container.maxItems = 1;
+				container.container.onOverflow = new ECSRunnable() {
+					@Override
+					public void update(Entity me, float deltaTime) {
+						CItemContainer itemContainer = me.getComponent(CItemContainer.class);
+						CPosition pos = me.getComponent(CPosition.class);
+						Iterator<ItemParameter> overflowingItems = itemContainer.container.items.keySet().iterator();
+						for(int i = 0; i < itemContainer.container.maxItems;  i++) overflowingItems.next();
+						while(overflowingItems.hasNext()){
+							Entity droppedItemEntity = creationManager.entityDescriptors.get("placeholderDroppedItem").create(pos.position.x, pos.position.y);
+							CItem entityItem = droppedItemEntity.getComponent(CItem.class);
+							entityItem.itemType = overflowingItems.next();
+							entityItem.itemCount = itemContainer.container.items.get(entityItem.itemType);
+							itemContainer.container.items.remove(entityItem.itemType);
+							pooledEngine.addEntity(droppedItemEntity);
+							Gdx.app.debug("Chest", "Overflow! Tossing " + entityItem.itemCount + " of " + entityItem.itemType.name);
+						}
+					}
+				};
 				CBounds bounds = pooledEngine.createComponent(CBounds.class);
 				bounds.bounds.setSize(8, 8);
 				CInteractive interactive = pooledEngine.createComponent(CInteractive.class);
@@ -384,6 +414,46 @@ public class CaveGame extends ApplicationAdapter {
 			}
 		};
 		creationManager.entityDescriptors.put("placeholderChest", chest);
+		EntityDescriptor droppedItem = new EntityDescriptor() {
+			@Override
+			public Entity create(float x, float y) {
+				Entity entity = pooledEngine.createEntity();
+				CItem item = pooledEngine.createComponent(CItem.class);
+				CPosition position = pooledEngine.createComponent(CPosition.class);
+				position.position.set(x, y);
+				CSpeed speed = pooledEngine.createComponent(CSpeed.class);
+				CFrictionObject fritionObject = pooledEngine.createComponent(CFrictionObject.class);
+				CBounds bounds = pooledEngine.createComponent(CBounds.class);
+				bounds.bounds.setSize(4, 4);
+				CGravity gravity = pooledEngine.createComponent(CGravity.class);
+				gravity.gravity.set(0, Constants.DEFAULT_GRAVITY);
+				CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
+				CAnimation animation = pooledEngine.createComponent(CAnimation.class);
+				CStepper stepper = pooledEngine.createComponent(CStepper.class);
+				stepper.runnable = new ECSRunnable() {
+					@Override
+					public void update(Entity me, float deltaTime) {
+						CItem myItem = me.getComponent(CItem.class);
+						CAnimation myAnimation = me.getComponent(CAnimation.class);
+						if(myAnimation.animationQueue.animationQueue.size() <= 0 && myItem.itemType.animation != null) {
+							Animation newAnimation = new Animation();
+							newAnimation.animationParameter = myItem.itemType.animation;
+							myAnimation.animationQueue.add(newAnimation);
+						}
+					}
+				};
+				entity.add(animation);
+				entity.add(normalObject);
+				entity.add(gravity);
+				entity.add(bounds);
+				entity.add(fritionObject);
+				entity.add(speed);
+				entity.add(position);
+				entity.add(item);
+				return entity;
+			}
+		};
+		creationManager.entityDescriptors.put("placeholderDroppedItem", droppedItem);
 	}
 
 	private void loadAssets() {
