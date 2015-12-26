@@ -20,6 +20,8 @@ import com.danilafe.cave.ecs.components.CCameraView;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
 import com.danilafe.cave.ecs.components.CGravity;
+import com.danilafe.cave.ecs.components.CInteractionCause;
+import com.danilafe.cave.ecs.components.CInteractive;
 import com.danilafe.cave.ecs.components.CLight;
 import com.danilafe.cave.ecs.components.CMarked;
 import com.danilafe.cave.ecs.components.CNormalObject;
@@ -34,6 +36,7 @@ import com.danilafe.cave.ecs.systems.DebugRenderSystem;
 import com.danilafe.cave.ecs.systems.FollowingSystem;
 import com.danilafe.cave.ecs.systems.FrictionSystem;
 import com.danilafe.cave.ecs.systems.GravitySystem;
+import com.danilafe.cave.ecs.systems.InteractionSystem;
 import com.danilafe.cave.ecs.systems.LightSystem;
 import com.danilafe.cave.ecs.systems.NormalSystem;
 import com.danilafe.cave.ecs.systems.PositionSystem;
@@ -108,6 +111,10 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public FollowingSystem followingSystem;
 	/**
+	 * InteractionSystem - handles interactions
+	 */
+	public InteractionSystem interactionSystem;
+	/**
 	 * Camera used to look into the game world.
 	 */
 	public OrthographicCamera orthoCam;
@@ -152,6 +159,7 @@ public class CaveGame extends ApplicationAdapter {
 		accelerationSystem = new AccelerationSystem();
 		selectableElementSytem = new SelectableElementSystem();
 		followingSystem = new FollowingSystem();
+		interactionSystem = new InteractionSystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
@@ -160,6 +168,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(debugRenderSystem);
 		pooledEngine.addSystem(gravitySystem);
 		pooledEngine.addSystem(normalSystem);
+		pooledEngine.addSystem(interactionSystem);
 		pooledEngine.addSystem(positionSystem);
 		pooledEngine.addSystem(frictionSystem);
 		pooledEngine.addSystem(stepperSystem);
