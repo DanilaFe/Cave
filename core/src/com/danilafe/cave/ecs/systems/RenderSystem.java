@@ -126,8 +126,8 @@ public class RenderSystem extends IteratingSystem {
 		Gdx.gl.glActiveTexture(Gdx.gl.GL_TEXTURE0);
 		Gdx.app.debug("Lights", "Rendering " + lightManager.lights.size() + " lights");
 		shaderProgram.setUniformi("u_normalTexture", 1);
-		shaderProgram.setUniformi("u_textureWidth", (int) CaveGame.instance.orthoCam.viewportWidth);
-		shaderProgram.setUniformi("u_textureHeight", (int) CaveGame.instance.orthoCam.viewportHeight);
+		shaderProgram.setUniformi("u_textureWidth", orthoCamWidth);
+		shaderProgram.setUniformi("u_textureHeight", orthoCamHeight);
 		shaderProgram.setUniformf("u_texOffsetX", (CaveGame.instance.orthoCam.position.x - CaveGame.instance.orthoCam.viewportWidth / 2));
 		shaderProgram.setUniformf("u_texOffsetY", (CaveGame.instance.orthoCam.position.y - CaveGame.instance.orthoCam.viewportHeight / 2));
 		lightManager.sortByDistance(new Vector2(CaveGame.instance.orthoCam.position.x, CaveGame.instance.orthoCam.position.y));
