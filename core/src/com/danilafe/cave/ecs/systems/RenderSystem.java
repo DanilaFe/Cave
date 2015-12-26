@@ -107,7 +107,7 @@ public class RenderSystem extends IteratingSystem {
 				CAnimation animation = e.getComponent(CAnimation.class);
 				CPosition position = e.getComponent(CPosition.class);
 				Animation animationObject = animation.animationQueue.animationQueue.peek();
-				if (animationObject != null){
+				if (animationObject != null && animationObject.animationParameter.normalTextures != null){
 					TextureRegion toRender = animationObject.getNormalAt(animationObject.texIndex);
 					normalBatch.draw(toRender, (int) Math.floor(position.position.x - toRender.getRegionWidth() / 2), (int) Math.floor(position.position.y - toRender.getRegionHeight() / 2));
 				}
