@@ -234,7 +234,7 @@ public class CaveGame extends ApplicationAdapter {
 							enableFriction = false;
 						}
 						if(Gdx.input.isKeyPressed(Keys.SPACE) && normalSystem.checkNormalEdge(2, myBounds.bounds)){
-							mySpeed.speed.y += 100;
+							mySpeed.speed.y += 70;
 						}
 						myFriction.frictionCoefficient.x = (enableFriction) ? 1 : 0;
 					}
@@ -244,8 +244,8 @@ public class CaveGame extends ApplicationAdapter {
 				CInteractionCause interactionCause = pooledEngine.createComponent(CInteractionCause.class);
 				interactionCause.canInteract = true;
 				entity.add(interactionCause);
-				camView.maxOffsetX = Constants.CAMERA_WIDTH / 4;
-				camView.maxOffsetY = Constants.CAMERA_WIDTH / 6;
+				camView.maxOffsetX = Constants.CAMERA_WIDTH / 8;
+				camView.maxOffsetY = Constants.CAMERA_WIDTH / 12;
 				entity.add(camView);
 				entity.add(position);
 				entity.add(speed);
