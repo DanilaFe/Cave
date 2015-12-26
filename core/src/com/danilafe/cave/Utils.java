@@ -30,6 +30,11 @@ public class Utils {
 		return false;
 	}
 
+	public static boolean checkEdgeContact(Rectangle primary, Rectangle secondary){
+		for(int i = 0; i < 4; i++) if(checkEdgeContact(i, primary, secondary)) return true;
+		return false;
+	}
+
 	/**
 	 * Shader function.
 	 * This loads the GLSL shaders for the game.

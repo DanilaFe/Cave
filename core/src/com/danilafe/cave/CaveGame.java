@@ -20,6 +20,8 @@ import com.danilafe.cave.ecs.components.CCameraView;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
 import com.danilafe.cave.ecs.components.CGravity;
+import com.danilafe.cave.ecs.components.CInteractionCause;
+import com.danilafe.cave.ecs.components.CInteractive;
 import com.danilafe.cave.ecs.components.CLight;
 import com.danilafe.cave.ecs.components.CMarked;
 import com.danilafe.cave.ecs.components.CNormalObject;
@@ -34,6 +36,7 @@ import com.danilafe.cave.ecs.systems.DebugRenderSystem;
 import com.danilafe.cave.ecs.systems.FollowingSystem;
 import com.danilafe.cave.ecs.systems.FrictionSystem;
 import com.danilafe.cave.ecs.systems.GravitySystem;
+import com.danilafe.cave.ecs.systems.InteractionSystem;
 import com.danilafe.cave.ecs.systems.LightSystem;
 import com.danilafe.cave.ecs.systems.NormalSystem;
 import com.danilafe.cave.ecs.systems.PositionSystem;
@@ -108,6 +111,10 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public FollowingSystem followingSystem;
 	/**
+	 * InteractionSystem - handles interactions
+	 */
+	public InteractionSystem interactionSystem;
+	/**
 	 * Camera used to look into the game world.
 	 */
 	public OrthographicCamera orthoCam;
@@ -152,6 +159,7 @@ public class CaveGame extends ApplicationAdapter {
 		accelerationSystem = new AccelerationSystem();
 		selectableElementSytem = new SelectableElementSystem();
 		followingSystem = new FollowingSystem();
+		interactionSystem = new InteractionSystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
@@ -159,6 +167,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(boundsSystem);
 		pooledEngine.addSystem(debugRenderSystem);
 		pooledEngine.addSystem(gravitySystem);
+		pooledEngine.addSystem(interactionSystem);
 		pooledEngine.addSystem(normalSystem);
 		pooledEngine.addSystem(positionSystem);
 		pooledEngine.addSystem(frictionSystem);
@@ -182,6 +191,7 @@ public class CaveGame extends ApplicationAdapter {
 			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(72, 8 * (i + 1)));
 		}
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(8, 8 * 2));
+		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderJumpBoost").create(64, 8));
 
 		for(int i = 0; i < 32; i ++){
 			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderLightball").create((float) Math.random() * 80, (float) Math.random() * 50));
@@ -224,13 +234,18 @@ public class CaveGame extends ApplicationAdapter {
 							enableFriction = false;
 						}
 						if(Gdx.input.isKeyPressed(Keys.SPACE) && normalSystem.checkNormalEdge(2, myBounds.bounds)){
-							mySpeed.speed.y += 100;
+							mySpeed.speed.y += 70;
 						}
 						myFriction.frictionCoefficient.x = (enableFriction) ? 1 : 0;
 					}
 				};
 				CCameraView camView = pooledEngine.createComponent(CCameraView.class);
 				camView.camera = orthoCam;
+				CInteractionCause interactionCause = pooledEngine.createComponent(CInteractionCause.class);
+				interactionCause.canInteract = true;
+				entity.add(interactionCause);
+				camView.maxOffsetX = Constants.CAMERA_WIDTH / 8;
+				camView.maxOffsetY = Constants.CAMERA_WIDTH / 12;
 				entity.add(camView);
 				entity.add(position);
 				entity.add(speed);
@@ -310,6 +325,30 @@ public class CaveGame extends ApplicationAdapter {
 			}
 		};
 		creationManager.entityDescriptors.put("placeholderLightball", lightball);
+		EntityDescriptor jumpBoost = new EntityDescriptor() {
+			@Override
+			public Entity create(float x, float y) {
+				Entity newEntity = creationManager.entityDescriptors.get("placeholderWall").create(x, y);
+				CLight light = pooledEngine.createComponent(CLight.class);
+				light.light.set(x, y, 16, .5F, .5F, .5F, 4, .5F, .5F, .5F);
+				CInteractive interactive = pooledEngine.createComponent(CInteractive.class);
+				interactive.interactKey = Keys.SPACE;
+				interactive.onInteract = new ECSRunnable() {
+					@Override
+					public void update(Entity me, float deltaTime) {
+						CInteractive myInteractive = me.getComponent(CInteractive.class);
+						CSpeed otherSpeed = myInteractive.currentInteraction.getComponent(CSpeed.class);
+						CBounds myBounds = me.getComponent(CBounds.class);
+						CBounds otherBounds = myInteractive.currentInteraction.getComponent(CBounds.class);
+						if(Utils.checkEdgeContact(0, myBounds.bounds, otherBounds.bounds)) otherSpeed.speed.y += 200;
+					}
+				};
+				newEntity.add(light);
+				newEntity.add(interactive);
+				return newEntity;
+			}
+		};
+		creationManager.entityDescriptors.put("placeholderJumpBoost", jumpBoost);
 	}
 
 	private void loadAssets() {
