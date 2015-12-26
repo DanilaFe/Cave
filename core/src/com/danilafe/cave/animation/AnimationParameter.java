@@ -41,7 +41,8 @@ public class AnimationParameter {
 	public static AnimationParameter create(String texturePath, boolean loop, int texWidth, int texHeight, float frameDelta){
 		AnimationParameter animationParameter = new AnimationParameter();
 		animationParameter.textures = TextureRegion.split(CaveGame.instance.assetManager.get("textures/" + texturePath, Texture.class), texWidth, texHeight);
-		animationParameter.normalTextures =  TextureRegion.split(CaveGame.instance.assetManager.get("normals/" + texturePath, Texture.class), texWidth, texHeight);
+		if(CaveGame.instance.assetManager.isLoaded("normals/" + texturePath))
+			animationParameter.normalTextures =  TextureRegion.split(CaveGame.instance.assetManager.get("normals/" + texturePath, Texture.class), texWidth, texHeight);
 		animationParameter.frameDelta = frameDelta;
 		animationParameter.loop = loop;
 		return animationParameter;
