@@ -402,9 +402,6 @@ public class CaveGame extends ApplicationAdapter {
 						Utils.printContainerContents(me.getComponent(CItemContainer.class).container);
 					}
 				};
-				CLight light = pooledEngine.createComponent(CLight.class);
-				light.light.set(0, 0, 16, 1, 1, .3F, 0, 0, 0, 0);
-				entity.add(light);
 				entity.add(interactive);
 				entity.add(bounds);
 				entity.add(bounds);
