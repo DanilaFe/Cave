@@ -453,6 +453,29 @@ public class CaveGame extends ApplicationAdapter {
 			}
 		};
 		creationManager.entityDescriptors.put("placeholderDroppedItem", droppedItem);
+		EntityDescriptor crystal = new EntityDescriptor() {
+			@Override
+			public Entity create(float x, float y) {
+				Entity entity = pooledEngine.createEntity();
+				CPosition position = pooledEngine.createComponent(CPosition.class);
+				position.position.set(x, y);
+				CBounds bounds = pooledEngine.createComponent(CBounds.class);
+				bounds.bounds.setSize(8, 8);
+				CAnimation animation = pooledEngine.createComponent(CAnimation.class);
+				Animation ani = new Animation();
+				ani.animationParameter = creationManager.animationParams.get("crystals");
+				ani.texIndex = (int) Math.round(Math.random() * 2);
+				animation.animationQueue.add(ani);
+				CLight light = pooledEngine.createComponent(CLight.class);
+				light.light.set(0, 0, 64, .7F, 1F, .7F, 0, 0, 0, 0);
+				entity.add(light);
+				entity.add(animation);
+				entity.add(bounds);
+				entity.add(position);
+				return entity;
+			}
+		};
+		creationManager.entityDescriptors.put("placeholderCrystal", crystal);
 	}
 
 	private void loadAssets() {
