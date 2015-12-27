@@ -14,6 +14,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.danilafe.cave.animation.Animation;
+import com.danilafe.cave.animation.AnimationParameter;
 import com.danilafe.cave.creation.CreationManager;
 import com.danilafe.cave.creation.EntityDescriptor;
 import com.danilafe.cave.ecs.components.CAcceleration;
@@ -211,6 +212,7 @@ public class CaveGame extends ApplicationAdapter {
 			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderLightball").create((float) Math.random() * 80, (float) Math.random() * 50));
 		}
 
+		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderCrystal").create(16, 8));
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderChest").create(72, 80));
 	}
 
@@ -287,6 +289,12 @@ public class CaveGame extends ApplicationAdapter {
 				CNormalObstacle normalObstacle = pooledEngine.createComponent(CNormalObstacle.class);
 				CFrictionCause frictionCause = pooledEngine.createComponent(CFrictionCause.class);
 				frictionCause.frictionMultiplier.x = .01F;
+				CAnimation animation = pooledEngine.createComponent(CAnimation.class);
+				Animation ani = new Animation();
+				ani.animationParameter = creationManager.animationParams.get("caveTiles");
+				ani.texIndex = (int) Math.floor(Math.random() * 3);
+				animation.animationQueue.add(ani);
+				entity.add(animation);
 				entity.add(position);
 				entity.add(bounds);
 				entity.add(normalObstacle);
@@ -461,7 +469,7 @@ public class CaveGame extends ApplicationAdapter {
 				CAnimation animation = pooledEngine.createComponent(CAnimation.class);
 				Animation ani = new Animation();
 				ani.animationParameter = creationManager.animationParams.get("crystals");
-				ani.texIndex = (int) Math.round(Math.random() * 2);
+				ani.texIndex = (int) Math.floor(Math.random() * 2);
 				animation.animationQueue.add(ani);
 				CLight light = pooledEngine.createComponent(CLight.class);
 				light.light.set(0, 0, 64, .7F, 1F, .7F, 0, 0, 0, 0);
