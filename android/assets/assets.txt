@@ -1,8 +1,8 @@
 [NormalTexture]
 cavetiles.png
-chest_large.png
-chest_small.png
-crystals.png
 dungeontiles.png
 [RegularTexture]
 particles.png
+chest_large.png
+chest_small.png
+crystals.png
