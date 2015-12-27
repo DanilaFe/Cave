@@ -22,6 +22,6 @@ public class Constants {
 	/**
 	 * Whether normal maps should be used.
 	 */
-	public static final boolean NORMAL = false;
+	public static final boolean NORMAL = true;
 
 }
