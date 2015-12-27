@@ -215,6 +215,8 @@ public class CaveGame extends ApplicationAdapter {
 	}
 
 	private void loadCreation() {
+		creationManager.animationParams.put("caveTiles", AnimationParameter.create("cavetiles.png", true, 8, 8, 0));
+		creationManager.animationParams.put("crystals", AnimationParameter.create("crystals.png", true, 8, 8, 0));
 		/*
 		 * Entities
 		 */
