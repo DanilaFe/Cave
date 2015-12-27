@@ -346,8 +346,6 @@ public class CaveGame extends ApplicationAdapter {
 			@Override
 			public Entity create(float x, float y) {
 				Entity newEntity = creationManager.entityDescriptors.get("placeholderWall").create(x, y);
-				CLight light = pooledEngine.createComponent(CLight.class);
-				light.light.set(x, y, 16, .5F, .5F, .5F, 4, .5F, .5F, .5F);
 				CInteractive interactive = pooledEngine.createComponent(CInteractive.class);
 				interactive.interactKey = Keys.SPACE;
 				interactive.onInteract = new ECSRunnable() {
@@ -360,7 +358,6 @@ public class CaveGame extends ApplicationAdapter {
 						if(Utils.checkEdgeContact(0, myBounds.bounds, otherBounds.bounds)) otherSpeed.speed.y += 200;
 					}
 				};
-				newEntity.add(light);
 				newEntity.add(interactive);
 				return newEntity;
 			}
