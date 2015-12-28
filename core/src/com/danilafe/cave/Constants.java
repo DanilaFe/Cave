@@ -23,6 +23,9 @@ public class Constants {
 	 * Whether normal maps should be used.
 	 */
 	public static final boolean NORMAL = true;
+	/**
+	 * The size of a regular tile
+	 */
 	public static final int TILE_SIZE = 8;
 	/**
 	 * The size (w/h) of one chunk.

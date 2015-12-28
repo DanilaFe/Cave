@@ -11,6 +11,9 @@ public class TileParameter {
 	 * The animation of this tile
 	 */
 	public TileAnimation animation;
+	/**
+	 * The type of entity that this tile stands for.
+	 */
 	public String entityType;
 
 	/**

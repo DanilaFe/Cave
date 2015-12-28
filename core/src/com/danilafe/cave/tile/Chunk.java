@@ -27,15 +27,31 @@ public class Chunk {
 	 */
 	public boolean wasLoaded = false;
 
+	/**
+	 * Gets the tile at the given position
+	 * @param x the x-position of the tile
+	 * @param y the y-position of the tile
+	 * @return the tile at the given position
+	 */
 	public Tile getTile(int x, int y){
 		return tiles[y * Constants.CHUNK_SIZE / Constants.TILE_SIZE + x];
 	}
 
+	/**
+	 * Sets the isLoaded value, saving the previous one into wasLoaded.
+	 * @param loaded the new isLoaded value
+	 */
 	public void setLoaded(boolean loaded){
 		wasLoaded = isLoaded;
 		isLoaded = loaded;
 	}
 
+	/**
+	 * Sets the tile at the given position
+	 * @param tile the tile to set
+	 * @param x the x-position of the tile
+	 * @param y the y-position of the tile
+	 */
 	public void setTile(Tile tile, int x, int y){
 		tiles[y * Constants.CHUNK_SIZE / Constants.TILE_SIZE + x] = tile;
 		tile.position.set(x, y).scl(Constants.TILE_SIZE);

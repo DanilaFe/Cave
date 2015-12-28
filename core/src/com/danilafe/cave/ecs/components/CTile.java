@@ -11,6 +11,9 @@ import com.danilafe.cave.tile.Tile;
  */
 public class CTile implements Poolable, Component {
 
+	/**
+	 * The tile this entity was created for.
+	 */
 	public Tile myTile;
 
 	@Override
