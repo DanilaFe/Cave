@@ -30,6 +30,10 @@ public class TileAnimation {
 	 */
 	public AnimationParameter fourNeighbor[];
 	/**
+	 * Animation when this tile has no neighbors
+	 */
+	public AnimationParameter noNeighbors[];
+	/**
 	 * Creates a new TileAnimation from the given parameters
 	 * @param oneNeighbor the animation when this tile has one neighbor
 	 * @param corner the animation when this tile has two adjacent neighbors
@@ -38,13 +42,14 @@ public class TileAnimation {
 	 * @param threeNeighbors the animation when this tile has three neighbors
 	 * @return the created TileAnimation
 	 */
-	public static TileAnimation create(AnimationParameter[] oneNeighbor, AnimationParameter[] corner, AnimationParameter[] fourNeighbor, AnimationParameter[] twoNeighbors, AnimationParameter[] threeNeighbors){
+	public static TileAnimation create(AnimationParameter[] oneNeighbor, AnimationParameter[] corner, AnimationParameter[] fourNeighbor, AnimationParameter[] twoNeighbors, AnimationParameter[] threeNeighbors, AnimationParameter[] noNeighbors){
 		TileAnimation newAnimation = new TileAnimation();
 		newAnimation.oneNeighbor = oneNeighbor;
 		newAnimation.corner = corner;
 		newAnimation.fourNeighbor = fourNeighbor;
 		newAnimation.twoNeighbors = twoNeighbors;
 		newAnimation.threeNeighbors = threeNeighbors;
+		newAnimation.noNeighbors = noNeighbors;
 
 		return newAnimation;
 	}
