@@ -26,6 +26,10 @@ public class MapManager {
 	 * List of anchors that this manager has. Anchors keep tiles around them loaded
 	 */
 	public ArrayList<ChunkAnchor> anchors = new ArrayList<ChunkAnchor>();
+	/**
+	 * Whether this chunk manager needs to be updated.
+	 */
+	public boolean needsUpdate = false;
 
 	/**
 	 * Create a new MapManager
@@ -33,6 +37,7 @@ public class MapManager {
 	public MapManager() {
 		mainNode.size = Constants.CHUNK_SIZE;
 	}
+
 
 	/**
 	 * Returns the chunk at the given world position
@@ -225,9 +230,12 @@ public class MapManager {
 	 * Updates which chunks are anchored, load / unloads them.
 	 */
 	public void update(){
-		markAllChunks(mainNode, false);
-		markAnchored();
-		manageLoading(mainNode);
+		if(needsUpdate){
+			markAllChunks(mainNode, false);
+			markAnchored();
+			manageLoading(mainNode);
+			needsUpdate = false;
+		}
 	}
 
 	/**
@@ -241,6 +249,7 @@ public class MapManager {
 		int tileX = (x % Constants.CHUNK_SIZE) / Constants.TILE_SIZE;
 		int tileY = (y % Constants.CHUNK_SIZE) / Constants.TILE_SIZE;
 		toChange.setTile(tile, tileX, tileY);
+		needsUpdate = true;
 	}
 
 }

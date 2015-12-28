@@ -2,6 +2,7 @@ package com.danilafe.cave.ecs.systems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.CaveGame;
 import com.danilafe.cave.ecs.components.CAnchor;
 import com.danilafe.cave.ecs.components.CPosition;
@@ -26,7 +27,11 @@ public class TileSystem extends FamilySystem {
 		super.update(deltaTime);
 
 		for(Entity entityB : entitiesB) {
-			entityB.getComponent(CAnchor.class).anchor.position.set(entityB.getComponent(CPosition.class).position);
+			CAnchor anchor = entityB.getComponent(CAnchor.class);
+			Vector2 oldPos = anchor.anchor.position.cpy();
+			anchor.anchor.position.set(entityB.getComponent(CPosition.class).position);
+			if(!(oldPos.x == anchor.anchor.position.x && oldPos.y == anchor.anchor.position.y))
+				CaveGame.instance.mapManager.needsUpdate = true;
 		}
 	}
 
