@@ -215,11 +215,15 @@ public class CaveGame extends ApplicationAdapter {
 		loadAssets();
 		loadCreation();
 
+		TileParameter newTileParam = TileParameter.create(null, "placeholderWall");
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderPlayer").create(50, 50));
-		for(int i = 0; i < 9; i ++){
-			// pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(8 * i, 0));
-			// pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(0, 8 * (i + 1)));
-			// pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(72, 8 * (i + 1)));
+		for(int i = 0; i < 10; i ++){
+			Tile newTile = Tile.create(newTileParam, 0);
+			mapManager.setTile(newTile, Constants.TILE_SIZE * i, 0);
+			newTile = Tile.create(newTileParam, 0);
+			mapManager.setTile(newTile, 0, Constants.TILE_SIZE * (i));
+			newTile = Tile.create(newTileParam, 0);
+			mapManager.setTile(newTile, 72, Constants.TILE_SIZE * (i));
 		}
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(8, 8 * 2));
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderJumpBoost").create(64, 8));
@@ -231,14 +235,6 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderCrystal").create(16, 8));
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderChest").create(72, 80));
 
-		TileParameter newTileParam = TileParameter.create(null);
-		newTileParam.entityType = "placeholderWall";
-		for(int i = 0; i < 10000; i++){
-			Tile newTile = Tile.create(newTileParam, 0);
-			int chunkLoc = i % (Constants.CHUNK_SIZE / Constants.TILE_SIZE);
-			mapManager.getChunkAt(i * Constants.TILE_SIZE, i * Constants.TILE_SIZE).setTile(newTile, chunkLoc , chunkLoc);
-			System.out.println(mapManager.getChunkAt(i * Constants.TILE_SIZE, i * Constants.TILE_SIZE));
-		}
 	}
 
 	private void loadCreation() {
