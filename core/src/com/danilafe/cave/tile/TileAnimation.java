@@ -1,6 +1,6 @@
 package com.danilafe.cave.tile;
 
-import com.danilafe.cave.animation.Animation;
+import com.danilafe.cave.animation.AnimationParameter;
 
 /**
  * The animation set of a tile.
@@ -12,23 +12,23 @@ public class TileAnimation {
 	/**
 	 * Animation when this tile has one neighbor
 	 */
-	public Animation[] oneNeighbor;
+	public AnimationParameter[] oneNeighbor;
 	/**
 	 * Animation when this tile has two adjacent neighbors
 	 */
-	public Animation[] corner;
+	public AnimationParameter[] corner;
 	/**
 	 * Animation when this tile has two non-adjacent neighbors
 	 */
-	public Animation[] twoNeighbors;
+	public AnimationParameter[] twoNeighbors;
 	/**
 	 * Animation when this tile has three neighbors.
 	 */
-	public Animation[] threeNeighbors;
+	public AnimationParameter[] threeNeighbors;
 	/**
 	 * Animation when this tile has no exposed sides.
 	 */
-	public Animation fourNeighbor[];
+	public AnimationParameter fourNeighbor[];
 	/**
 	 * Creates a new TileAnimation from the given parameters
 	 * @param oneNeighbor the animation when this tile has one neighbor
@@ -38,7 +38,7 @@ public class TileAnimation {
 	 * @param threeNeighbors the animation when this tile has three neighbors
 	 * @return the created TileAnimation
 	 */
-	public static TileAnimation create(Animation[] oneNeighbor, Animation[] corner, Animation[] fourNeighbor, Animation[] twoNeighbors, Animation[] threeNeighbors){
+	public static TileAnimation create(AnimationParameter[] oneNeighbor, AnimationParameter[] corner, AnimationParameter[] fourNeighbor, AnimationParameter[] twoNeighbors, AnimationParameter[] threeNeighbors){
 		TileAnimation newAnimation = new TileAnimation();
 		newAnimation.oneNeighbor = oneNeighbor;
 		newAnimation.corner = corner;
