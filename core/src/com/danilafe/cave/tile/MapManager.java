@@ -127,7 +127,7 @@ public class MapManager {
 	}
 
 	public void loadChunk(Chunk chunk){
-		Gdx.app.log("World Tree", "Loading Chunk");
+		Gdx.app.debug("World Tree", "Loading Chunk");
 		for(int x = 0; x < Constants.CHUNK_SIZE / Constants.TILE_SIZE; x++){
 			for(int y = 0; y < Constants.CHUNK_SIZE/ Constants.TILE_SIZE; y++){
 				Tile toCreate = chunk.getTile(x, y);
@@ -142,7 +142,7 @@ public class MapManager {
 	}
 
 	public void unloadChunk(Chunk chunk){
-		Gdx.app.log("World Tree", "Unloading Chunk");
+		Gdx.app.debug("World Tree", "Unloading Chunk");
 		ImmutableArray<Entity> tileEntities = CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CTile.class).get());
 		ArrayList<Entity> toDelete = new ArrayList<Entity>();
 		for(Entity e : tileEntities){
@@ -174,6 +174,13 @@ public class MapManager {
 		markAllChunks(mainNode, false);
 		markAnchored();
 		manageLoading(mainNode);
+	}
+
+	public void setTile(Tile tile, int x, int y){
+		Chunk toChange = getChunkAt(x, y);
+		int tileX = (x % Constants.CHUNK_SIZE) / Constants.TILE_SIZE;
+		int tileY = (y % Constants.CHUNK_SIZE) / Constants.TILE_SIZE;
+		toChange.setTile(tile, tileX, tileY);
 	}
 
 }
