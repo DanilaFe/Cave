@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.danilafe.cave.CaveGame;
 import com.danilafe.cave.Constants;
+import com.danilafe.cave.Utils;
 import com.danilafe.cave.ecs.components.CTile;
 
 public class MapManager {
@@ -23,6 +25,9 @@ public class MapManager {
 	}
 
 	public Chunk getChunkAt(float x, float y){
+		if(x % Constants.CHUNK_SIZE == 0) x += 1;
+		if(y % Constants.CHUNK_SIZE == 0) y += 1;
+
 		int chunkX = (int) Math.ceil(x / Constants.CHUNK_SIZE);
 		int chunkY = (int) Math.ceil(y / Constants.CHUNK_SIZE);
 		int biggetValue = (chunkX > chunkY) ? chunkX : chunkY;
@@ -57,8 +62,8 @@ public class MapManager {
 			}
 			return node.holdsChunk;
 		}
-		boolean secondX = relativeX > node.size / 2;
-		boolean secondY = relativeY > node.size / 2;
+		boolean secondX = relativeX >= node.size / 2;
+		boolean secondY = relativeY >= node.size / 2;
 
 		if(secondX) relativeX -= node.size / 2;
 		if(secondY) relativeY -= node.size / 2;
@@ -138,12 +143,16 @@ public class MapManager {
 
 	public void unloadChunk(Chunk chunk){
 		Gdx.app.log("World Tree", "Unloading Chunk");
-		for(Entity e : CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CTile.class).get())){
+		ImmutableArray<Entity> tileEntities = CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CTile.class).get());
+		ArrayList<Entity> toDelete = new ArrayList<Entity>();
+		for(Entity e : tileEntities){
 			CTile tile = e.getComponent(CTile.class);
 			if(tile.myTile.myChunk == chunk) {
-				e.removeAll();
-				CaveGame.instance.pooledEngine.removeEntity(e);
+				toDelete.add(e);
 			}
+		}
+		for(Entity e : toDelete){
+			Utils.removeEntity(e);
 		}
 	}
 
