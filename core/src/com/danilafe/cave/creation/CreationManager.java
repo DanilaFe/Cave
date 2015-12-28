@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.danilafe.cave.animation.AnimationParameter;
 import com.danilafe.cave.item.ItemParameter;
+import com.danilafe.cave.tile.TileAnimation;
 import com.danilafe.cave.tile.TileParameter;
 
 /**
@@ -29,5 +30,9 @@ public class CreationManager {
 	 * The tile parameters representing different kinds of tiles.
 	 */
 	public HashMap<String, TileParameter> tileParameters = new HashMap<String, TileParameter>();
+	/**
+	 * The tile animations representing different kinds of animations tiles can have
+	 */
+	public HashMap<String, TileAnimation> tileAnimations = new HashMap<String, TileAnimation>();
 
 }
