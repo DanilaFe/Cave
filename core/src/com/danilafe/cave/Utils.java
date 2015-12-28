@@ -1,5 +1,6 @@
 package com.danilafe.cave;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
@@ -64,6 +65,14 @@ public class Utils {
 		for(ItemParameter key : container.items.keySet()){
 			System.out.println(key.name + " | " + key.description + " | " + container.items.get(key));
 		}
+	}
+
+	/**
+	 * Safely remove entity from game (attempts to find all references to this entity)
+	 * @param e the entity to remove
+	 */
+	public static void removeEntity(Entity e){
+		CaveGame.instance.pooledEngine.removeEntity(e);
 	}
 
 }
