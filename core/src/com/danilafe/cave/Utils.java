@@ -1,11 +1,14 @@
 package com.danilafe.cave;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
+import com.danilafe.cave.ecs.components.CTile;
 import com.danilafe.cave.item.ItemContainer;
 import com.danilafe.cave.item.ItemParameter;
+import com.danilafe.cave.tile.Tile;
 
 /**
  * Utils class to hold utility methods.
@@ -73,6 +76,20 @@ public class Utils {
 	 */
 	public static void removeEntity(Entity e){
 		CaveGame.instance.pooledEngine.removeEntity(e);
+	}
+
+	public static Entity createEntityFromTile(Tile toCreate){
+		Entity createdEntiy = CaveGame.instance.creationManager.entityDescriptors.get(toCreate.tileParameter.entityType).create(toCreate.myChunk.position.x + toCreate.position.x, toCreate.myChunk.position.y + toCreate.position.y);
+		CTile tile = CaveGame.instance.pooledEngine.createComponent(CTile.class);
+		tile.myTile = toCreate;
+		createdEntiy.add(tile);
+		return createdEntiy;
+	}
+
+	public static void destroyEntityFromTile(Tile toDestroy){
+		for(Entity e : CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CTile.class).get())){
+			if(e.getComponent(CTile.class).myTile == toDestroy) CaveGame.instance.pooledEngine.removeEntity(e);
+		}
 	}
 
 }
