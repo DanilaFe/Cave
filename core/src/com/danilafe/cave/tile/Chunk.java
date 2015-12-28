@@ -2,6 +2,7 @@ package com.danilafe.cave.tile;
 
 import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.Constants;
+import com.danilafe.cave.Utils;
 
 /**
  * A chunk in the game map.
@@ -53,8 +54,15 @@ public class Chunk {
 	 * @param y the y-position of the tile
 	 */
 	public void setTile(Tile tile, int x, int y){
+		Tile oldTile = tiles[y * Constants.CHUNK_SIZE / Constants.TILE_SIZE + x];
+		if(oldTile != null && isLoaded) Utils.destroyEntityFromTile(oldTile);
+
 		tiles[y * Constants.CHUNK_SIZE / Constants.TILE_SIZE + x] = tile;
-		tile.position.set(x, y).scl(Constants.TILE_SIZE);
-		tile.myChunk = this;
+		if(tile != null){
+			tile.position.set(x, y).scl(Constants.TILE_SIZE);
+			tile.myChunk = this;
+
+			if(isLoaded) Utils.createEntityFromTile(tile);
+		}
 	}
 }
