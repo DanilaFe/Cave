@@ -22,5 +22,23 @@ public class Chunk {
 	 * Whether this chunk is loaded or not.
 	 */
 	public boolean isLoaded = false;
+	/**
+	 * Whether this chunk was loaded previously or not.
+	 */
+	public boolean wasLoaded = false;
 
+	public Tile getTile(int x, int y){
+		return tiles[y * Constants.CHUNK_SIZE / Constants.TILE_SIZE + x];
+	}
+
+	public void setLoaded(boolean loaded){
+		wasLoaded = isLoaded;
+		isLoaded = loaded;
+	}
+
+	public void setTile(Tile tile, int x, int y){
+		tiles[y * Constants.CHUNK_SIZE / Constants.TILE_SIZE + x] = tile;
+		tile.position.set(x, y).scl(Constants.TILE_SIZE);
+		tile.myChunk = this;
+	}
 }
