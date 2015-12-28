@@ -241,10 +241,25 @@ public class MapManager {
 	 * @param y the y-position of the tile
 	 */
 	public void setTile(Tile tile, int x, int y){
+		if(x < 0 || y < 0) return;
 		Chunk toChange = getChunkAt(x, y);
 		int tileX = (x % Constants.CHUNK_SIZE) / Constants.TILE_SIZE;
 		int tileY = (y % Constants.CHUNK_SIZE) / Constants.TILE_SIZE;
 		toChange.setTile(tile, tileX, tileY);
+	}
+
+	/**
+	 * Gets the tile at the current world position
+	 * @param x the x-position of the tile
+	 * @param y the y-position of the tile
+	 * @return the tile at the position
+	 */
+	public Tile getTile(int x, int y){
+		if(x < 0 || y < 0) return null;
+		Chunk toChange = getChunkAt(x, y);
+		int tileX = (x % Constants.CHUNK_SIZE) / Constants.TILE_SIZE;
+		int tileY = (y % Constants.CHUNK_SIZE) / Constants.TILE_SIZE;
+		return toChange.getTile(tileX, tileY);
 	}
 
 }
