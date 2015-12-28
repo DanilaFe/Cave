@@ -23,9 +23,10 @@ public class Constants {
 	 * Whether normal maps should be used.
 	 */
 	public static final boolean NORMAL = true;
+	public static final int TILE_SIZE = 8;
 	/**
 	 * The size (w/h) of one chunk.
 	 */
-	public static final int CHUNK_SIZE = 16;
+	public static final int CHUNK_SIZE = TILE_SIZE * 8;
 
 }
