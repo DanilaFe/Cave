@@ -180,17 +180,13 @@ public class MapManager {
 			for(int y = 0; y < Constants.CHUNK_SIZE/ Constants.TILE_SIZE; y++){
 				Tile toCreate = chunk.getTile(x, y);
 				if(toCreate == null) continue;
-				Entity createdEntiy = CaveGame.instance.creationManager.entityDescriptors.get(toCreate.tileParameter.entityType).create(chunk.position.x + x * Constants.TILE_SIZE, chunk.position.y + y * Constants.TILE_SIZE);
-				CTile tile = CaveGame.instance.pooledEngine.createComponent(CTile.class);
-				tile.myTile = toCreate;
-				createdEntiy.add(tile);
-				CaveGame.instance.pooledEngine.addEntity(createdEntiy);
+				CaveGame.instance.pooledEngine.addEntity(Utils.createEntityFromTile(toCreate));
 			}
 		}
 	}
 
 	/**
-	 * Remvoes the entities in the given chunk from the world
+	 * Removes the entities in the given chunk from the world
 	 * @param chunk the chunk to unload
 	 */
 	public void unloadChunk(Chunk chunk){
