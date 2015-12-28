@@ -1,6 +1,7 @@
 package com.danilafe.cave.tile;
 
 import com.badlogic.gdx.math.Vector2;
+import com.danilafe.cave.animation.AnimationParameter;
 
 /**
  * Tile data structure holding data for a specific tile
@@ -26,10 +27,17 @@ public class Tile {
 	 */
 	public int rotation;
 	/**
+	 * The current animation
+	 */
+	public AnimationParameter currentAnimation;
+	/**
 	 * Position of the tile in the chunk.
 	 */
 	public Vector2 position = new Vector2(0, 0);
-
+	/**
+	 * Whether the animation of this tile was changed
+	 */
+	public boolean animationChange = false;
 	/**
 	 * Creates a new tile from the given data
 	 * @param tileParam the parameter of the tile
