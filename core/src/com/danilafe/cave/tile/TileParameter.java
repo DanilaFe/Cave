@@ -11,6 +11,7 @@ public class TileParameter {
 	 * The animation of this tile
 	 */
 	public TileAnimation animation;
+	public String entityType;
 
 	/**
 	 * Creates a new tile from the given properties
