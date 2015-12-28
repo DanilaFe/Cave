@@ -234,7 +234,10 @@ public class CaveGame extends ApplicationAdapter {
 
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderCrystal").create(16, 8));
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderChest").create(72, 80));
-
+		for(int i = 8; i < 64; i ++){
+			Tile newTile = Tile.create(newTileParam, 0);
+			mapManager.setTile(newTile, Constants.TILE_SIZE * i, Constants.TILE_SIZE * i);
+		}
 	}
 
 	private void loadCreation() {
@@ -288,7 +291,7 @@ public class CaveGame extends ApplicationAdapter {
 				camView.maxOffsetY = Constants.CAMERA_WIDTH / 12;
 				CAnchor anchor = pooledEngine.createComponent(CAnchor.class);
 				anchor.anchor = new ChunkAnchor();
-				anchor.anchor.range = 2;
+				anchor.anchor.range = 1;
 				entity.add(anchor);
 				entity.add(camView);
 				entity.add(position);
@@ -315,10 +318,6 @@ public class CaveGame extends ApplicationAdapter {
 				CFrictionCause frictionCause = pooledEngine.createComponent(CFrictionCause.class);
 				frictionCause.frictionMultiplier.x = .01F;
 				CAnimation animation = pooledEngine.createComponent(CAnimation.class);
-				Animation ani = new Animation();
-				ani.animationParameter = creationManager.animationParams.get("caveTiles");
-				ani.texIndex = (int) Math.floor(Math.random() * 3);
-				animation.animationQueue.add(ani);
 				entity.add(animation);
 				entity.add(position);
 				entity.add(bounds);
