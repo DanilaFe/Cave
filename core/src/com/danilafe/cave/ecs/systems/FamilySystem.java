@@ -57,22 +57,26 @@ public class FamilySystem extends EntitySystem {
 			@Override
 			public void entityRemoved(Entity entity) {
 				entitiesA = listenFor.getEntitiesFor(familyA);
+				entityARemoved(entity);
 			}
 
 			@Override
 			public void entityAdded(Entity entity) {
 				entitiesA = listenFor.getEntitiesFor(familyA);
+				entityAAdded(entity);
 			}
 		};
 		listenerB = new EntityListener() {
 			@Override
 			public void entityRemoved(Entity entity) {
 				entitiesB = listenFor.getEntitiesFor(familyB);
+				entityBRemoved(entity);
 			}
 
 			@Override
 			public void entityAdded(Entity entity) {
 				entitiesB = listenFor.getEntitiesFor(familyB);
+				entityBAdded(entity);
 			}
 		};
 	}
@@ -95,6 +99,22 @@ public class FamilySystem extends EntitySystem {
 		engine.removeEntityListener(listenerB);
 		entitiesA = null;
 		entitiesB = null;
+	}
+
+	public void entityAAdded(Entity e){
+
+	}
+
+	public void entityARemoved(Entity e){
+
+	}
+
+	public void entityBAdded(Entity e){
+
+	}
+
+	public void entityBRemoved(Entity e){
+
 	}
 
 }
