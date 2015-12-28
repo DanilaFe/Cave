@@ -18,6 +18,7 @@ import com.danilafe.cave.animation.AnimationParameter;
 import com.danilafe.cave.creation.CreationManager;
 import com.danilafe.cave.creation.EntityDescriptor;
 import com.danilafe.cave.ecs.components.CAcceleration;
+import com.danilafe.cave.ecs.components.CAnchor;
 import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CBounds;
 import com.danilafe.cave.ecs.components.CCameraView;
@@ -50,9 +51,14 @@ import com.danilafe.cave.ecs.systems.PositionSystem;
 import com.danilafe.cave.ecs.systems.RenderSystem;
 import com.danilafe.cave.ecs.systems.SelectableElementSystem;
 import com.danilafe.cave.ecs.systems.StepperSystem;
+import com.danilafe.cave.ecs.systems.TileSystem;
 import com.danilafe.cave.item.ItemContainer;
 import com.danilafe.cave.item.ItemParameter;
 import com.danilafe.cave.runnable.ECSRunnable;
+import com.danilafe.cave.tile.ChunkAnchor;
+import com.danilafe.cave.tile.MapManager;
+import com.danilafe.cave.tile.Tile;
+import com.danilafe.cave.tile.TileParameter;
 
 /**
  * CaveGame - Main class of Cave.
@@ -128,6 +134,10 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public ItemSystem itemSystem;
 	/**
+	 * Tile system used to update anchors and tiles.
+	 */
+	public TileSystem tileSystem;
+	/**
 	 * Camera used to look into the game world.
 	 */
 	public OrthographicCamera orthoCam;
@@ -151,6 +161,10 @@ public class CaveGame extends ApplicationAdapter {
 	 * Whether the debug output should be allowed (when debugging)
 	 */
 	public boolean debugOutput = false;
+	/**
+	 * The map manger used to load / unload chunks
+	 */
+	public MapManager mapManager = new MapManager();
 
 	@Override
 	public void create () {
@@ -174,6 +188,7 @@ public class CaveGame extends ApplicationAdapter {
 		followingSystem = new FollowingSystem();
 		interactionSystem = new InteractionSystem();
 		itemSystem = new ItemSystem();
+		tileSystem = new TileSystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
@@ -192,6 +207,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(selectableElementSytem);
 		pooledEngine.addSystem(followingSystem);
 		pooledEngine.addSystem(itemSystem);
+		pooledEngine.addSystem(tileSystem);
 
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();
@@ -201,9 +217,9 @@ public class CaveGame extends ApplicationAdapter {
 
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderPlayer").create(50, 50));
 		for(int i = 0; i < 9; i ++){
-			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(8 * i, 0));
-			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(0, 8 * (i + 1)));
-			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(72, 8 * (i + 1)));
+			// pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(8 * i, 0));
+			// pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(0, 8 * (i + 1)));
+			// pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(72, 8 * (i + 1)));
 		}
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(8, 8 * 2));
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderJumpBoost").create(64, 8));
@@ -214,6 +230,15 @@ public class CaveGame extends ApplicationAdapter {
 
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderCrystal").create(16, 8));
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderChest").create(72, 80));
+
+		TileParameter newTileParam = TileParameter.create(null);
+		newTileParam.entityType = "placeholderWall";
+		for(int i = 0; i < 10000; i++){
+			Tile newTile = Tile.create(newTileParam, 0);
+			int chunkLoc = i % (Constants.CHUNK_SIZE / Constants.TILE_SIZE);
+			mapManager.getChunkAt(i * Constants.TILE_SIZE, i * Constants.TILE_SIZE).setTile(newTile, chunkLoc , chunkLoc);
+			System.out.println(mapManager.getChunkAt(i * Constants.TILE_SIZE, i * Constants.TILE_SIZE));
+		}
 	}
 
 	private void loadCreation() {
@@ -265,6 +290,10 @@ public class CaveGame extends ApplicationAdapter {
 				entity.add(interactionCause);
 				camView.maxOffsetX = Constants.CAMERA_WIDTH / 8;
 				camView.maxOffsetY = Constants.CAMERA_WIDTH / 12;
+				CAnchor anchor = pooledEngine.createComponent(CAnchor.class);
+				anchor.anchor = new ChunkAnchor();
+				anchor.anchor.range = 2;
+				entity.add(anchor);
 				entity.add(camView);
 				entity.add(position);
 				entity.add(speed);
@@ -506,6 +535,8 @@ public class CaveGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+		mapManager.update();
+
 		Gdx.app.setLogLevel(debug && debugOutput ? Gdx.app.LOG_DEBUG : Gdx.app.LOG_INFO);
 		/*
 		 * Update the engine using the delta time
