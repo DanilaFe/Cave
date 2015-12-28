@@ -15,7 +15,7 @@ public class Chunk {
 	 */
 	public Tile[] tiles = new Tile[Constants.CHUNK_SIZE * Constants.CHUNK_SIZE];
 	/**
-	 * Position of the chunk, where each unit represents one chunk.
+	 * Position of the chunk in the game world.
 	 */
 	public Vector2 position = new Vector2(0, 0);
 

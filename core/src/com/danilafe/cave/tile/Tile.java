@@ -1,5 +1,7 @@
 package com.danilafe.cave.tile;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * Tile data structure holding data for a specific tile
  * @author vanilla
@@ -23,6 +25,11 @@ public class Tile {
 	 * The rotation of this tile
 	 */
 	public int rotation;
+	/**
+	 * Position of the tile in the chunk.
+	 */
+	public Vector2 position = new Vector2(0, 0);
+
 	/**
 	 * Creates a new tile from the given data
 	 * @param tileParam the parameter of the tile
