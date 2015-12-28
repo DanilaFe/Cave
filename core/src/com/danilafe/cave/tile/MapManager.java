@@ -245,7 +245,6 @@ public class MapManager {
 		int tileX = (x % Constants.CHUNK_SIZE) / Constants.TILE_SIZE;
 		int tileY = (y % Constants.CHUNK_SIZE) / Constants.TILE_SIZE;
 		toChange.setTile(tile, tileX, tileY);
-		needsUpdate = true;
 	}
 
 }
