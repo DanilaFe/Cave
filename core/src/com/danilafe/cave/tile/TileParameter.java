@@ -18,9 +18,10 @@ public class TileParameter {
 	 * @param aparameter the animations of this tile
 	 * @return the created TileParameter
 	 */
-	public static TileParameter create(TileAnimation aparameter) {
+	public static TileParameter create(TileAnimation aparameter, String entityType) {
 		TileParameter parameter = new TileParameter();
 		parameter.animation = aparameter;
+		parameter.entityType = entityType;
 		return parameter;
 	}
 
