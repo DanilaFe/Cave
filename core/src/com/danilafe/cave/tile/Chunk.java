@@ -18,5 +18,9 @@ public class Chunk {
 	 * Position of the chunk in the game world.
 	 */
 	public Vector2 position = new Vector2(0, 0);
+	/**
+	 * Whether this chunk is loaded or not.
+	 */
+	public boolean isLoaded = false;
 
 }
