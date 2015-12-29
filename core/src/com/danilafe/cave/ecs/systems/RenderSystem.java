@@ -172,13 +172,18 @@ public class RenderSystem extends IteratingSystem {
 				for(int h = 0; h < newPixmap.getHeight(); h++){
 					int pixelColor = newPixmap.getPixel(w, h);
 					int blue = (pixelColor >> 8);
-					tmp.set((pixelColor >> 24) & 0xFF,  (pixelColor >> 16) & 0xFF);
+					tmp.set((pixelColor >> 24) & 0xFF, (pixelColor >> 16) & 0xFF);
+					System.out.println("Original: " + tmp.toString());
+					tmp.sub(255 / 2, 255 / 2);
 					tmp.rotate(-rotation);
-					int newColor = (((int) tmp.x) << 24) | (((int) tmp.y) << 16) | (blue << 8);
+					tmp.add(255 / 2, 255 / 2);
+					System.out.println("Modified: " + tmp.toString());
+					int newColor = (((int) tmp.x) << 24) | (((int) tmp.y) << 16) | (blue << 8) | 255;
 					newPixmap.drawPixel(w, h, newColor);
 				}
 			}
 			Texture newTexture = new Texture(newPixmap);
+			newPixmap.dispose();
 			rotatedVersions.put(rotation, newTexture);
 			return newTexture;
 		}
