@@ -223,6 +223,8 @@ public class CaveGame extends ApplicationAdapter {
 			Tile newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
 			mapManager.setTile(newTile, Constants.TILE_SIZE * i, 0);
 			newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
+			mapManager.setTile(newTile, Constants.TILE_SIZE * i, 8);
+			newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
 			mapManager.setTile(newTile, 0, Constants.TILE_SIZE * (i));
 			newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
 			mapManager.setTile(newTile, 72, Constants.TILE_SIZE * (i));
@@ -235,7 +237,7 @@ public class CaveGame extends ApplicationAdapter {
 			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderLightball").create((float) Math.random() * 80, (float) Math.random() * 50));
 		}
 
-		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderCrystal").create(16, 8));
+		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderCrystal").create(16, 16));
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderChest").create(72, 80));
 	}
 
