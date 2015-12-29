@@ -16,11 +16,16 @@ public class CAnimation implements Poolable, Component {
 	 * The animation queue, used for scheduling animations.
 	 */
 	public AnimationQueue animationQueue = new AnimationQueue();
+	/**
+	 * The rotation of this animation
+	 */
+	public int rotation = 0;
 
 	@Override
 	public void reset() {
 		animationQueue.deltaTime = -1;
 		animationQueue.animationQueue.clear();
+		rotation = 0;
 	}
 
 }
