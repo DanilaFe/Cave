@@ -216,23 +216,19 @@ public class CaveGame extends ApplicationAdapter {
 		loadAssets();
 		loadCreation();
 
-		AnimationParameter[] testParameter = new AnimationParameter[] {
-				creationManager.animationParams.get("caveTiles")
-		};
-		AnimationParameter[] secondTest = new AnimationParameter[] {
-				creationManager.animationParams.get("crystals")
-		};
-		TileAnimation tileAnimation = TileAnimation.create(secondTest, testParameter, testParameter, testParameter, testParameter, testParameter);
+		TileAnimation tileAnimation = TileAnimation.create("cavetiles.png", 8, 8, 0, true);
 		TileParameter newTileParam = TileParameter.create(tileAnimation, "placeholderWall");
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderPlayer").create(50, 50));
 		for(int i = 0; i < 10; i ++){
-			Tile newTile = Tile.create(newTileParam, 0);
+			Tile newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
 			mapManager.setTile(newTile, Constants.TILE_SIZE * i, 0);
-			newTile = Tile.create(newTileParam, 0);
+			newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
 			mapManager.setTile(newTile, 0, Constants.TILE_SIZE * (i));
-			newTile = Tile.create(newTileParam, 0);
+			newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
 			mapManager.setTile(newTile, 72, Constants.TILE_SIZE * (i));
 		}
+		mapManager.setTile(Tile.create(newTileParam, (int)(Math.random() * 3)), 8, 8);
+
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderJumpBoost").create(64, 8));
 
 		for(int i = 0; i < 32; i ++){
