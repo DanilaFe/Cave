@@ -166,12 +166,12 @@ public class Utils {
 						break;
 					}
 				} else if (neighborCount == 2) {
-					if (neighbors[i] && neighbors[(i + 1) % 4]) {
+					if (!neighbors[i] && !neighbors[(i + 1) % 4]) {
 						tile.rotation = 90 * i;
 						if (tile.tileParameter.animation != null && tile.tileParameter.animation.corner != null)
 							tile.currentAnimation = tile.tileParameter.animation.corner[tile.tileVariation];
 						break;
-					} else if (neighbors[i] && neighbors[(i + 2) % 4]) {
+					} else if (!neighbors[i] && !neighbors[(i + 2) % 4]) {
 						tile.rotation = 90 * i;
 						if (tile.tileParameter.animation != null && tile.tileParameter.animation.twoNeighbors != null)
 							tile.currentAnimation = tile.tileParameter.animation.twoNeighbors[tile.tileVariation];
