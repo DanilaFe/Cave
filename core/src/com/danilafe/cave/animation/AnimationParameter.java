@@ -48,6 +48,21 @@ public class AnimationParameter {
 		return animationParameter;
 	}
 
+	public static AnimationParameter create(String texturePath, int regionX, int regionY, int regionWidth, int regionHeight, boolean loop, int texWidth, int texHeight, float frameDelta){
+		AnimationParameter animationParameter = new AnimationParameter();
+		TextureRegion sourceTexture = new TextureRegion(CaveGame.instance.assetManager.get("textures/" + texturePath, Texture.class));
+		sourceTexture.setRegion(regionX, regionY, regionWidth, regionHeight);
+		animationParameter.textures = sourceTexture.split(texWidth, texHeight);
+		animationParameter.frameDelta = frameDelta;
+		animationParameter.loop = loop;
+		if(CaveGame.instance.assetManager.isLoaded("normals/" + texturePath)) {
+			TextureRegion sourceNormal = new TextureRegion(CaveGame.instance.assetManager.get("textures/" + texturePath, Texture.class));
+			sourceNormal.setRegion(regionX, regionY, regionWidth, regionHeight);
+			animationParameter.normalTextures = sourceNormal.split(texWidth, texHeight);
+		}
+		return animationParameter;
+	}
+
 	/**
 	 * Gets the texture region of the regular texture at the given index.
 	 * @param index the index of the region, beginning at 0 and increasing left to right, and down to up
