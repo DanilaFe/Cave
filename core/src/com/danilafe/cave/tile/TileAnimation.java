@@ -36,6 +36,10 @@ public class TileAnimation {
 	 */
 	public AnimationParameter noNeighbors[];
 	/**
+	 * Whether this animation has tile variations
+	 */
+	public boolean isDifferent = false;
+	/**
 	 * Creates a new TileAnimation from the given parameters
 	 * @param oneNeighbor the animation when this tile has one neighbor
 	 * @param corner the animation when this tile has two adjacent neighbors
@@ -111,6 +115,8 @@ public class TileAnimation {
 				newAnimation.noNeighbors[i] = param;
 			}
 		}
+
+		newAnimation.isDifferent = isDifferent;
 
 		return newAnimation;
 	}

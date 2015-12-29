@@ -136,6 +136,12 @@ public class Utils {
 	public static void updateTileNeighbors(Tile tile) {
 		Vector2 worldPos = tile.position.cpy().add(tile.myChunk.position);
 
+		if(!tile.tileParameter.animation.isDifferent){
+			tile.rotation = 0;
+			tile.currentAnimation = tile.tileParameter.animation.noNeighbors[tile.tileVariation];
+			return;
+		}
+
 		boolean[] neighbors = new boolean[4];
 		neighbors[0] = CaveGame.instance.mapManager.getTile((int) worldPos.x,
 				(int) worldPos.y + Constants.TILE_SIZE) != null;
