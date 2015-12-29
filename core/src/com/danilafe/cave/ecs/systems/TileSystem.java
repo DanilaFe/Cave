@@ -36,6 +36,9 @@ public class TileSystem extends FamilySystem {
 				Animation newAnimation = new Animation();
 				newAnimation.animationParameter = tile.myTile.currentAnimation;
 				animation.animationQueue.add(newAnimation);
+				animation.rotation = tile.myTile.rotation;
+				System.out.println(animation.rotation + ", at position " + tile.myTile.position.toString());
+				tile.myTile.animationChange = false;
 			}
 		}
 
@@ -56,6 +59,16 @@ public class TileSystem extends FamilySystem {
 	@Override
 	public void entityBRemoved(Entity e) {
 		CaveGame.instance.mapManager.anchors.remove(e.getComponent(CAnchor.class).anchor);
+	}
+
+	@Override
+	public void entityAAdded(Entity e) {
+		e.getComponent(CTile.class).myTile.animationChange = true;
+	}
+
+	@Override
+	public void entityARemoved(Entity e) {
+		e.getComponent(CTile.class).myTile.animationChange = true;
 	}
 
 }
