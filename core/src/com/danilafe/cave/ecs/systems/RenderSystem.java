@@ -171,7 +171,7 @@ public class RenderSystem extends IteratingSystem {
 			for(int w = 0; w < newPixmap.getWidth(); w++){
 				for(int h = 0; h < newPixmap.getHeight(); h++){
 					int pixelColor = newPixmap.getPixel(w, h);
-					int blue = (pixelColor >> 8);
+					int blue = (pixelColor >> 8) & 0xFF;
 					tmp.set((pixelColor >> 24) & 0xFF, (pixelColor >> 16) & 0xFF);
 					System.out.println("Original: " + tmp.toString());
 					tmp.sub(255 / 2, 255 / 2);
