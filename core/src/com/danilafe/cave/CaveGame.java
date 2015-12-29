@@ -227,7 +227,7 @@ public class CaveGame extends ApplicationAdapter {
 			newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
 			mapManager.setTile(newTile, 72, Constants.TILE_SIZE * (i));
 		}
-		mapManager.setTile(Tile.create(newTileParam, (int)(Math.random() * 3)), 8, 8);
+		mapManager.setTile(Tile.create(newTileParam, (int)(Math.random() * 3)), 8, 16);
 
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderJumpBoost").create(64, 8));
 
@@ -290,7 +290,7 @@ public class CaveGame extends ApplicationAdapter {
 				camView.maxOffsetY = Constants.CAMERA_WIDTH / 12;
 				CAnchor anchor = pooledEngine.createComponent(CAnchor.class);
 				anchor.anchor = new ChunkAnchor();
-				anchor.anchor.range = 0;
+				anchor.anchor.range = 2;
 				entity.add(anchor);
 				entity.add(camView);
 				entity.add(position);
