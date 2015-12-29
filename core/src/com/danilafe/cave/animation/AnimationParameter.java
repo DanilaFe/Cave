@@ -48,6 +48,19 @@ public class AnimationParameter {
 		return animationParameter;
 	}
 
+	/**
+	 * Creates an animation parameter from a region of the given texture
+	 * @param texturePath the texture to use
+	 * @param regionX the x-coordinate of the region
+	 * @param regionY the y-coordinate of the region
+	 * @param regionWidth the width of the region
+	 * @param regionHeight the height of the region
+	 * @param loop whether this animation should loop
+	 * @param texWidth the width of a single frame
+	 * @param texHeight the height of the single frame
+	 * @param frameDelta the delta time between frames
+	 * @return the newly created AnomationParameter
+	 */
 	public static AnimationParameter create(String texturePath, int regionX, int regionY, int regionWidth, int regionHeight, boolean loop, int texWidth, int texHeight, float frameDelta){
 		AnimationParameter animationParameter = new AnimationParameter();
 		TextureRegion sourceTexture = new TextureRegion(CaveGame.instance.assetManager.get("textures/" + texturePath, Texture.class));

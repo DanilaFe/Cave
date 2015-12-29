@@ -57,6 +57,15 @@ public class TileAnimation {
 		return newAnimation;
 	}
 
+	/**
+	 * Create a tile animation from a texture and sizes
+	 * @param textureName the name of the texture
+	 * @param tileWidth the width of one frame
+	 * @param tileHeight the height of one frame
+	 * @param timeDelta the delta time between frames
+	 * @param isDifferent whether the tiles have variation based on location
+	 * @return
+	 */
 	public static TileAnimation create(String textureName, int tileWidth, int tileHeight, float timeDelta, boolean isDifferent){
 		TileAnimation newAnimation = new TileAnimation();
 		Texture tex = CaveGame.instance.assetManager.get("textures/" + textureName, Texture.class);
