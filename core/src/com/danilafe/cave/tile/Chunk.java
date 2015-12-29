@@ -61,6 +61,7 @@ public class Chunk {
 		if(tile != null){
 			tile.position.set(x, y).scl(Constants.TILE_SIZE);
 			tile.myChunk = this;
+			Utils.updateNearby(tile.position.cpy().add(position));
 
 			if(isLoaded) Utils.createEntityFromTile(tile);
 		}
