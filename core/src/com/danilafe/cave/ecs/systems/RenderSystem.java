@@ -163,7 +163,6 @@ public class RenderSystem extends IteratingSystem {
 		HashMap<Integer, Texture> rotatedVersions = rotatedTextures.get(sourceTexture);
 		if(rotatedVersions.containsKey(rotation)) return rotatedVersions.get(rotation);
 		else {
-			System.out.println("Generating rotated texture for rotation " + rotation);
 			TextureData textureData = sourceTexture.getTextureData();
 			if(!textureData.isPrepared()) textureData.prepare();
 			Pixmap newPixmap = textureData.consumePixmap();
@@ -173,11 +172,9 @@ public class RenderSystem extends IteratingSystem {
 					int pixelColor = newPixmap.getPixel(w, h);
 					int blue = (pixelColor >> 8) & 0xFF;
 					tmp.set((pixelColor >> 24) & 0xFF, (pixelColor >> 16) & 0xFF);
-					System.out.println("Original: " + tmp.toString());
 					tmp.sub(255 / 2, 255 / 2);
 					tmp.rotate(-rotation);
 					tmp.add(255 / 2, 255 / 2);
-					System.out.println("Modified: " + tmp.toString());
 					int newColor = (((int) tmp.x) << 24) | (((int) tmp.y) << 16) | (blue << 8) | 255;
 					newPixmap.drawPixel(w, h, newColor);
 				}
