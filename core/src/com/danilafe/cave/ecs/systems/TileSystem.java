@@ -4,7 +4,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.CaveGame;
+import com.danilafe.cave.animation.Animation;
 import com.danilafe.cave.ecs.components.CAnchor;
+import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CPosition;
 import com.danilafe.cave.ecs.components.CTile;
 
@@ -25,6 +27,17 @@ public class TileSystem extends FamilySystem {
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
+
+		for(Entity entityA : entitiesA) {
+			CTile tile = entityA.getComponent(CTile.class);
+			if(tile.myTile.animationChange && tile.myTile.currentAnimation != null) {
+				CAnimation animation = entityA.getComponent(CAnimation.class);
+				animation.animationQueue.animationQueue.clear();
+				Animation newAnimation = new Animation();
+				newAnimation.animationParameter = tile.myTile.currentAnimation;
+				animation.animationQueue.add(newAnimation);
+			}
+		}
 
 		for(Entity entityB : entitiesB) {
 			CAnchor anchor = entityB.getComponent(CAnchor.class);
