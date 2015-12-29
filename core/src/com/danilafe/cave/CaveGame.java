@@ -58,6 +58,7 @@ import com.danilafe.cave.runnable.ECSRunnable;
 import com.danilafe.cave.tile.ChunkAnchor;
 import com.danilafe.cave.tile.MapManager;
 import com.danilafe.cave.tile.Tile;
+import com.danilafe.cave.tile.TileAnimation;
 import com.danilafe.cave.tile.TileParameter;
 
 /**
@@ -215,7 +216,14 @@ public class CaveGame extends ApplicationAdapter {
 		loadAssets();
 		loadCreation();
 
-		TileParameter newTileParam = TileParameter.create(null, "placeholderWall");
+		AnimationParameter[] testParameter = new AnimationParameter[] {
+				creationManager.animationParams.get("caveTiles")
+		};
+		AnimationParameter[] secondTest = new AnimationParameter[] {
+				creationManager.animationParams.get("crystals")
+		};
+		TileAnimation tileAnimation = TileAnimation.create(secondTest, testParameter, testParameter, testParameter, testParameter, testParameter);
+		TileParameter newTileParam = TileParameter.create(tileAnimation, "placeholderWall");
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderPlayer").create(50, 50));
 		for(int i = 0; i < 10; i ++){
 			Tile newTile = Tile.create(newTileParam, 0);
@@ -225,7 +233,6 @@ public class CaveGame extends ApplicationAdapter {
 			newTile = Tile.create(newTileParam, 0);
 			mapManager.setTile(newTile, 72, Constants.TILE_SIZE * (i));
 		}
-		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderWall").create(8, 8 * 2));
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderJumpBoost").create(64, 8));
 
 		for(int i = 0; i < 32; i ++){
@@ -234,10 +241,6 @@ public class CaveGame extends ApplicationAdapter {
 
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderCrystal").create(16, 8));
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderChest").create(72, 80));
-		for(int i = 8; i < 64; i ++){
-			Tile newTile = Tile.create(newTileParam, 0);
-			mapManager.setTile(newTile, Constants.TILE_SIZE * i, Constants.TILE_SIZE * i);
-		}
 	}
 
 	private void loadCreation() {
@@ -253,7 +256,7 @@ public class CaveGame extends ApplicationAdapter {
 				CPosition position = pooledEngine.createComponent(CPosition.class);
 				position.position.set(x, y);
 				CSpeed speed = pooledEngine.createComponent(CSpeed.class);
-				speed.speed.set(10, 100);
+				speed.speed.set(0, 0);
 				CBounds bounds = pooledEngine.createComponent(CBounds.class);
 				bounds.bounds.set(x, y, 8, 8);
 				CGravity gravity = pooledEngine.createComponent(CGravity.class);
@@ -291,7 +294,7 @@ public class CaveGame extends ApplicationAdapter {
 				camView.maxOffsetY = Constants.CAMERA_WIDTH / 12;
 				CAnchor anchor = pooledEngine.createComponent(CAnchor.class);
 				anchor.anchor = new ChunkAnchor();
-				anchor.anchor.range = 1;
+				anchor.anchor.range = 0;
 				entity.add(anchor);
 				entity.add(camView);
 				entity.add(position);
