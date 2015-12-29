@@ -84,12 +84,12 @@ public class TileAnimation {
 			newAnimation.twoNeighbors = new AnimationParameter[numVariations];
 
 			for(int i = 0; i < numVariations; i++){
-				newAnimation.noNeighbors[i] = AnimationParameter.create(textureName, tileWidth * i, 0, tileWidth, texHeight, true, tileWidth, tileHeight, timeDelta);
+				newAnimation.fourNeighbor[i] = AnimationParameter.create(textureName, tileWidth * i, 0, tileWidth, texHeight, true, tileWidth, tileHeight, timeDelta);
 				newAnimation.threeNeighbors[i] = AnimationParameter.create(textureName, tileWidth * i, texHeight, tileWidth, texHeight, true, tileWidth, tileHeight, timeDelta);
 				newAnimation.corner[i] = AnimationParameter.create(textureName, tileWidth * i, texHeight * 2, tileWidth, texHeight, true, tileWidth, tileHeight, timeDelta);
 				newAnimation.twoNeighbors[i] = AnimationParameter.create(textureName, tileWidth * i, texHeight * 3, tileWidth, texHeight, true, tileWidth, tileHeight, timeDelta);
 				newAnimation.oneNeighbor[i] = AnimationParameter.create(textureName, tileWidth * i, texHeight * 4, tileWidth, texHeight, true, tileWidth, tileHeight, timeDelta);
-				newAnimation.fourNeighbor[i] = AnimationParameter.create(textureName, tileWidth * i, texHeight * 5, tileWidth, texHeight, true, tileWidth, tileHeight, timeDelta);
+				newAnimation.noNeighbors[i] = AnimationParameter.create(textureName, tileWidth * i, texHeight * 5, tileWidth, texHeight, true, tileWidth, tileHeight, timeDelta);
 			}
 		} else {
 			int numVariations = tex.getWidth() / tileWidth;
