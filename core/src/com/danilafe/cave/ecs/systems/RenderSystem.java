@@ -1,12 +1,16 @@
 package com.danilafe.cave.ecs.systems;
 
+import java.util.HashMap;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -55,6 +59,10 @@ public class RenderSystem extends IteratingSystem {
 	 * Class to manage lights
 	 */
 	public LightManager lightManager;
+	/**
+	 * Rotated Textures
+	 */
+	public HashMap<Texture, HashMap<Integer, Texture>> rotatedTextures;
 
 	public RenderSystem() {
 		super(Family.all(CAnimation.class, CPosition.class).get());
@@ -63,6 +71,7 @@ public class RenderSystem extends IteratingSystem {
 		normalBatch = new SpriteBatch();
 		shaderProgram = Utils.loadShaders("debug");
 		lightManager = new LightManager();
+		rotatedTextures = new HashMap<Texture, HashMap<Integer, Texture>>();
 
 		bufferBatch.setShader(shaderProgram);
 	}
@@ -109,7 +118,10 @@ public class RenderSystem extends IteratingSystem {
 				Animation animationObject = animation.animationQueue.animationQueue.peek();
 				if (animationObject != null && animationObject.animationParameter.normalTextures != null){
 					TextureRegion toRender = animationObject.getNormalAt(animationObject.texIndex);
+					Texture originalTexture = toRender.getTexture();
+					if(animation.rotation != 0) toRender.setTexture(getRotatedTexture(originalTexture, animation.rotation));
 					normalBatch.draw(toRender, (int) Math.floor(position.position.x - toRender.getRegionWidth() / 2), (int) Math.floor(position.position.y - toRender.getRegionHeight() / 2), toRender.getRegionWidth() / 2, toRender.getRegionHeight() / 2, toRender.getRegionWidth(), toRender.getRegionHeight(), 1, 1, -animation.rotation);
+					toRender.setTexture(originalTexture);
 				}
 			}
 			normalBatch.end();
@@ -144,6 +156,32 @@ public class RenderSystem extends IteratingSystem {
 
 		mainBuffer.dispose();
 		normalBuffer.dispose();
+	}
+
+	public Texture getRotatedTexture(Texture sourceTexture, int rotation){
+		if(rotatedTextures.get(sourceTexture) == null) rotatedTextures.put(sourceTexture, new HashMap<Integer, Texture>());
+		HashMap<Integer, Texture> rotatedVersions = rotatedTextures.get(sourceTexture);
+		if(rotatedVersions.containsKey(rotation)) return rotatedVersions.get(rotation);
+		else {
+			System.out.println("Generating rotated texture for rotation " + rotation);
+			TextureData textureData = sourceTexture.getTextureData();
+			if(!textureData.isPrepared()) textureData.prepare();
+			Pixmap newPixmap = textureData.consumePixmap();
+			Vector2 tmp = new Vector2();
+			for(int w = 0; w < newPixmap.getWidth(); w++){
+				for(int h = 0; h < newPixmap.getHeight(); h++){
+					int pixelColor = newPixmap.getPixel(w, h);
+					int blue = (pixelColor >> 8);
+					tmp.set((pixelColor >> 24) & 0xFF,  (pixelColor >> 16) & 0xFF);
+					tmp.rotate(-rotation);
+					int newColor = (((int) tmp.x) << 24) | (((int) tmp.y) << 16) | (blue << 8);
+					newPixmap.drawPixel(w, h, newColor);
+				}
+			}
+			Texture newTexture = new Texture(newPixmap);
+			rotatedVersions.put(rotation, newTexture);
+			return newTexture;
+		}
 	}
 
 }
