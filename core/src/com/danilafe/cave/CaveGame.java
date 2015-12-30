@@ -157,17 +157,17 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public AssetManager assetManager;
 	/**
-	 * Whether the game is in debug mode.
-	 */
-	public boolean debug = Constants.DEBUG;
-	/**
 	 * Whether the collision boxes should be rendered (when debugging)
 	 */
-	public boolean collisionBoxes = true;
+	public boolean collisionBoxes = false;
 	/**
 	 * Whether the debug output should be allowed (when debugging)
 	 */
 	public boolean debugOutput = false;
+	/**
+	 * Whether the engine should not be updated.
+	 */
+	public boolean executionStopped = false;
 	/**
 	 * The map manger used to load / unload chunks
 	 */
@@ -247,6 +247,10 @@ public class CaveGame extends ApplicationAdapter {
 
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderCrystal").create(16, 16));
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderChest").create(72, 80));
+
+		if(Constants.DEBUG){
+			pooledEngine.addEntity(creationManager.entityDescriptors.get("debugger").create(0, 0));
+		}
 	}
 
 	private void loadCreation() {
@@ -517,6 +521,32 @@ public class CaveGame extends ApplicationAdapter {
 			}
 		};
 		creationManager.entityDescriptors.put("placeholderCrystal", crystal);
+		EntityDescriptor debugger = new EntityDescriptor() {
+			@Override
+			public Entity create(float x, float y) {
+				Entity debuggerEntity = pooledEngine.createEntity();
+				CStepper stepper = pooledEngine.createComponent(CStepper.class);
+				stepper.runnable = new ECSRunnable() {
+					@Override
+					public void update(Entity me, float deltaTime) {
+						if(Gdx.input.isKeyPressed(Keys.F1)){
+							if(Gdx.input.isKeyJustPressed(Keys.B)){
+								collisionBoxes = !collisionBoxes;
+							}
+							if(Gdx.input.isKeyJustPressed(Keys.O)){
+								debugOutput = !debugOutput;
+							}
+							if(Gdx.input.isKeyJustPressed(Keys.P)){
+								executionStopped = !executionStopped;
+							}
+						}
+					}
+				};
+				debuggerEntity.add(stepper);
+				return debuggerEntity;
+			}
+		};
+		creationManager.entityDescriptors.put("debugger", debugger);
 	}
 
 	private void loadAssets() {
@@ -544,11 +574,12 @@ public class CaveGame extends ApplicationAdapter {
 	public void render () {
 		mapManager.update();
 
-		Gdx.app.setLogLevel(debug && debugOutput ? Gdx.app.LOG_DEBUG : Gdx.app.LOG_INFO);
+		Gdx.app.setLogLevel(debugOutput ? Gdx.app.LOG_DEBUG : Gdx.app.LOG_INFO);
 		/*
 		 * Update the engine using the delta time
 		 */
-		pooledEngine.update(Gdx.graphics.getDeltaTime());
+		if(!executionStopped)
+			pooledEngine.update(Gdx.graphics.getDeltaTime());
 		Gdx.app.debug("FPS", Gdx.graphics.getFramesPerSecond() + " Frames Per Second");
 	}
 
