@@ -22,7 +22,6 @@ import com.danilafe.cave.ecs.components.CAnchor;
 import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CBounds;
 import com.danilafe.cave.ecs.components.CCameraView;
-import com.danilafe.cave.ecs.components.CDisappearing;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
 import com.danilafe.cave.ecs.components.CGravity;
@@ -42,6 +41,7 @@ import com.danilafe.cave.ecs.systems.BoundsSystem;
 import com.danilafe.cave.ecs.systems.CameraSystem;
 import com.danilafe.cave.ecs.systems.DebugRenderSystem;
 import com.danilafe.cave.ecs.systems.DisappearingSystem;
+import com.danilafe.cave.ecs.systems.EmitterSystem;
 import com.danilafe.cave.ecs.systems.FollowingSystem;
 import com.danilafe.cave.ecs.systems.FrictionSystem;
 import com.danilafe.cave.ecs.systems.GravitySystem;
@@ -145,6 +145,10 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public DisappearingSystem disappearingSystem;
 	/**
+	 * Manages particle emitters
+	 */
+	public EmitterSystem emitterSystem;
+	/**
 	 * Camera used to look into the game world.
 	 */
 	public OrthographicCamera orthoCam;
@@ -197,12 +201,13 @@ public class CaveGame extends ApplicationAdapter {
 		itemSystem = new ItemSystem();
 		tileSystem = new TileSystem();
 		disappearingSystem = new DisappearingSystem();
+		emitterSystem = new EmitterSystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
 		pooledEngine.addSystem(renderSystem);
-		pooledEngine.addSystem(boundsSystem);
 		pooledEngine.addSystem(debugRenderSystem);
+		pooledEngine.addSystem(boundsSystem);
 		pooledEngine.addSystem(gravitySystem);
 		pooledEngine.addSystem(interactionSystem);
 		pooledEngine.addSystem(normalSystem);
@@ -217,6 +222,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(itemSystem);
 		pooledEngine.addSystem(tileSystem);
 		pooledEngine.addSystem(disappearingSystem);
+		pooledEngine.addSystem(emitterSystem);
 
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();
@@ -242,7 +248,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderJumpBoost").create(64, 8));
 
 		for(int i = 0; i < 32; i ++){
-			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderLightball").create((float) Math.random() * 80, (float) Math.random() * 50));
+			// pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderLightball").create((float) Math.random() * 80, (float) Math.random() * 50));
 		}
 
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderCrystal").create(16, 16));
@@ -345,7 +351,7 @@ public class CaveGame extends ApplicationAdapter {
 			public Entity create(float x, float y) {
 				Entity entity = pooledEngine.createEntity();
 				CLight light = pooledEngine.createComponent(CLight.class);
-				light.light.set(0, 0, 10, .1F, .3F, .3F);
+				light.light.set(x, y, 10, .1F, .3F, .3F);
 				CPosition position = pooledEngine.createComponent(CPosition.class);
 				position.position.set(x, y);
 				CSpeed speed = pooledEngine.createComponent(CSpeed.class);
@@ -368,15 +374,12 @@ public class CaveGame extends ApplicationAdapter {
 					}
 				};
 				CBounds bounds = pooledEngine.createComponent(CBounds.class);
-				bounds.bounds.setSize(5, 5);
+				bounds.bounds.setSize(5, 5).setCenter(x, y);
 				CAcceleration acceleration = pooledEngine.createComponent(CAcceleration.class);
 				acceleration.scalarAcceleration.set(.8F, .8F);
 				CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
 				CGravity gravity = pooledEngine.createComponent(CGravity.class);
 				gravity.gravity.set(0, -0.1F);
-				CDisappearing disappearing = pooledEngine.createComponent(CDisappearing.class);
-				disappearing.remaingTime = (float) Math.random() * 5;
-				entity.add(disappearing);
 				entity.add(gravity);
 				entity.add(mark);
 				entity.add(bounds);

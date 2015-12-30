@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.CaveGame;
 import com.danilafe.cave.creation.EntityDescriptor;
+import com.danilafe.cave.ecs.components.CDisappearing;
 import com.danilafe.cave.ecs.components.CMarked;
 
 /**
@@ -55,6 +56,14 @@ public class ParticleEmitter {
 	 */
 	public boolean markAsParticle;
 	/**
+	 * The minimum ammount of time this particle will live
+	 */
+	public float minParticleLife;
+	/**
+	 * The maximum amount over the minimum time this particle will live
+	 */
+	public float maxParticleLifeFluctuation;
+	/**
 	 * The descriptor of the entity type. Used for caching to prevent requesting the entity descriptor multiple times.
 	 */
 	private EntityDescriptor retreivedDescriptor;
@@ -70,6 +79,7 @@ public class ParticleEmitter {
 			float addedDelay = (float) (Math.random() * maxDelayFluctuation + minDelay);
 			float direction = (float) (Math.random() * maxDirectionFluctuation + minDirection);
 			float distance = (float) (Math.random() * maxRangeFluctuation + minRange);
+			float life = (float) (Math.random() * maxParticleLifeFluctuation + minParticleLife);
 
 			Vector2 offset = new Vector2(1, 0);
 			offset.setAngle(direction);
@@ -78,9 +88,26 @@ public class ParticleEmitter {
 
 			Entity newParticle = retreivedDescriptor.create(offset.x, offset.y);
 			if(markAsParticle && Family.all(CMarked.class).get().matches(newParticle)) newParticle.getComponent(CMarked.class).marks.put("particle", true);
+			CDisappearing disappearing = CaveGame.instance.pooledEngine.createComponent(CDisappearing.class);
+			disappearing.remaingTime = life;
+			newParticle.add(disappearing);
 			CaveGame.instance.pooledEngine.addEntity(newParticle);
 			delay += addedDelay;
 		}
+	}
+
+	public void set(float x, float y, float minDelay, float maxDelayF, float minDistance, float maxDistanceF, float minDir, float maxDirF, float minLife, float maxLifeF, String entityType, boolean markAsParticle){
+		position.set(x, y);
+		this.minDelay = minDelay;
+		maxDelayFluctuation = maxDelayF;
+		minDirection = minDir;
+		maxDirectionFluctuation = maxDirF;
+		minRange = minDistance;
+		maxRangeFluctuation = maxDistanceF;
+		this.markAsParticle = markAsParticle;
+		this.entityType = entityType;
+		minParticleLife = minLife;
+		maxParticleLifeFluctuation = maxLifeF;
 	}
 
 }
