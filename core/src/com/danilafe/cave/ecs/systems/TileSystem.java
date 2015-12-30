@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.CaveGame;
+import com.danilafe.cave.Constants;
 import com.danilafe.cave.animation.Animation;
 import com.danilafe.cave.ecs.components.CAnchor;
 import com.danilafe.cave.ecs.components.CAnimation;
@@ -45,7 +46,7 @@ public class TileSystem extends FamilySystem {
 			CAnchor anchor = entityB.getComponent(CAnchor.class);
 			Vector2 oldPos = anchor.anchor.position.cpy();
 			anchor.anchor.position.set(entityB.getComponent(CPosition.class).position);
-			if(!(oldPos.x == anchor.anchor.position.x && oldPos.y == anchor.anchor.position.y))
+			if(!(oldPos.x % Constants.CHUNK_SIZE == anchor.anchor.position.x % Constants.CHUNK_SIZE && oldPos.y % Constants.CHUNK_SIZE == anchor.anchor.position.y % Constants.CHUNK_SIZE))
 				CaveGame.instance.mapManager.needsUpdate = true;
 		}
 	}
