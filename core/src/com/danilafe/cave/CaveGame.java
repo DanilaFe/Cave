@@ -205,24 +205,24 @@ public class CaveGame extends ApplicationAdapter {
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
+		pooledEngine.addSystem(gravitySystem);
+		pooledEngine.addSystem(accelerationSystem);
+		pooledEngine.addSystem(normalSystem);
+		pooledEngine.addSystem(frictionSystem);
+		pooledEngine.addSystem(positionSystem);
+		pooledEngine.addSystem(cameraSystem);
+		pooledEngine.addSystem(followingSystem);
+		pooledEngine.addSystem(boundsSystem);
+		pooledEngine.addSystem(lightSystem);
 		pooledEngine.addSystem(renderSystem);
 		pooledEngine.addSystem(debugRenderSystem);
-		pooledEngine.addSystem(boundsSystem);
-		pooledEngine.addSystem(gravitySystem);
 		pooledEngine.addSystem(interactionSystem);
-		pooledEngine.addSystem(normalSystem);
-		pooledEngine.addSystem(positionSystem);
-		pooledEngine.addSystem(frictionSystem);
-		pooledEngine.addSystem(stepperSystem);
-		pooledEngine.addSystem(cameraSystem);
-		pooledEngine.addSystem(lightSystem);
-		pooledEngine.addSystem(accelerationSystem);
 		pooledEngine.addSystem(selectableElementSytem);
-		pooledEngine.addSystem(followingSystem);
 		pooledEngine.addSystem(itemSystem);
 		pooledEngine.addSystem(tileSystem);
 		pooledEngine.addSystem(disappearingSystem);
 		pooledEngine.addSystem(emitterSystem);
+		pooledEngine.addSystem(stepperSystem);
 
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();
@@ -302,7 +302,7 @@ public class CaveGame extends ApplicationAdapter {
 							enableFriction = false;
 						}
 						if(Gdx.input.isKeyPressed(Keys.SPACE) && normalSystem.checkNormalEdge(2, myBounds.bounds)){
-							mySpeed.speed.y += 70;
+							mySpeed.speed.y += 150;
 						}
 						myFriction.frictionCoefficient.x = (enableFriction) ? 1 : 0;
 					}
