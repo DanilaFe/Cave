@@ -23,41 +23,45 @@ public class DamageSystem extends FamilySystem {
 			damageCause.delay -= deltaTime;
 			if(damageCause.delay < 0) damageCause.delay = 0;
 		}
-		damageableLoop:
-			for(int i = 0; i < entitiesA.size(); i++){
-				Entity damageable = entitiesA.get(i);
-				CDamageable damageableComponent = damageable.getComponent(CDamageable.class);
+		for(int i = 0; i < entitiesA.size(); i++){
+			Entity damageableentity = entitiesA.get(i);
+			CDamageable damageeable = damageableentity.getComponent(CDamageable.class);
 
-				damageableComponent.delay -= deltaTime;
-				if(damageableComponent.delay < 0) damageableComponent.delay = 0;
-				if(damageableComponent.delay > 0) continue;
+			damageeable.delay -= deltaTime;
+			if(damageeable.delay < 0) damageeable.delay = 0;
+		}
+		for(int i = 0; i < entitiesA.size(); i++){
+			Entity damageable = entitiesA.get(i);
+			CDamageable damageableComponent = damageable.getComponent(CDamageable.class);
 
-				CBounds damageableBounds = damageable.getComponent(CBounds.class);
-				CHealth damageableHealth = damageable.getComponent(CHealth.class);
+			if(damageableComponent.delay > 0) continue;
 
-				for(int j = 0; j < entitiesB.size(); j++){
-					Entity damageCause = entitiesB.get(j);
-					CDamageCause damageCauseComponent = damageCause.getComponent(CDamageCause.class);
-					if(damageCauseComponent.delay > 0) continue;
+			CBounds damageableBounds = damageable.getComponent(CBounds.class);
+			CHealth damageableHealth = damageable.getComponent(CHealth.class);
 
-					CBounds damageCauseBounds = damageCause.getComponent(CBounds.class);
-					if(damageCauseComponent.teams.contains(damageableComponent.team) && damageCauseBounds.bounds.overlaps(damageableBounds.bounds)) {
-						DamageData damageData = new DamageData();
-						damageData.damageFrom = damageCause;
-						damageData.damageTo = damageable;
-						damageData.damage = damageableComponent.damageMutliplier * damageCauseComponent.damage;
+			for(int j = 0; j < entitiesB.size(); j++){
+				Entity damageCause = entitiesB.get(j);
+				CDamageCause damageCauseComponent = damageCause.getComponent(CDamageCause.class);
+				if(damageCauseComponent.delay > 0) continue;
 
-						damageableComponent.currentDamage = damageData;
-						if(damageableComponent.onDamage != null) damageableComponent.onDamage.update(damageable, deltaTime);
-						damageableHealth.health -= damageData.damage;
-						if(damageableHealth.health <= 0 && damageableHealth.onNoHealth != null) damageableHealth.onNoHealth.update(damageable, deltaTime);
-						damageableComponent.delay = damageableComponent.maxDelay;
-						damageCauseComponent.delay = damageCauseComponent.maxDelay;
-						damageCauseComponent.onDamage.update(damageCause, deltaTime);
-						continue damageableLoop;
-					}
+				CBounds damageCauseBounds = damageCause.getComponent(CBounds.class);
+				if(damageCauseComponent.teams.contains(damageableComponent.team) && damageCauseBounds.bounds.overlaps(damageableBounds.bounds)) {
+					DamageData damageData = new DamageData();
+					damageData.damageFrom = damageCause;
+					damageData.damageTo = damageable;
+					damageData.damage = damageableComponent.damageMutliplier * damageCauseComponent.damage;
+
+					damageableComponent.currentDamage = damageData;
+					if(damageableComponent.onDamage != null) damageableComponent.onDamage.update(damageable, deltaTime);
+					damageableHealth.health -= damageData.damage;
+					damageableComponent.currentDamage = null;
+					if(damageableHealth.health <= 0 && damageableHealth.onNoHealth != null) damageableHealth.onNoHealth.update(damageable, deltaTime);
+					damageableComponent.delay = damageableComponent.maxDelay;
+					damageCauseComponent.delay = damageCauseComponent.maxDelay;
+					damageCauseComponent.onDamage.update(damageCause, deltaTime);
 				}
 			}
+		}
 	}
 
 
