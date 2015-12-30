@@ -22,6 +22,7 @@ import com.danilafe.cave.ecs.components.CAnchor;
 import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CBounds;
 import com.danilafe.cave.ecs.components.CCameraView;
+import com.danilafe.cave.ecs.components.CDisappearing;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
 import com.danilafe.cave.ecs.components.CGravity;
@@ -40,6 +41,7 @@ import com.danilafe.cave.ecs.systems.AccelerationSystem;
 import com.danilafe.cave.ecs.systems.BoundsSystem;
 import com.danilafe.cave.ecs.systems.CameraSystem;
 import com.danilafe.cave.ecs.systems.DebugRenderSystem;
+import com.danilafe.cave.ecs.systems.DisappearingSystem;
 import com.danilafe.cave.ecs.systems.FollowingSystem;
 import com.danilafe.cave.ecs.systems.FrictionSystem;
 import com.danilafe.cave.ecs.systems.GravitySystem;
@@ -139,6 +141,10 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public TileSystem tileSystem;
 	/**
+	 * Disappearing System handles disappearances
+	 */
+	public DisappearingSystem disappearingSystem;
+	/**
 	 * Camera used to look into the game world.
 	 */
 	public OrthographicCamera orthoCam;
@@ -190,6 +196,7 @@ public class CaveGame extends ApplicationAdapter {
 		interactionSystem = new InteractionSystem();
 		itemSystem = new ItemSystem();
 		tileSystem = new TileSystem();
+		disappearingSystem = new DisappearingSystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
@@ -209,6 +216,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(followingSystem);
 		pooledEngine.addSystem(itemSystem);
 		pooledEngine.addSystem(tileSystem);
+		pooledEngine.addSystem(disappearingSystem);
 
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();
@@ -362,6 +370,9 @@ public class CaveGame extends ApplicationAdapter {
 				CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
 				CGravity gravity = pooledEngine.createComponent(CGravity.class);
 				gravity.gravity.set(0, -0.1F);
+				CDisappearing disappearing = pooledEngine.createComponent(CDisappearing.class);
+				disappearing.remaingTime = (float) Math.random() * 5;
+				entity.add(disappearing);
 				entity.add(gravity);
 				entity.add(mark);
 				entity.add(bounds);
