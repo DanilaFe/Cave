@@ -33,13 +33,12 @@ public class DamageSystem extends FamilySystem {
 		for(int i = 0; i < entitiesA.size(); i++){
 			Entity damageable = entitiesA.get(i);
 			CDamageable damageableComponent = damageable.getComponent(CDamageable.class);
-
-			if(damageableComponent.delay > 0) continue;
-
 			CBounds damageableBounds = damageable.getComponent(CBounds.class);
 			CHealth damageableHealth = damageable.getComponent(CHealth.class);
 
 			for(int j = 0; j < entitiesB.size(); j++){
+				if(damageableComponent.delay > 0) continue;
+
 				Entity damageCause = entitiesB.get(j);
 				CDamageCause damageCauseComponent = damageCause.getComponent(CDamageCause.class);
 				if(damageCauseComponent.delay > 0) continue;
