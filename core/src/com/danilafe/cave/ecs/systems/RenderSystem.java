@@ -173,7 +173,7 @@ public class RenderSystem extends IteratingSystem {
 					int blue = (pixelColor >> 8) & 0xFF;
 					tmp.set((pixelColor >> 24) & 0xFF, (pixelColor >> 16) & 0xFF);
 					tmp.sub(255 / 2, 255 / 2);
-					tmp.rotate(-rotation);
+					tmp.rotate(rotation);
 					tmp.add(255 / 2, 255 / 2);
 					int newColor = (((int) tmp.x) << 24) | (((int) tmp.y) << 16) | (blue << 8) | 255;
 					newPixmap.drawPixel(w, h, newColor);
