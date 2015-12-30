@@ -260,8 +260,8 @@ public class CaveGame extends ApplicationAdapter {
 
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderJumpBoost").create(64, 24));
 
-		for(int i = 0; i < 32; i ++){
-			// pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderLightball").create((float) Math.random() * 80, (float) Math.random() * 50));
+		for(int i = 0; i < 16; i ++){
+			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderLightball").create(16 + (float) Math.random() * 48, 16 + (float) Math.random() * 70));
 		}
 
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderCrystal").create(16, 32));
