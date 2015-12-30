@@ -39,6 +39,7 @@ import com.danilafe.cave.ecs.components.CStepper;
 import com.danilafe.cave.ecs.systems.AccelerationSystem;
 import com.danilafe.cave.ecs.systems.BoundsSystem;
 import com.danilafe.cave.ecs.systems.CameraSystem;
+import com.danilafe.cave.ecs.systems.DamageSystem;
 import com.danilafe.cave.ecs.systems.DebugRenderSystem;
 import com.danilafe.cave.ecs.systems.DisappearingSystem;
 import com.danilafe.cave.ecs.systems.EmitterSystem;
@@ -149,6 +150,10 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public EmitterSystem emitterSystem;
 	/**
+	 * Damages things.
+	 */
+	public DamageSystem damageSystem;
+	/**
 	 * Camera used to look into the game world.
 	 */
 	public OrthographicCamera orthoCam;
@@ -202,6 +207,7 @@ public class CaveGame extends ApplicationAdapter {
 		tileSystem = new TileSystem();
 		disappearingSystem = new DisappearingSystem();
 		emitterSystem = new EmitterSystem();
+		damageSystem = new DamageSystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
@@ -223,6 +229,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(disappearingSystem);
 		pooledEngine.addSystem(emitterSystem);
 		pooledEngine.addSystem(stepperSystem);
+		pooledEngine.addSystem(damageSystem);
 
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();
