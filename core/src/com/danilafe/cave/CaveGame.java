@@ -561,11 +561,7 @@ public class CaveGame extends ApplicationAdapter {
 							if(Gdx.input.isKeyJustPressed(Keys.S)){
 								for(Entity e : pooledEngine.getEntitiesFor(Family.all(CCameraShake.class).get())){
 									CCameraShake shake = e.getComponent(CCameraShake.class);
-									shake.delay = .01F;
-									shake.maxDelay = .025F;
-									shake.distance = 10;
-									shake.resetThreshold = 1;
-									shake.distanceDamping = .7F;
+									Utils.shake(shake, .01F, .025F, 10, 1, .7F);
 								}
 							}
 						}
