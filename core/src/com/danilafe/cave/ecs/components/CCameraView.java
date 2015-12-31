@@ -28,6 +28,10 @@ public class CCameraView implements Poolable, Component {
 	 * The offset from the center of the player of this camera
 	 */
 	public Vector2 offset = new Vector2(0, 0);
+	/**
+	 * The true position of the camera
+	 */
+	public Vector2 truePosition = new Vector2(0, 0);
 
 	@Override
 	public void reset() {
