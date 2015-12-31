@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.danilafe.cave.ecs.components.CCameraShake;
 import com.danilafe.cave.ecs.components.CTile;
 import com.danilafe.cave.item.ItemContainer;
 import com.danilafe.cave.item.ItemParameter;
@@ -206,4 +207,11 @@ public class Utils {
 		if((placeholderTile = CaveGame.instance.mapManager.getTile((int) center.x,(int) center.y - Constants.TILE_SIZE)) != null) updateTileNeighbors(placeholderTile);
 	}
 
+	public static void shake(CCameraShake shake, float delay, float maxDelay, float distance, float resetThreshold, float distanceDamping){
+		shake.delay = delay;
+		shake.maxDelay = maxDelay;
+		shake.distance = distance;
+		shake.resetThreshold = resetThreshold;
+		shake.distanceDamping = distanceDamping;
+	}
 }
