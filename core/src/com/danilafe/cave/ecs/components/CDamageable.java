@@ -7,6 +7,7 @@ import com.danilafe.cave.runnable.ECSRunnable;
 
 public class CDamageable implements Poolable, Component {
 
+	public float knockbackMultiplier = 1;
 	public float damageMutliplier = 1;
 	public DamageData currentDamage;
 	public ECSRunnable onDamage;
@@ -18,6 +19,7 @@ public class CDamageable implements Poolable, Component {
 
 	@Override
 	public void reset() {
+		knockbackMultiplier = 1;
 		damageMutliplier = 1;
 		currentDamage = null;
 		onDamage = null;

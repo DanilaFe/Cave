@@ -2,16 +2,18 @@ package com.danilafe.cave.ecs.systems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.ecs.components.CBounds;
 import com.danilafe.cave.ecs.components.CDamageCause;
 import com.danilafe.cave.ecs.components.CDamageable;
 import com.danilafe.cave.ecs.components.CHealth;
+import com.danilafe.cave.ecs.components.CSpeed;
 import com.danilafe.cave.health.DamageData;
 
 public class DamageSystem extends FamilySystem {
 
 	public DamageSystem() {
-		super(Family.all(CDamageable.class, CBounds.class, CHealth.class).get(), Family.all(CDamageCause.class, CBounds.class).get());
+		super(Family.all(CDamageable.class, CBounds.class).get(), Family.all(CDamageCause.class, CBounds.class).get());
 	}
 
 	@Override
@@ -35,6 +37,7 @@ public class DamageSystem extends FamilySystem {
 			CDamageable damageableComponent = damageable.getComponent(CDamageable.class);
 			CBounds damageableBounds = damageable.getComponent(CBounds.class);
 			CHealth damageableHealth = damageable.getComponent(CHealth.class);
+			CSpeed speed = damageable.getComponent(CSpeed.class);
 
 			for(int j = 0; j < entitiesB.size(); j++){
 				if(damageableComponent.delay > 0) continue;
@@ -52,12 +55,24 @@ public class DamageSystem extends FamilySystem {
 
 					damageableComponent.currentDamage = damageData;
 					if(damageableComponent.onDamage != null) damageableComponent.onDamage.update(damageable, deltaTime);
-					damageableHealth.health -= damageData.damage;
+					if(damageableHealth != null) damageableHealth.health -= damageData.damage;
 					damageableComponent.currentDamage = null;
-					if(damageableHealth.health <= 0 && damageableHealth.onNoHealth != null) damageableHealth.onNoHealth.update(damageable, deltaTime);
+					if(damageableHealth != null && damageableHealth.health <= 0 && damageableHealth.onNoHealth != null) damageableHealth.onNoHealth.update(damageable, deltaTime);
 					damageableComponent.delay = damageableComponent.maxDelay;
 					damageCauseComponent.delay = damageCauseComponent.maxDelay;
-					damageCauseComponent.onDamage.update(damageCause, deltaTime);
+					if(damageCauseComponent.onDamage != null) damageCauseComponent.onDamage.update(damageCause, deltaTime);
+
+
+					if(speed != null){
+						Vector2 damageableCenter = new Vector2();
+						damageableBounds.bounds.getCenter(damageableCenter);
+						Vector2 damageCenter = new Vector2();
+						damageCauseBounds.bounds.getCenter(damageCenter);
+
+						float angle = damageableCenter.sub(damageCenter).angle(); // We won't be needing it afterwards, so don't copy
+						damageCenter.set(1, 1).setLength(damageCauseComponent.knockback * damageableComponent.knockbackMultiplier).setAngle(angle); // Reuse damage center
+						speed.speed.add(damageCenter);
+					}
 				}
 			}
 		}

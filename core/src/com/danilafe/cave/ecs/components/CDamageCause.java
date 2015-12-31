@@ -9,6 +9,7 @@ import com.danilafe.cave.runnable.ECSRunnable;
 public class CDamageCause implements Poolable, Component {
 
 	public float damage = 0;
+	public float knockback = 0;
 
 	public float delay;
 	public float maxDelay;
@@ -24,6 +25,7 @@ public class CDamageCause implements Poolable, Component {
 		onDamage = null;
 		delay = 0;
 		maxDelay = 0;
+		knockback = 0;
 	}
 
 }
