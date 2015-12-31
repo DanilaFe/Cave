@@ -20,6 +20,10 @@ public class ParticleEmitter {
 	 */
 	public Vector2 position = new Vector2();
 	/**
+	 * The offset of this emitter
+	 */
+	public Vector2 offset = new Vector2();
+	/**
 	 * The minimum delay (in seconds) before a new particle is spawned
 	 */
 	public float minDelay;
@@ -96,7 +100,7 @@ public class ParticleEmitter {
 		}
 	}
 
-	public void set(float x, float y, float minDelay, float maxDelayF, float minDistance, float maxDistanceF, float minDir, float maxDirF, float minLife, float maxLifeF, String entityType, boolean markAsParticle){
+	public void set(float x, float y, float minDelay, float maxDelayF, float minDistance, float maxDistanceF, float minDir, float maxDirF, float minLife, float maxLifeF, String entityType, boolean markAsParticle, float offsetX, float offsetY){
 		position.set(x, y);
 		this.minDelay = minDelay;
 		maxDelayFluctuation = maxDelayF;
@@ -108,6 +112,7 @@ public class ParticleEmitter {
 		this.entityType = entityType;
 		minParticleLife = minLife;
 		maxParticleLifeFluctuation = maxLifeF;
+		offset.set(offsetX, offsetY);
 	}
 
 }
