@@ -21,6 +21,7 @@ import com.danilafe.cave.ecs.components.CAcceleration;
 import com.danilafe.cave.ecs.components.CAnchor;
 import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CBounds;
+import com.danilafe.cave.ecs.components.CCameraShake;
 import com.danilafe.cave.ecs.components.CCameraView;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
@@ -324,6 +325,8 @@ public class CaveGame extends ApplicationAdapter {
 				CAnchor anchor = pooledEngine.createComponent(CAnchor.class);
 				anchor.anchor = new ChunkAnchor();
 				anchor.anchor.range = 2;
+				CCameraShake shake = pooledEngine.createComponent(CCameraShake.class);
+				entity.add(shake);
 				entity.add(anchor);
 				entity.add(camView);
 				entity.add(position);
@@ -554,6 +557,16 @@ public class CaveGame extends ApplicationAdapter {
 							}
 							if(Gdx.input.isKeyJustPressed(Keys.P)){
 								executionStopped = !executionStopped;
+							}
+							if(Gdx.input.isKeyJustPressed(Keys.S)){
+								for(Entity e : pooledEngine.getEntitiesFor(Family.all(CCameraShake.class).get())){
+									CCameraShake shake = e.getComponent(CCameraShake.class);
+									shake.delay = .01F;
+									shake.maxDelay = .025F;
+									shake.distance = 10;
+									shake.resetThreshold = 1;
+									shake.distanceDamping = .7F;
+								}
 							}
 						}
 					}
