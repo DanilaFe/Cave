@@ -88,7 +88,7 @@ public class ParticleEmitter {
 			Vector2 offset = new Vector2(1, 0);
 			offset.setAngle(direction);
 			offset.setLength(distance);
-			offset.add(position);
+			offset.add(position).add(this.offset);
 
 			Entity newParticle = retreivedDescriptor.create(offset.x, offset.y);
 			if(markAsParticle && Family.all(CMarked.class).get().matches(newParticle)) newParticle.getComponent(CMarked.class).marks.put("particle", true);
