@@ -27,7 +27,11 @@ public class CCameraView implements Poolable, Component {
 	/**
 	 * The offset from the center of the player of this camera
 	 */
-	public Vector2 offset = new Vector2(0, 0);
+	public Vector2 worldOffset = new Vector2(0, 0);
+	/**
+	 * The offset from the center of the player of this camera (for screenhake)
+	 */
+	public Vector2 shakeOffset = new Vector2(0, 0);
 	/**
 	 * The true position of the camera
 	 */
@@ -36,7 +40,8 @@ public class CCameraView implements Poolable, Component {
 	@Override
 	public void reset() {
 		camera = null;
-		offset.set(0, 0);
+		shakeOffset.set(0, 0);
+		worldOffset.set(0, 0);
 		maxOffsetX = 0;
 		maxOffsetY = 0;
 	}

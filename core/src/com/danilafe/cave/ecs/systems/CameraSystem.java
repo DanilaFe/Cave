@@ -42,9 +42,9 @@ public class CameraSystem extends FamilySystem {
 			}
 			if(cameraShake.maxDelay != 0 && cameraShake.distance > cameraShake.resetThreshold){
 				Vector2 progress = cameraShake.nextOffset.cpy().sub(cameraShake.currentOffset).scl(1F - (cameraShake.delay / cameraShake.maxDelay));
-				cameraView.offset.set(cameraShake.currentOffset.cpy().add(progress));
+				cameraView.shakeOffset.set(cameraShake.currentOffset.cpy().add(progress));
 			} else {
-				cameraView.offset.set(0, 0);
+				cameraView.shakeOffset.set(0, 0);
 			}
 		}
 
@@ -56,7 +56,7 @@ public class CameraSystem extends FamilySystem {
 				if(position.position.x > camView.camera.position.x + camView.maxOffsetX) camView.truePosition.x = position.position.x - camView.maxOffsetX;
 				if(position.position.y < camView.camera.position.y - camView.maxOffsetY) camView.truePosition.y = position.position.y + camView.maxOffsetY;
 				if(position.position.y > camView.camera.position.y + camView.maxOffsetY) camView.truePosition.y = position.position.y - camView.maxOffsetY;
-				camView.camera.position.set(camView.truePosition.x, camView.truePosition.y, 0).add(camView.offset.x, camView.offset.y, 0);
+				camView.camera.position.set(camView.truePosition.x, camView.truePosition.y, 0).add(camView.shakeOffset.x, camView.shakeOffset.y, 0).add(camView.worldOffset.x, camView.worldOffset.y, 0);
 				camView.camera.update();
 			}
 		}
