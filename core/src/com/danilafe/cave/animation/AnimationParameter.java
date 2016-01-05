@@ -1,4 +1,5 @@
 package com.danilafe.cave.animation;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.danilafe.cave.CaveGame;
@@ -28,7 +29,10 @@ public class AnimationParameter {
 	 * Milliseconds between each frame
 	 */
 	public float frameDelta;
-
+	/**
+	 * The color of this animation parameter
+	 */
+	public Color color;
 	/**
 	 * Creates a new animation parameter from the given arguments.
 	 * @param texturePath The path to the texture load from
@@ -45,6 +49,7 @@ public class AnimationParameter {
 			animationParameter.normalTextures =  TextureRegion.split(CaveGame.instance.assetManager.get("normals/" + texturePath, Texture.class), texWidth, texHeight);
 		animationParameter.frameDelta = frameDelta;
 		animationParameter.loop = loop;
+		animationParameter.color = Color.WHITE;
 		return animationParameter;
 	}
 
@@ -73,6 +78,7 @@ public class AnimationParameter {
 			sourceNormal.setRegion(regionX, regionY, regionWidth, regionHeight);
 			animationParameter.normalTextures = sourceNormal.split(texWidth, texHeight);
 		}
+		animationParameter.color = Color.WHITE;
 		return animationParameter;
 	}
 
