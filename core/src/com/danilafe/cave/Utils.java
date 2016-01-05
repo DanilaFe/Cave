@@ -7,7 +7,10 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.ecs.components.CCameraShake;
+import com.danilafe.cave.ecs.components.CDamageable;
+import com.danilafe.cave.ecs.components.CHealth;
 import com.danilafe.cave.ecs.components.CTile;
+import com.danilafe.cave.health.DamageData;
 import com.danilafe.cave.item.ItemContainer;
 import com.danilafe.cave.item.ItemParameter;
 import com.danilafe.cave.tile.Tile;
@@ -213,5 +216,34 @@ public class Utils {
 		shake.distance = distance;
 		shake.resetThreshold = resetThreshold;
 		shake.distanceDamping = distanceDamping;
+	}
+
+	/**
+	 * Deals damage to this entity. Does not provide a cause.
+	 * @param damageTo the entity to deal damage to
+	 * @param damage the damge to deal
+	 * @param useMultiplier whether to use the damageMultiplier value of CDamageable
+	 * @param cooldown whether to set the damageable to cooldown mode
+	 * @param dealIfCooldown whether to damage if the damageable is cooling down
+	 * @param deltaTime the delta time
+	 */
+	public static void dealDamage(Entity damageTo, float damage, boolean useMultiplier, boolean cooldown, boolean dealIfCooldown, float deltaTime){
+		CDamageable damageable = damageTo.getComponent(CDamageable.class);
+		CHealth health = damageTo.getComponent(CHealth.class);
+
+
+		if(useMultiplier) damage *= damageable.damageMutliplier;
+		if(!dealIfCooldown && damageable.delay != 0) return;
+		if(cooldown) damageable.delay = damageable.maxDelay;
+
+		DamageData damageData = new DamageData();
+		damageData.damage = damage;
+		damageData.damageTo = damageTo;
+		damageable.currentDamage = damageData;
+
+		damageable.onDamage.update(damageTo, deltaTime);
+
+		health.health -= damage;
+		if(health.health <= 0 && health.onNoHealth != null) health.onNoHealth.update(damageTo, deltaTime);
 	}
 }
