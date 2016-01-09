@@ -1,0 +1,31 @@
+stages:
+    - build
+    - test
+    - deploy
+
+gradleBuild:
+    stage: build
+    script:
+        - ./gradlew desktop:build
+    only:
+        - master
+        - development
+
+junitTests:
+    stage: test
+    script:
+        - ./gradlew core:test
+        - ./gradlew desktop:test
+    only:
+        - master
+        - development
+
+compileExecutable:
+    stage: deploy
+    script:
+        - ./gradlew desktop:dist
+        - mkdir deploy
+        - mv deskop/build/libs/* deploy/
+    only:
+        - master
+        - development
