@@ -82,14 +82,16 @@ project(":ios") {
 
 project(":core") {
     apply plugin: "java"
-
-
+    
     dependencies {
+    	testCompile "junit:junit:4.12"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
     }
+    
+    sourceSets.test.java.srcDir "tests/"
 }
 
 tasks.eclipse.doLast {
