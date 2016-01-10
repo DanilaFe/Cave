@@ -30,7 +30,6 @@ compileExecutable:
     only:
         - master
         - development
-
-artifacts:
-    paths:
-        - deploy/
+    artifacts:
+        paths:
+            - deploy/
