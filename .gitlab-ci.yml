@@ -24,6 +24,7 @@ compileExecutable:
     stage: deploy
     script:
         - ./gradlew desktop:dist
+        - rm -rf deploy/*
         - mkdir deploy
         - mv deskop/build/libs/* deploy/
     only:
