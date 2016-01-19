@@ -54,6 +54,7 @@ import com.danilafe.cave.ecs.systems.NormalSystem;
 import com.danilafe.cave.ecs.systems.PositionSystem;
 import com.danilafe.cave.ecs.systems.RenderSystem;
 import com.danilafe.cave.ecs.systems.SelectableElementSystem;
+import com.danilafe.cave.ecs.systems.SpeedDamageSystem;
 import com.danilafe.cave.ecs.systems.StepperSystem;
 import com.danilafe.cave.ecs.systems.TileSystem;
 import com.danilafe.cave.item.ItemContainer;
@@ -151,6 +152,10 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public EmitterSystem emitterSystem;
 	/**
+	 * Fast speed change --> damage
+	 */
+	public SpeedDamageSystem speedDamageSystem;
+	/**
 	 * Damages things.
 	 */
 	public DamageSystem damageSystem;
@@ -208,6 +213,7 @@ public class CaveGame extends ApplicationAdapter {
 		tileSystem = new TileSystem();
 		disappearingSystem = new DisappearingSystem();
 		emitterSystem = new EmitterSystem();
+		speedDamageSystem = new SpeedDamageSystem();
 		damageSystem = new DamageSystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
@@ -231,6 +237,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(emitterSystem);
 		pooledEngine.addSystem(stepperSystem);
 		pooledEngine.addSystem(damageSystem);
+		pooledEngine.addSystem(speedDamageSystem);
 
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();
