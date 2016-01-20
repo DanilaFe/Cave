@@ -13,7 +13,7 @@ import com.danilafe.cave.health.DamageData;
 public class DamageSystem extends FamilySystem {
 
 	public DamageSystem() {
-		super(Family.all(CDamageable.class, CBounds.class).get(), Family.all(CDamageCause.class, CBounds.class).get());
+		super(Family.all(CDamageable.class, CBounds.class, CHealth.class).get(), Family.all(CDamageCause.class, CBounds.class).get());
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class DamageSystem extends FamilySystem {
 
 						float angle = damageableCenter.sub(damageCenter).angle(); // We won't be needing it afterwards, so don't copy
 						damageCenter.set(1, 1).setLength(damageCauseComponent.knockback * damageableComponent.knockbackMultiplier).setAngle(angle); // Reuse damage center
-						speed.speed.add(damageCenter);
+						speed.speed.add(damageCenter).add(damageCauseComponent.additionalKnockback.cpy().scl(damageableComponent.knockbackMultiplier));
 					}
 				}
 			}

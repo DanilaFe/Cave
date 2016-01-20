@@ -23,9 +23,12 @@ import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CBounds;
 import com.danilafe.cave.ecs.components.CCameraShake;
 import com.danilafe.cave.ecs.components.CCameraView;
+import com.danilafe.cave.ecs.components.CDamageCause;
+import com.danilafe.cave.ecs.components.CDamageable;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
 import com.danilafe.cave.ecs.components.CGravity;
+import com.danilafe.cave.ecs.components.CHealth;
 import com.danilafe.cave.ecs.components.CInteractionCause;
 import com.danilafe.cave.ecs.components.CInteractive;
 import com.danilafe.cave.ecs.components.CItem;
@@ -271,6 +274,8 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderCrystal").create(16, 32));
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderChest").create(72, 80));
 
+		pooledEngine.addEntity(creationManager.entityDescriptors.get("battleBox").create(32, 75));
+
 		if(Constants.DEBUG){
 			pooledEngine.addEntity(creationManager.entityDescriptors.get("debugger").create(0, 0));
 		}
@@ -329,6 +334,21 @@ public class CaveGame extends ApplicationAdapter {
 				anchor.anchor = new ChunkAnchor();
 				anchor.anchor.range = 2;
 				CCameraShake shake = pooledEngine.createComponent(CCameraShake.class);
+				CDamageable damageable = pooledEngine.createComponent(CDamageable.class);
+				damageable.team = "player";
+				damageable.onDamage = new ECSRunnable() {
+					@Override
+					public void update(Entity me, float deltaTime) {
+						Utils.shake(me.getComponent(CCameraShake.class), 0, 1F / 25, 10, 1, .7F);
+					}
+				};
+				damageable.maxDelay = 1F / 4;
+				damageable.knockbackMultiplier = 1;
+				CHealth health = pooledEngine.createComponent(CHealth.class);
+				health.health = 10;
+				health.maxHealth = 10;
+				entity.add(health);
+				entity.add(damageable);
 				entity.add(shake);
 				entity.add(anchor);
 				entity.add(camView);
@@ -575,6 +595,37 @@ public class CaveGame extends ApplicationAdapter {
 			}
 		};
 		creationManager.entityDescriptors.put("debugger", debugger);
+		EntityDescriptor battleBox = new EntityDescriptor() {
+			@Override
+			public Entity create(float x, float y) {
+				Entity entity = pooledEngine.createEntity();
+
+				CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
+				CGravity gravity = pooledEngine.createComponent(CGravity.class);
+				gravity.gravity.set(0, Constants.DEFAULT_GRAVITY);
+				CSpeed speed = pooledEngine.createComponent(CSpeed.class);
+				CPosition position = pooledEngine.createComponent(CPosition.class);
+				position.position.set(x, y);
+				CBounds bounds = pooledEngine.createComponent(CBounds.class);
+				bounds.bounds.setSize(8, 8).setCenter(x, y);
+				CDamageCause damageCause = pooledEngine.createComponent(CDamageCause.class);
+				damageCause.damage = 0;
+				damageCause.additionalKnockback.set(0, 100);
+				damageCause.knockback = 100;
+				damageCause.maxDelay = 0;
+				damageCause.teams.add("player");
+
+				entity.add(damageCause);
+				entity.add(bounds);
+				entity.add(position);
+				entity.add(speed);
+				entity.add(gravity);
+				entity.add(normalObject);
+
+				return entity;
+			}
+		};
+		creationManager.entityDescriptors.put("battleBox", battleBox);
 	}
 
 	private void loadAssets() {
