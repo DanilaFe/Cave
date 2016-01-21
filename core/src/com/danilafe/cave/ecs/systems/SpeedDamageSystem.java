@@ -30,8 +30,7 @@ public class SpeedDamageSystem extends IteratingSystem {
 
 		if(!(speedDamage.previousSpeed.x == speedDamage.previousSpeed.y  && speedDamage.previousSpeed.x == Float.MAX_VALUE)){
 			float speedDifference = speed.speed.len() - speedDamage.previousSpeed.len();
-			System.out.println(speedDifference);
-			float damage = Math.max((Math.abs(speedDifference) - speedDamage.maxSpeed), 0);
+			float damage = Math.max((Math.abs(speedDifference) - speedDamage.maxSpeed), 0) * speedDamage.damagePerUnit;
 			if(damage > 0)
 				Utils.dealDamage(entity, damage, true, true, false, deltaTime);
 		}
