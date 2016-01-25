@@ -39,6 +39,7 @@ import com.danilafe.cave.ecs.components.CNormalObject;
 import com.danilafe.cave.ecs.components.CNormalObstacle;
 import com.danilafe.cave.ecs.components.CPosition;
 import com.danilafe.cave.ecs.components.CSpeed;
+import com.danilafe.cave.ecs.components.CSpeedDamage;
 import com.danilafe.cave.ecs.components.CStepper;
 import com.danilafe.cave.ecs.systems.AccelerationSystem;
 import com.danilafe.cave.ecs.systems.BoundsSystem;
@@ -273,6 +274,7 @@ public class CaveGame extends ApplicationAdapter {
 
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderCrystal").create(16, 32));
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderChest").create(72, 80));
+		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderJumpBoost").create(72, 72));
 
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("battleBox").create(32, 75));
 
@@ -339,6 +341,7 @@ public class CaveGame extends ApplicationAdapter {
 				damageable.onDamage = new ECSRunnable() {
 					@Override
 					public void update(Entity me, float deltaTime) {
+						System.out.println("Sustained " + me.getComponent(CDamageable.class).currentDamage.damage + " damage");
 						Utils.shake(me.getComponent(CCameraShake.class), 0, 1F / 25, 10, 1, .7F);
 					}
 				};
@@ -347,6 +350,10 @@ public class CaveGame extends ApplicationAdapter {
 				CHealth health = pooledEngine.createComponent(CHealth.class);
 				health.health = 10;
 				health.maxHealth = 10;
+				CSpeedDamage speedDamage = pooledEngine.createComponent(CSpeedDamage.class);
+				speedDamage.maxSpeed = 350;
+				speedDamage.damagePerUnit = 10F / 150;
+				entity.add(speedDamage);
 				entity.add(health);
 				entity.add(damageable);
 				entity.add(shake);
