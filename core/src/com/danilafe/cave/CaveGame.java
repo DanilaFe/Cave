@@ -341,7 +341,6 @@ public class CaveGame extends ApplicationAdapter {
 				damageable.onDamage = new ECSRunnable() {
 					@Override
 					public void update(Entity me, float deltaTime) {
-						System.out.println("Sustained " + me.getComponent(CDamageable.class).currentDamage.damage + " damage");
 						Utils.shake(me.getComponent(CCameraShake.class), 0, 1F / 25, 10, 1, .7F);
 					}
 				};
