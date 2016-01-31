@@ -92,7 +92,7 @@ public class Utils {
 	 */
 	public static void printContainerContents(ItemContainer container) {
 		for (ItemParameter key : container.items.keySet()) {
-			System.out.println(key.name + " | " + key.description + " | " + container.items.get(key));
+			Gdx.app.debug("Chest Contents", key.name + " | " + key.description + " | " + container.items.get(key));
 		}
 	}
 
