@@ -8,6 +8,7 @@ import com.danilafe.cave.Constants;
 import com.danilafe.cave.animation.Animation;
 import com.danilafe.cave.ecs.components.CAnchor;
 import com.danilafe.cave.ecs.components.CAnimation;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CPosition;
 import com.danilafe.cave.ecs.components.CTile;
 
@@ -22,7 +23,7 @@ public class TileSystem extends FamilySystem {
 	 * Creates a new TileSystem
 	 */
 	public TileSystem() {
-		super(Family.all(CTile.class).get(), Family.all(CAnchor.class, CPosition.class).get());
+		super(Family.all(CTile.class).exclude(CDisabled.class).get(), Family.all(CAnchor.class, CPosition.class).exclude(CDisabled.class).get());
 	}
 
 	@Override

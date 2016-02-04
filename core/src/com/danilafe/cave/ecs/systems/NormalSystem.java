@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.Utils;
 import com.danilafe.cave.ecs.components.CBounds;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CGravity;
 import com.danilafe.cave.ecs.components.CNormalObject;
 import com.danilafe.cave.ecs.components.CNormalObstacle;
@@ -26,7 +27,7 @@ public class NormalSystem extends FamilySystem {
 	 * Creates a new NormalSystem
 	 */
 	public NormalSystem() {
-		super(Family.all(CNormalObject.class, CBounds.class).get(), Family.all(CNormalObstacle.class, CBounds.class).get());
+		super(Family.all(CNormalObject.class, CBounds.class).exclude(CDisabled.class).get(), Family.all(CNormalObstacle.class, CBounds.class).exclude(CDisabled.class).get());
 	}
 
 	@Override

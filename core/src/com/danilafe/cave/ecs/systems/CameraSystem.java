@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.ecs.components.CCameraShake;
 import com.danilafe.cave.ecs.components.CCameraView;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CPosition;
 
 /**
@@ -18,7 +19,7 @@ public class CameraSystem extends FamilySystem {
 	 * Creates a new CameraSystem
 	 */
 	public CameraSystem() {
-		super(Family.all(CPosition.class, CCameraView.class).get(), Family.all(CCameraShake.class, CCameraView.class).get());
+		super(Family.all(CPosition.class, CCameraView.class).exclude(CDisabled.class).get(), Family.all(CCameraShake.class, CCameraView.class).exclude(CDisabled.class).get());
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.CaveGame;
 import com.danilafe.cave.creation.EntityDescriptor;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CDisappearing;
 import com.danilafe.cave.ecs.components.CMarked;
 
@@ -91,7 +92,7 @@ public class ParticleEmitter {
 			offset.add(position).add(this.offset);
 
 			Entity newParticle = retreivedDescriptor.create(offset.x, offset.y);
-			if(markAsParticle && Family.all(CMarked.class).get().matches(newParticle)) newParticle.getComponent(CMarked.class).marks.put("particle", true);
+			if(markAsParticle && Family.all(CMarked.class).exclude(CDisabled.class).get().matches(newParticle)) newParticle.getComponent(CMarked.class).marks.put("particle", true);
 			CDisappearing disappearing = CaveGame.instance.pooledEngine.createComponent(CDisappearing.class);
 			disappearing.remaingTime = life;
 			newParticle.add(disappearing);

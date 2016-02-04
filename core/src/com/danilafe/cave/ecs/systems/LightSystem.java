@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.danilafe.cave.CaveGame;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CLight;
 import com.danilafe.cave.ecs.components.CPosition;
 
@@ -24,7 +25,7 @@ public class LightSystem extends IteratingSystem{
 	 * Creates a new LightSystem.
 	 */
 	public LightSystem() {
-		super(Family.all(CPosition.class, CLight.class).get());
+		super(Family.all(CPosition.class, CLight.class).exclude(CDisabled.class).get());
 		lightListener = new EntityListener() {
 
 			@Override
@@ -37,7 +38,7 @@ public class LightSystem extends IteratingSystem{
 				CaveGame.instance.renderSystem.lightManager.lights.add(entity.getComponent(CLight.class).light);
 			}
 		};
-		CaveGame.instance.pooledEngine.addEntityListener(Family.all(CLight.class).get(), lightListener);
+		CaveGame.instance.pooledEngine.addEntityListener(Family.all(CLight.class).exclude(CDisabled.class).get(), lightListener);
 	}
 
 	@Override

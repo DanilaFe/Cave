@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.danilafe.cave.Utils;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CDisappearing;
 
 /**
@@ -18,7 +19,7 @@ public class DisappearingSystem extends IteratingSystem {
 	 * @param family
 	 */
 	public DisappearingSystem() {
-		super(Family.all(CDisappearing.class).get());
+		super(Family.all(CDisappearing.class).exclude(CDisabled.class).get());
 	}
 
 	@Override

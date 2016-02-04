@@ -2,13 +2,14 @@ package com.danilafe.cave.ecs.systems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CItem;
 import com.danilafe.cave.ecs.components.CItemContainer;
 
 public class ItemSystem extends FamilySystem {
 
 	public ItemSystem() {
-		super(Family.all(CItem.class).get(), Family.all(CItemContainer.class).get());
+		super(Family.all(CItem.class).exclude(CDisabled.class).get(), Family.all(CItemContainer.class).exclude(CDisabled.class).get());
 	}
 
 	@Override

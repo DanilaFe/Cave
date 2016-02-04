@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Array;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CFollow;
 import com.danilafe.cave.ecs.components.CPosition;
 
@@ -19,7 +20,7 @@ public class FollowingSystem extends IteratingSystem {
 	 * Creates a new FollowingSystem
 	 */
 	public FollowingSystem() {
-		super(Family.all(CFollow.class, CPosition.class).get());
+		super(Family.all(CFollow.class, CPosition.class).exclude(CDisabled.class).get());
 	}
 
 	@Override

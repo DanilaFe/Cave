@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.danilafe.cave.Utils;
 import com.danilafe.cave.ecs.components.CBounds;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
 import com.danilafe.cave.ecs.components.CSpeed;
@@ -23,7 +24,7 @@ public class FrictionSystem extends FamilySystem {
 	 * Creates a new FrictionSystem
 	 */
 	public FrictionSystem() {
-		super(Family.all(CSpeed.class, CFrictionObject.class, CBounds.class).get(), Family.all(CBounds.class, CFrictionCause.class).get());
+		super(Family.all(CSpeed.class, CFrictionObject.class, CBounds.class).exclude(CDisabled.class).get(), Family.all(CBounds.class, CFrictionCause.class).exclude(CDisabled.class).get());
 	}
 
 	@Override

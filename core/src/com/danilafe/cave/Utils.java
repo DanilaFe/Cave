@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.ecs.components.CCameraShake;
 import com.danilafe.cave.ecs.components.CDamageable;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CHealth;
 import com.danilafe.cave.ecs.components.CTile;
 import com.danilafe.cave.health.DamageData;
@@ -131,7 +132,7 @@ public class Utils {
 	 *            the tile whose entity to delete
 	 */
 	public static void destroyEntityFromTile(Tile toDestroy) {
-		for (Entity e : CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CTile.class).get())) {
+		for (Entity e : CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CTile.class).exclude(CDisabled.class).get())) {
 			if (e.getComponent(CTile.class).myTile == toDestroy)
 				CaveGame.instance.pooledEngine.removeEntity(e);
 		}

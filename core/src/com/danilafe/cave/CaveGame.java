@@ -25,6 +25,7 @@ import com.danilafe.cave.ecs.components.CCameraShake;
 import com.danilafe.cave.ecs.components.CCameraView;
 import com.danilafe.cave.ecs.components.CDamageCause;
 import com.danilafe.cave.ecs.components.CDamageable;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
 import com.danilafe.cave.ecs.components.CGravity;
@@ -408,8 +409,8 @@ public class CaveGame extends ApplicationAdapter {
 					public void update(Entity me, float deltaTime) {
 						CBounds myBounds = me.getComponent(CBounds.class);
 						CSpeed mySpeed = me.getComponent(CSpeed.class);
-						for(Entity e : pooledEngine.getEntitiesFor(Family.all(CPosition.class, CSpeed.class, CBounds.class).get())){
-							if(Family.all(CMarked.class).get().matches(e) && e.getComponent(CMarked.class).marks.get("floater").booleanValue()) continue;
+						for(Entity e : pooledEngine.getEntitiesFor(Family.all(CPosition.class, CSpeed.class, CBounds.class).exclude(CDisabled.class).get())){
+							if(Family.all(CMarked.class).exclude(CDisabled.class).get().matches(e) && e.getComponent(CMarked.class).marks.get("floater").booleanValue()) continue;
 							CBounds otherBounds = e.getComponent(CBounds.class);
 							CSpeed otherSpeed = e.getComponent(CSpeed.class);
 							if(myBounds.bounds.overlaps(otherBounds.bounds)){
@@ -588,7 +589,7 @@ public class CaveGame extends ApplicationAdapter {
 								executionStopped = !executionStopped;
 							}
 							if(Gdx.input.isKeyJustPressed(Keys.S)){
-								for(Entity e : pooledEngine.getEntitiesFor(Family.all(CCameraShake.class).get())){
+								for(Entity e : pooledEngine.getEntitiesFor(Family.all(CCameraShake.class).exclude(CDisabled.class).get())){
 									CCameraShake shake = e.getComponent(CCameraShake.class);
 									Utils.shake(shake, .01F, .025F, 10, 1, .7F);
 								}

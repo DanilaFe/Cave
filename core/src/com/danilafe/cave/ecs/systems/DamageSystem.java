@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.ecs.components.CBounds;
 import com.danilafe.cave.ecs.components.CDamageCause;
 import com.danilafe.cave.ecs.components.CDamageable;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CHealth;
 import com.danilafe.cave.ecs.components.CSpeed;
 import com.danilafe.cave.health.DamageData;
@@ -13,7 +14,7 @@ import com.danilafe.cave.health.DamageData;
 public class DamageSystem extends FamilySystem {
 
 	public DamageSystem() {
-		super(Family.all(CDamageable.class, CBounds.class, CHealth.class).get(), Family.all(CDamageCause.class, CBounds.class).get());
+		super(Family.all(CDamageable.class, CBounds.class, CHealth.class).exclude(CDisabled.class).get(), Family.all(CDamageCause.class, CBounds.class).exclude(CDisabled.class).get());
 	}
 
 	@Override

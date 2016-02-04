@@ -6,6 +6,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.danilafe.cave.CaveGame;
 import com.danilafe.cave.ecs.components.CBounds;
+import com.danilafe.cave.ecs.components.CDisabled;
 
 /**
  * DebugSystem - This system renders collision boxes of entities and other debug information to the screen.
@@ -23,7 +24,7 @@ public class DebugRenderSystem extends IteratingSystem {
 	 * Creates a new DebugRenderSystem
 	 */
 	public DebugRenderSystem() {
-		super(Family.all(CBounds.class).get());
+		super(Family.all(CBounds.class).exclude(CDisabled.class).get());
 		shapeRenderer = new ShapeRenderer();
 	}
 

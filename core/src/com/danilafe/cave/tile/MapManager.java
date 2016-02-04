@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.danilafe.cave.CaveGame;
 import com.danilafe.cave.Constants;
 import com.danilafe.cave.Utils;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CTile;
 
 /**
@@ -191,7 +192,7 @@ public class MapManager {
 	 */
 	public void unloadChunk(Chunk chunk){
 		Gdx.app.debug("World Tree", "Unloading Chunk");
-		ImmutableArray<Entity> tileEntities = CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CTile.class).get());
+		ImmutableArray<Entity> tileEntities = CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CTile.class).exclude(CDisabled.class).get());
 		ArrayList<Entity> toDelete = new ArrayList<Entity>();
 		for(Entity e : tileEntities){
 			CTile tile = e.getComponent(CTile.class);

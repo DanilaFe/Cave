@@ -3,6 +3,7 @@ package com.danilafe.cave.ecs.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CParticleEmitter;
 import com.danilafe.cave.ecs.components.CPosition;
 
@@ -17,7 +18,7 @@ public class EmitterSystem extends IteratingSystem{
 	 * Creates a new EmitterSystem
 	 */
 	public EmitterSystem() {
-		super(Family.all(CParticleEmitter.class, CPosition.class).get());
+		super(Family.all(CParticleEmitter.class, CPosition.class).exclude(CDisabled.class).get());
 	}
 
 	@Override

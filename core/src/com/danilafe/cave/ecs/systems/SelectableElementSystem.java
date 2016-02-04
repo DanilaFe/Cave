@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CGroupElement;
 
 /**
@@ -17,7 +18,7 @@ public class SelectableElementSystem extends IteratingSystem {
 	 * Creates a new SelectableElementSystem.
 	 */
 	public SelectableElementSystem() {
-		super(Family.all(CGroupElement.class).get());
+		super(Family.all(CGroupElement.class).exclude(CDisabled.class).get());
 	}
 
 	@Override

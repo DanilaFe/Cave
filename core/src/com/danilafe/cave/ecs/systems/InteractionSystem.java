@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.danilafe.cave.Utils;
 import com.danilafe.cave.ecs.components.CBounds;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CInteractionCause;
 import com.danilafe.cave.ecs.components.CInteractive;
 
@@ -19,7 +20,7 @@ public class InteractionSystem extends FamilySystem {
 	 * Creates a new InteractionSystem
 	 */
 	public InteractionSystem() {
-		super(Family.all(CInteractive.class, CBounds.class).get(), Family.all(CInteractionCause.class, CBounds.class).get());
+		super(Family.all(CInteractive.class, CBounds.class).exclude(CDisabled.class).get(), Family.all(CInteractionCause.class, CBounds.class).exclude(CDisabled.class).get());
 	}
 
 	@Override

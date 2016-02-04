@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.danilafe.cave.Utils;
 import com.danilafe.cave.ecs.components.CDamageable;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CHealth;
 import com.danilafe.cave.ecs.components.CSpeed;
 import com.danilafe.cave.ecs.components.CSpeedDamage;
@@ -20,7 +21,7 @@ public class SpeedDamageSystem extends IteratingSystem {
 	 * Creates a new SpeedDamageSystem
 	 */
 	public SpeedDamageSystem() {
-		super(Family.all(CSpeedDamage.class, CSpeed.class, CHealth.class, CDamageable.class).get());
+		super(Family.all(CSpeedDamage.class, CSpeed.class, CHealth.class, CDamageable.class).exclude(CDisabled.class).get());
 	}
 
 	@Override

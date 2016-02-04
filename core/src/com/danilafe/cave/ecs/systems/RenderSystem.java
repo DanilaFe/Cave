@@ -21,6 +21,7 @@ import com.danilafe.cave.Constants;
 import com.danilafe.cave.Utils;
 import com.danilafe.cave.animation.Animation;
 import com.danilafe.cave.ecs.components.CAnimation;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CPosition;
 import com.danilafe.cave.lights.LightManager;
 
@@ -73,7 +74,7 @@ public class RenderSystem extends IteratingSystem {
 	public HashMap<Texture, HashMap<Integer, Texture>> rotatedTextures;
 
 	public RenderSystem() {
-		super(Family.all(CAnimation.class, CPosition.class).get());
+		super(Family.all(CAnimation.class, CPosition.class).exclude(CDisabled.class).get());
 		textureBatch = new SpriteBatch();
 		shaderBatch = new SpriteBatch();
 		normalBatch = new SpriteBatch();

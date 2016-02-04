@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.danilafe.cave.ecs.components.CAcceleration;
+import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CSpeed;
 
 /**
@@ -17,7 +18,7 @@ public class AccelerationSystem extends IteratingSystem {
 	 * Creates a new acceleration system.
 	 */
 	public AccelerationSystem() {
-		super(Family.all(CSpeed.class, CAcceleration.class).get());
+		super(Family.all(CSpeed.class, CAcceleration.class).exclude(CDisabled.class).get());
 	}
 
 	@Override
