@@ -26,6 +26,8 @@ import com.danilafe.cave.ecs.components.CCameraView;
 import com.danilafe.cave.ecs.components.CDamageCause;
 import com.danilafe.cave.ecs.components.CDamageable;
 import com.danilafe.cave.ecs.components.CDisabled;
+import com.danilafe.cave.ecs.components.CDisappearing;
+import com.danilafe.cave.ecs.components.CFollow;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
 import com.danilafe.cave.ecs.components.CGravity;
@@ -43,6 +45,7 @@ import com.danilafe.cave.ecs.components.CSpeed;
 import com.danilafe.cave.ecs.components.CSpeedDamage;
 import com.danilafe.cave.ecs.components.CStepper;
 import com.danilafe.cave.ecs.components.CUnloading;
+import com.danilafe.cave.ecs.components.CWeapon;
 import com.danilafe.cave.ecs.systems.AccelerationSystem;
 import com.danilafe.cave.ecs.systems.BoundsSystem;
 import com.danilafe.cave.ecs.systems.CameraSystem;
@@ -661,6 +664,27 @@ public class CaveGame extends ApplicationAdapter {
 			}
 		};
 		creationManager.entityDescriptors.put("battleBox", battleBox);
+		EntityDescriptor weaponEntityDescritor = new EntityDescriptor() {
+			@Override
+			public Entity create(float x, float y) {
+				Entity entity = pooledEngine.createEntity();
+				CDamageCause damageCause = pooledEngine.createComponent(CDamageCause.class);
+				CFollow follow = pooledEngine.createComponent(CFollow.class);
+				CBounds bounds = pooledEngine.createComponent(CBounds.class);
+				CWeapon weapon = pooledEngine.createComponent(CWeapon.class);
+				CDisappearing disappearing = pooledEngine.createComponent(CDisappearing.class);
+				CPosition position = pooledEngine.createComponent(CPosition.class);
+
+				entity.add(position);
+				entity.add(disappearing);
+				entity.add(weapon);
+				entity.add(bounds);
+				entity.add(follow);
+				entity.add(damageCause);
+				return entity;
+			}
+		};
+		creationManager.entityDescriptors.put("placeholderWeaponBase", weaponEntityDescritor);
 	}
 
 	private void loadAssets() {
