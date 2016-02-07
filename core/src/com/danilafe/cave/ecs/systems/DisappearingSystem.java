@@ -24,7 +24,11 @@ public class DisappearingSystem extends IteratingSystem {
 
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
-		if((entity.getComponent(CDisappearing.class).remaingTime -= deltaTime) < 0) Utils.removeEntity(entity);
+		CDisappearing disappearing = null;
+		if(((disappearing = entity.getComponent(CDisappearing.class)).remaingTime -= deltaTime) < 0) {
+			if(disappearing.onRemove != null) disappearing.onRemove.update(entity, deltaTime);
+			Utils.removeEntity(entity);
+		}
 	}
 
 }
