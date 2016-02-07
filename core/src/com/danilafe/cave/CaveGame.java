@@ -279,9 +279,14 @@ public class CaveGame extends ApplicationAdapter {
 
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("battleBox").create(32, 75));
 
+		for (int i = 0; i < 16; i ++){
+			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderLightball").create((float) (Math.random() * 160), (float)(Math.random() * 160)));
+		}
+
 		if(Constants.DEBUG){
 			pooledEngine.addEntity(creationManager.entityDescriptors.get("debugger").create(0, 0));
 		}
+
 	}
 
 	private void loadCreation() {
