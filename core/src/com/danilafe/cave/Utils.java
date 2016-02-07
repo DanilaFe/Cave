@@ -6,11 +6,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.danilafe.cave.attacks.Weapon;
+import com.danilafe.cave.attacks.WeaponDecriptor;
 import com.danilafe.cave.ecs.components.CCameraShake;
 import com.danilafe.cave.ecs.components.CDamageable;
 import com.danilafe.cave.ecs.components.CDisabled;
+import com.danilafe.cave.ecs.components.CDisappearing;
+import com.danilafe.cave.ecs.components.CFollow;
 import com.danilafe.cave.ecs.components.CHealth;
 import com.danilafe.cave.ecs.components.CTile;
+import com.danilafe.cave.ecs.components.CWeapon;
 import com.danilafe.cave.health.DamageData;
 import com.danilafe.cave.item.ItemContainer;
 import com.danilafe.cave.item.ItemParameter;
@@ -246,5 +251,26 @@ public class Utils {
 
 		health.health -= damage;
 		if(health.health <= 0 && health.onNoHealth != null) health.onNoHealth.update(damageTo, deltaTime);
+	}
+
+	/**
+	 * Creates a new weapon entity from the given descriptor. <br>
+	 * @param damageSource the entity who created this weapon
+	 * @param createFrom the weapon descriptor
+	 * @return
+	 */
+	public static Entity createWeaponEntity(Entity damageSource, WeaponDecriptor createFrom) {
+		Entity newEntity = createFrom.entityDescriptor.create(0, 0);
+		CFollow follow = newEntity.getComponent(CFollow.class);
+		follow.following = damageSource;
+		CDisappearing disappearing = newEntity.getComponent(CDisappearing.class);
+		disappearing.remaingTime = createFrom.weaponParameter.weaponDuration;
+		CWeapon weapon = newEntity.getComponent(CWeapon.class);
+		Weapon createdWeapon = new Weapon();
+		createdWeapon.parameter = createFrom.weaponParameter;
+		createdWeapon.propertiesCalculator = createFrom.weaponType;
+		weapon.weapon = createdWeapon;
+
+		return newEntity;
 	}
 }
