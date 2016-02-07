@@ -42,6 +42,7 @@ import com.danilafe.cave.ecs.components.CPosition;
 import com.danilafe.cave.ecs.components.CSpeed;
 import com.danilafe.cave.ecs.components.CSpeedDamage;
 import com.danilafe.cave.ecs.components.CStepper;
+import com.danilafe.cave.ecs.components.CUnloading;
 import com.danilafe.cave.ecs.systems.AccelerationSystem;
 import com.danilafe.cave.ecs.systems.BoundsSystem;
 import com.danilafe.cave.ecs.systems.CameraSystem;
@@ -431,6 +432,9 @@ public class CaveGame extends ApplicationAdapter {
 				CNormalObject normalObject = pooledEngine.createComponent(CNormalObject.class);
 				CGravity gravity = pooledEngine.createComponent(CGravity.class);
 				gravity.gravity.set(0, -0.1F);
+				CUnloading unloading = pooledEngine.createComponent(CUnloading.class);
+
+				entity.add(unloading);
 				entity.add(gravity);
 				entity.add(mark);
 				entity.add(bounds);
@@ -626,7 +630,9 @@ public class CaveGame extends ApplicationAdapter {
 				damageCause.knockback = 100;
 				damageCause.maxDelay = 0;
 				damageCause.teams.add("player");
+				CUnloading unloading = pooledEngine.createComponent(CUnloading.class);
 
+				entity.add(unloading);
 				entity.add(damageCause);
 				entity.add(bounds);
 				entity.add(position);
