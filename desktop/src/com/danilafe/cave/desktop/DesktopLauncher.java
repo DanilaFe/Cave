@@ -7,6 +7,7 @@ import com.danilafe.cave.CaveGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		config.setTitle("Cave");
 		new Lwjgl3Application(new CaveGame(), config);
 	}
 }
