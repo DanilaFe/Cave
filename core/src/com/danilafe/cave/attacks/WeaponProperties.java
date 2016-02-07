@@ -18,7 +18,21 @@ public class WeaponProperties {
 	 * The size (width, height) of the weapon's collision box.
 	 */
 	public Vector2 size = new Vector2(0, 0);
-
-	public float damage = 0;
+	/**
+	 * The damage of this weapon
+	 */
+	public float weaponDamage = 0;
+	/**
+	 * The knockback of this weapon
+	 */
+	public float weaponKnockback = 0;
+	/**
+	 * The additional knockback of this weapon
+	 */
+	public Vector2 additionalKnockback = new Vector2(0, 0);
+	/**
+	 * The delay of this weapon
+	 */
+	public float weaponDelay = 0;
 
 }
