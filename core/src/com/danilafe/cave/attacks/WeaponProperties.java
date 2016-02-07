@@ -19,4 +19,6 @@ public class WeaponProperties {
 	 */
 	public Vector2 size = new Vector2(0, 0);
 
+	public float damage = 0;
+
 }
