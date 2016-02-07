@@ -54,7 +54,7 @@ public class NormalSystem extends FamilySystem {
 				projectedBounds.set(normalEntityBounds.bounds);
 
 				if(obstacleBounds.bounds.overlaps(projectedBounds)){
-					Gdx.app.debug("Collision Detection", "Intresection");
+					Gdx.app.debug("Collision Detection", "Intresection: " + normalEntity.toString());
 					moveOutside(projectedBounds, obstacleBounds.bounds, normalEntityPosition.position);
 				}
 
@@ -69,7 +69,7 @@ public class NormalSystem extends FamilySystem {
 					float requiredChecksX = (float) (Math.ceil(widths));
 					for(int check = 1; check <= requiredChecksX; check++){
 						projectedBounds.setCenter(normalEntityPosition.position.cpy().add(xMove * check / requiredChecksX, 0));
-						if(Math.abs(normalEntitySpeed.speed.x) > 0.01F && obstacleBounds.bounds.overlaps(projectedBounds)){
+						if(Float.compare(Math.abs(normalEntitySpeed.speed.x), 0) > 0 && obstacleBounds.bounds.overlaps(projectedBounds)){
 							Gdx.app.debug("Collision Detection", "Imminent collision on x-axis");
 							normalEntityPosition.position.x = ((projectedBounds.x < obstacleBounds.bounds.x) ? obstacleBounds.bounds.x - projectedBounds.width : obstacleBounds.bounds.x + obstacleBounds.bounds.width) + (projectedBounds.width / 2);
 							normalEntitySpeed.speed.x = 0;
@@ -85,7 +85,7 @@ public class NormalSystem extends FamilySystem {
 					float requiredChecksY = (float) Math.ceil(heights);
 					for(int check = 1; check <= requiredChecksY; check++){
 						projectedBounds.setCenter(normalEntityPosition.position.cpy().add(0, yMove * check / requiredChecksY));
-						if(Math.abs(normalEntitySpeed.speed.y) > 0.01F && obstacleBounds.bounds.overlaps(projectedBounds)){
+						if(Float.compare(Math.abs(normalEntitySpeed.speed.y), 0) > 0 && obstacleBounds.bounds.overlaps(projectedBounds)){
 							Gdx.app.debug("Collision Detection", "Imminent collision on y-axis");
 							normalEntityPosition.position.y = ((projectedBounds.y < obstacleBounds.bounds.y) ? obstacleBounds.bounds.y - projectedBounds.height : obstacleBounds.bounds.y + obstacleBounds.bounds.height) + (projectedBounds.height / 2);
 							normalEntitySpeed.speed.y = 0;
