@@ -10,7 +10,9 @@ import com.danilafe.cave.CaveGame;
 import com.danilafe.cave.Constants;
 import com.danilafe.cave.Utils;
 import com.danilafe.cave.ecs.components.CDisabled;
+import com.danilafe.cave.ecs.components.CPosition;
 import com.danilafe.cave.ecs.components.CTile;
+import com.danilafe.cave.ecs.components.CUnloading;
 
 /**
  * Map manager used to manage in-game tiles, by loading / unloading them
@@ -184,6 +186,20 @@ public class MapManager {
 				CaveGame.instance.pooledEngine.addEntity(Utils.createEntityFromTile(toCreate));
 			}
 		}
+		ImmutableArray<Entity> unloadedEntities = CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CUnloading.class, CPosition.class, CDisabled.class).get());
+		for(int i = 0; i < unloadedEntities.size(); i++){
+			Entity e = unloadedEntities.get(i);
+			CPosition entityPosition = e.getComponent(CPosition.class);
+			float chunkX = (float) Math.floor(entityPosition.position.x / Constants.CHUNK_SIZE) * Constants.CHUNK_SIZE;
+			float chunkY = (float) Math.floor(entityPosition.position.y / Constants.CHUNK_SIZE) * Constants.CHUNK_SIZE;
+
+			if(e.getComponent(CDisabled.class).reason == "chunked" &&  chunkX == chunk.position.x && chunkY == chunk.position.y) {
+				e.remove(CDisabled.class);
+
+				i = -1;
+				unloadedEntities = CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CUnloading.class, CPosition.class, CDisabled.class).get());
+			}
+		}
 	}
 
 	/**
@@ -193,6 +209,7 @@ public class MapManager {
 	public void unloadChunk(Chunk chunk){
 		Gdx.app.debug("World Tree", "Unloading Chunk");
 		ImmutableArray<Entity> tileEntities = CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CTile.class).exclude(CDisabled.class).get());
+		ImmutableArray<Entity> unloadableEntities = CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CUnloading.class, CPosition.class).exclude(CDisabled.class).get());
 		ArrayList<Entity> toDelete = new ArrayList<Entity>();
 		for(Entity e : tileEntities){
 			CTile tile = e.getComponent(CTile.class);
@@ -202,6 +219,21 @@ public class MapManager {
 		}
 		for(Entity e : toDelete){
 			Utils.removeEntity(e);
+		}
+		for(int i = 0; i < unloadableEntities.size(); i++){
+			Entity e = unloadableEntities.get(i);
+			CPosition entityPosition = e.getComponent(CPosition.class);
+			float chunkX = (float) Math.floor(entityPosition.position.x / Constants.CHUNK_SIZE) * Constants.CHUNK_SIZE;
+			float chunkY = (float) Math.floor(entityPosition.position.y / Constants.CHUNK_SIZE) * Constants.CHUNK_SIZE;
+			if(chunkX == chunk.position.x && chunkY == chunk.position.y ){
+				CDisabled disabled = CaveGame.instance.pooledEngine.createComponent(CDisabled.class);
+				disabled.reason = "chunked";
+				e.add(disabled);
+
+				i = -1;
+				unloadableEntities = CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CUnloading.class, CPosition.class).exclude(CDisabled.class).get());
+
+			}
 		}
 	}
 
