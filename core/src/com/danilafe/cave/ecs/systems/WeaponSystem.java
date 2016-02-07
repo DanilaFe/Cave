@@ -23,14 +23,14 @@ public class WeaponSystem extends IteratingSystem {
 		CDamageCause weaponDamageCause = entity.getComponent(CDamageCause.class);
 		CBounds weaponBounds = entity.getComponent(CBounds.class);
 
-		weapon.weapon.currentDelay += deltaTime;
+		weapon.weapon.remainingDuration += deltaTime;
 		WeaponProperties generatedProperties = weapon.weapon.propertiesCalculator.calculateProperties(weapon.weapon);
 		weaponBounds.bounds.setSize(generatedProperties.size.x, generatedProperties.size.y);
 		weaponFollowing.offset.set(generatedProperties.offset);
-		weaponDamageCause.damage = generatedProperties.weaponDamage;
-		weaponDamageCause.maxDelay = generatedProperties.weaponDelay;
+		weaponDamageCause.damage = generatedProperties.damage;
+		weaponDamageCause.maxDelay = generatedProperties.delay;
 		weaponDamageCause.additionalKnockback.set(generatedProperties.additionalKnockback);
-		weaponDamageCause.knockback = generatedProperties.weaponKnockback;
+		weaponDamageCause.knockback = generatedProperties.knockback;
 
 	}
 

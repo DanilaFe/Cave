@@ -12,26 +12,26 @@ public class WeaponParameter {
 	/**
 	 * The duration of this weapon's attack
 	 */
-	public float weaponDuration;
+	public float duration;
 	/**
 	 * The damage this weapon deals
 	 */
-	public float weaponDamage = 0;
+	public float wDamage = 0;
 	/**
 	 * The knockback of this weapon
 	 */
-	public float weaponKnockback = 0;
+	public float wKnockback = 0;
 	/**
 	 * The additional knockback of this weapon
 	 */
-	public Vector2 additionalKnockback = new Vector2(0, 0);
+	public Vector2 wAdditionalKnockback = new Vector2(0, 0);
 	/**
 	 * The size of the weapon
 	 */
-	public Vector2 weaponSize = new Vector2(0, 0);
+	public Vector2 wSize = new Vector2(0, 0);
 	/**
 	 * The delay of this weapon
 	 */
-	public float weaponDelay = 0;
+	public float wDelay = 0;
 
 }

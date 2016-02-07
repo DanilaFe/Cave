@@ -18,5 +18,5 @@ public class Weapon {
 	/**
 	 * The current delay of the weapon
 	 */
-	public float currentDelay = 0;
+	public float remainingDuration = 0;
 }
