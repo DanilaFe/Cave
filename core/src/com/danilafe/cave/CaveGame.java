@@ -630,9 +630,19 @@ public class CaveGame extends ApplicationAdapter {
 				damageCause.knockback = 100;
 				damageCause.maxDelay = 0;
 				damageCause.teams.add("player");
+				CDamageable damageable = pooledEngine.createComponent(CDamageable.class);
+				damageable.damageMutliplier = 0;
+				damageable.team = "environment";
 				CUnloading unloading = pooledEngine.createComponent(CUnloading.class);
+				CHealth health = pooledEngine.createComponent(CHealth.class);
+				health.maxHealth = 10;
+				health.health = 10;
+				CFrictionObject frictionObject = pooledEngine.createComponent(CFrictionObject.class);
 
+				entity.add(frictionObject);
+				entity.add(health);
 				entity.add(unloading);
+				entity.add(damageable);
 				entity.add(damageCause);
 				entity.add(bounds);
 				entity.add(position);
