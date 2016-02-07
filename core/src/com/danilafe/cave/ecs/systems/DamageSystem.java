@@ -11,8 +11,16 @@ import com.danilafe.cave.ecs.components.CHealth;
 import com.danilafe.cave.ecs.components.CSpeed;
 import com.danilafe.cave.health.DamageData;
 
+/**
+ * Damage system, responsible for dealing damage.
+ * @author vanilla
+ *
+ */
 public class DamageSystem extends FamilySystem {
 
+	/**
+	 * Creates a new damage system.
+	 */
 	public DamageSystem() {
 		super(Family.all(CDamageable.class, CBounds.class, CHealth.class).exclude(CDisabled.class).get(), Family.all(CDamageCause.class, CBounds.class).exclude(CDisabled.class).get());
 	}
