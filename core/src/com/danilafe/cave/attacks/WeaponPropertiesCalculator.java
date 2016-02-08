@@ -10,7 +10,7 @@ public abstract class WeaponPropertiesCalculator {
 	/**
 	 * Calculates the properties from the given weapon
 	 * @param weapon the weapon whose properties to calculate
-	 * @return the created properties.
+	 * @return a new weapon parameter with adjusted variables.
 	 */
 	public abstract WeaponProperties calculateProperties(Weapon weapon);
 

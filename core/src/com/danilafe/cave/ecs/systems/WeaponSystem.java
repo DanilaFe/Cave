@@ -10,8 +10,16 @@ import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CFollow;
 import com.danilafe.cave.ecs.components.CWeapon;
 
+/**
+ * Updates weapon entities based on their parameters
+ * @author vanilla
+ *
+ */
 public class WeaponSystem extends IteratingSystem {
 
+	/**
+	 * Creates a new WeaponSystem
+	 */
 	public WeaponSystem() {
 		super(Family.all(CWeapon.class, CFollow.class, CBounds.class, CDamageCause.class).exclude(CDisabled.class).get());
 	}
@@ -25,12 +33,12 @@ public class WeaponSystem extends IteratingSystem {
 
 		weapon.weapon.remainingDuration += deltaTime;
 		WeaponProperties generatedProperties = weapon.weapon.propertiesCalculator.calculateProperties(weapon.weapon);
-		weaponBounds.bounds.setSize(generatedProperties.size.x, generatedProperties.size.y);
-		weaponFollowing.offset.set(generatedProperties.offset);
-		weaponDamageCause.damage = generatedProperties.damage;
-		weaponDamageCause.maxDelay = generatedProperties.delay;
-		weaponDamageCause.additionalKnockback.set(generatedProperties.additionalKnockback);
-		weaponDamageCause.knockback = generatedProperties.knockback;
+		weaponBounds.bounds.setSize(generatedProperties.wSize.x, generatedProperties.wSize.y);
+		weaponFollowing.offset.set(generatedProperties.wOffset);
+		weaponDamageCause.damage = generatedProperties.wDamage;
+		weaponDamageCause.maxDelay = generatedProperties.wDelay;
+		weaponDamageCause.additionalKnockback.set(generatedProperties.wAdditionalKnockback);
+		weaponDamageCause.knockback = generatedProperties.wKnockback;
 
 	}
 
