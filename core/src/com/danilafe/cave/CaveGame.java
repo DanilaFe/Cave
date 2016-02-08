@@ -300,6 +300,9 @@ public class CaveGame extends ApplicationAdapter {
 	}
 
 	private void loadCreation() {
+		/*
+		 * Animation parameters
+		 */
 		creationManager.animationParams.put("caveTiles", AnimationParameter.create("cavetiles.png", true, 8, 8, 0));
 		creationManager.animationParams.put("crystals", AnimationParameter.create("crystals.png", true, 8, 8, 0));
 		/*
@@ -684,9 +687,14 @@ public class CaveGame extends ApplicationAdapter {
 			}
 		};
 		creationManager.entityDescriptors.put("placeholderWeaponBase", weaponEntityDescritor);
-
+		/*
+		 * Tile animations
+		 */
 		TileAnimation cavetilesAnimation = TileAnimation.create("cavetiles.png", 8, 8, 0, true);
 		creationManager.tileAnimations.put("placeholderCavetilesAnimation", cavetilesAnimation);
+		/*
+		 * Tile parameters
+		 */
 		TileParameter cavetilesParameter = TileParameter.create(cavetilesAnimation, placeholderWall);
 		creationManager.tileParameters.put("placeholderCavetilesParameter", cavetilesParameter);
 
