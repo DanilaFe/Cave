@@ -23,4 +23,12 @@ public class WeaponDecriptor {
 	 */
 	public EntityDescriptor entityDescriptor = null;
 
+	public static WeaponDecriptor create(WeaponParameter parameter, WeaponPropertiesCalculator calculator, EntityDescriptor entity){
+		WeaponDecriptor weaponDescriptor = new WeaponDecriptor();
+		weaponDescriptor.weaponParameter = parameter;
+		weaponDescriptor.weaponType = calculator;
+		weaponDescriptor.entityDescriptor = entity;
+		return weaponDescriptor;
+	}
+
 }

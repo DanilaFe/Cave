@@ -266,9 +266,7 @@ public class Utils {
 		CDisappearing disappearing = newEntity.getComponent(CDisappearing.class);
 		disappearing.remaingTime = createFrom.weaponParameter.duration;
 		CWeapon weapon = newEntity.getComponent(CWeapon.class);
-		Weapon createdWeapon = new Weapon();
-		createdWeapon.parameter = createFrom.weaponParameter;
-		createdWeapon.propertiesCalculator = createFrom.weaponType;
+		Weapon createdWeapon = Weapon.create(createFrom);
 		weapon.weapon = createdWeapon;
 
 		return newEntity;

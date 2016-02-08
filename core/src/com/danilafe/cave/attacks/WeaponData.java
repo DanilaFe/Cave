@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
  * @author vanilla
  *
  */
-public interface WeaponData {
+public class WeaponData {
 
 	/**
 	 * The damage this weapon deals

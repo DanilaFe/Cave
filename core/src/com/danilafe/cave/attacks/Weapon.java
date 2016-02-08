@@ -19,4 +19,11 @@ public class Weapon {
 	 * The current delay of the weapon
 	 */
 	public float remainingDuration = 0;
+
+	public static Weapon create(WeaponDecriptor weaponDescriptor){
+		Weapon newWeapon = new Weapon();
+		newWeapon.parameter = weaponDescriptor.weaponParameter;
+		newWeapon.propertiesCalculator = weaponDescriptor.weaponType;
+		return newWeapon;
+	}
 }

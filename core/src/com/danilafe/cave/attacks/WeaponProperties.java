@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
  * @author vanilla
  *
  */
-public class WeaponProperties implements WeaponData {
+public class WeaponProperties extends WeaponData {
 
 	/**
 	 * The offset of this weapon.
