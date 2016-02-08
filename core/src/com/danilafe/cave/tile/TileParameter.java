@@ -1,5 +1,7 @@
 package com.danilafe.cave.tile;
 
+import com.danilafe.cave.creation.EntityDescriptor;
+
 /**
  * Parameter of a tile
  * @author vanilla
@@ -14,14 +16,14 @@ public class TileParameter {
 	/**
 	 * The type of entity that this tile stands for.
 	 */
-	public String entityType;
+	public EntityDescriptor entityType;
 
 	/**
 	 * Creates a new tile from the given properties
 	 * @param aparameter the animations of this tile
 	 * @return the created TileParameter
 	 */
-	public static TileParameter create(TileAnimation aparameter, String entityType) {
+	public static TileParameter create(TileAnimation aparameter, EntityDescriptor entityType) {
 		TileParameter parameter = new TileParameter();
 		parameter.animation = aparameter;
 		parameter.entityType = entityType;

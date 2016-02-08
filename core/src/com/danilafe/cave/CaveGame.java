@@ -262,7 +262,7 @@ public class CaveGame extends ApplicationAdapter {
 		loadCreation();
 
 		TileAnimation tileAnimation = TileAnimation.create("cavetiles.png", 8, 8, 0, true);
-		TileParameter newTileParam = TileParameter.create(tileAnimation, "placeholderWall");
+		TileParameter newTileParam = TileParameter.create(tileAnimation, creationManager.entityDescriptors.get("placeholderWall"));
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderPlayer").create(50, 50));
 		for(int i = 0; i < 10; i ++){
 			Tile newTile = Tile.create(newTileParam, (int)(Math.random() * 3));

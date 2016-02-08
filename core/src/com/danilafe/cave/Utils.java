@@ -121,7 +121,7 @@ public class Utils {
 	 * @return the created entity
 	 */
 	public static Entity createEntityFromTile(Tile toCreate) {
-		Entity createdEntiy = CaveGame.instance.creationManager.entityDescriptors.get(toCreate.tileParameter.entityType)
+		Entity createdEntiy = toCreate.tileParameter.entityType
 				.create(toCreate.myChunk.position.x + toCreate.position.x,
 						toCreate.myChunk.position.y + toCreate.position.y);
 		CTile tile = CaveGame.instance.pooledEngine.createComponent(CTile.class);
