@@ -260,7 +260,7 @@ public class Utils {
 	 * @return
 	 */
 	public static Entity createWeaponEntity(Entity damageSource, WeaponDecriptor createFrom) {
-		Entity newEntity = CaveGame.instance.creationManager.entityDescriptors.get(createFrom.entityDescriptor).create(0, 0);
+		Entity newEntity = createFrom.entityDescriptor.create(0, 0);
 		CFollow follow = newEntity.getComponent(CFollow.class);
 		follow.following = damageSource;
 		CDisappearing disappearing = newEntity.getComponent(CDisappearing.class);

@@ -3,6 +3,9 @@ package com.danilafe.cave.creation;
 import java.util.HashMap;
 
 import com.danilafe.cave.animation.AnimationParameter;
+import com.danilafe.cave.attacks.WeaponDecriptor;
+import com.danilafe.cave.attacks.WeaponParameter;
+import com.danilafe.cave.attacks.WeaponPropertiesCalculator;
 import com.danilafe.cave.item.ItemParameter;
 import com.danilafe.cave.tile.TileAnimation;
 import com.danilafe.cave.tile.TileParameter;
@@ -34,5 +37,17 @@ public class CreationManager {
 	 * The tile animations representing different kinds of animations tiles can have
 	 */
 	public HashMap<String, TileAnimation> tileAnimations = new HashMap<String, TileAnimation>();
+	/**
+	 * The parameters of different weapons, such as their width, height, attack duration etc
+	 */
+	public HashMap<String, WeaponParameter> weaponParameters = new HashMap<String, WeaponParameter>();
+	/**
+	 * Different abstract classes used to calculate the properties of a weapon at a given time.
+	 */
+	public HashMap<String, WeaponPropertiesCalculator> weaponCalculators = new HashMap<String, WeaponPropertiesCalculator>();
+	/**
+	 * Descriptors for entire weapons, including their calculators, parameters and entity descriptors.
+	 */
+	public HashMap<String, WeaponDecriptor> weaponDescriptors = new HashMap<String, WeaponDecriptor>();
 
 }

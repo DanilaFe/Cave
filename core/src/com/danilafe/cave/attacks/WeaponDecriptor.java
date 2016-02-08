@@ -1,5 +1,7 @@
 package com.danilafe.cave.attacks;
 
+import com.danilafe.cave.creation.EntityDescriptor;
+
 /**
  * Weapon descriptor used to spawn weapon entities.
  * @author vanilla
@@ -19,6 +21,6 @@ public class WeaponDecriptor {
 	/**
 	 * Entity descriptor of this weapon. To spawn the entity.
 	 */
-	public String entityDescriptor = "";
+	public EntityDescriptor entityDescriptor = null;
 
 }
