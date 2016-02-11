@@ -371,6 +371,11 @@ public class CaveGame extends ApplicationAdapter {
 				CSpeedDamage speedDamage = pooledEngine.createComponent(CSpeedDamage.class);
 				speedDamage.maxSpeed = 350;
 				speedDamage.damagePerUnit = 10F / 150;
+				CAnimation animation = new CAnimation();
+				Animation an = new Animation();
+				an.animationParameter = creationManager.animationParams.get("caveTiles");
+				animation.animationQueue.add(an);
+				entity.add(animation);
 				entity.add(speedDamage);
 				entity.add(health);
 				entity.add(damageable);
@@ -415,7 +420,7 @@ public class CaveGame extends ApplicationAdapter {
 			public Entity create(float x, float y) {
 				Entity entity = pooledEngine.createEntity();
 				CLight light = pooledEngine.createComponent(CLight.class);
-				light.light.set(x, y, 10, .1F, .3F, .3F);
+				light.light.set(x, y, 25, .1F, .3F, .3F);
 				CPosition position = pooledEngine.createComponent(CPosition.class);
 				position.position.set(x, y);
 				CSpeed speed = pooledEngine.createComponent(CSpeed.class);

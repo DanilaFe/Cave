@@ -17,16 +17,16 @@ public class WeaponDecriptor {
 	/**
 	 * Calculator to determine how the weapon is used
 	 */
-	public WeaponPropertiesCalculator weaponType = null;
+	public ComboChain weaponAttacks = null;
 	/**
 	 * Entity descriptor of this weapon. To spawn the entity.
 	 */
 	public EntityDescriptor entityDescriptor = null;
 
-	public static WeaponDecriptor create(WeaponParameter parameter, WeaponPropertiesCalculator calculator, EntityDescriptor entity){
+	public static WeaponDecriptor create(WeaponParameter parameter, ComboChain chain, EntityDescriptor entity){
 		WeaponDecriptor weaponDescriptor = new WeaponDecriptor();
 		weaponDescriptor.weaponParameter = parameter;
-		weaponDescriptor.weaponType = calculator;
+		weaponDescriptor.weaponAttacks = chain;
 		weaponDescriptor.entityDescriptor = entity;
 		return weaponDescriptor;
 	}

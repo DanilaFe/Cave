@@ -14,7 +14,7 @@ public class Weapon {
 	/**
 	 * The weapon properties calculator
 	 */
-	public WeaponPropertiesCalculator propertiesCalculator;
+	public ComboChain currentChain;
 	/**
 	 * The current delay of the weapon
 	 */
@@ -23,7 +23,7 @@ public class Weapon {
 	public static Weapon create(WeaponDecriptor weaponDescriptor){
 		Weapon newWeapon = new Weapon();
 		newWeapon.parameter = weaponDescriptor.weaponParameter;
-		newWeapon.propertiesCalculator = weaponDescriptor.weaponType;
+		newWeapon.currentChain = weaponDescriptor.weaponAttacks;
 		return newWeapon;
 	}
 }
