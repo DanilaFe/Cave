@@ -93,7 +93,7 @@ public class RenderSystem extends IteratingSystem {
 		Animation animationObject = animation.animationQueue.animationQueue.peek();
 		if (animationObject != null){
 			TextureRegion toRender = animationObject.getTextureAt(animationObject.texIndex);
-			textureBatch.draw(toRender, (int)Math.floor(position.position.x - toRender.getRegionWidth() / 2), (int) Math.floor(position.position.y - toRender.getRegionHeight() / 2), toRender.getRegionWidth() / 2, toRender.getRegionHeight() / 2, toRender.getRegionWidth(), toRender.getRegionHeight(), 1, 1, -animation.rotation);
+			textureBatch.draw(toRender, Math.round(position.position.x - toRender.getRegionWidth() / 2), Math.round(position.position.y - toRender.getRegionHeight() / 2), toRender.getRegionWidth() / 2, toRender.getRegionHeight() / 2, toRender.getRegionWidth(), toRender.getRegionHeight(), 1, 1, -animation.rotation);
 		}
 		animation.animationQueue.update(deltaTime);
 	}
@@ -131,7 +131,7 @@ public class RenderSystem extends IteratingSystem {
 					TextureRegion toRender = animationObject.getNormalAt(animationObject.texIndex);
 					Texture originalTexture = toRender.getTexture();
 					if(animation.rotation != 0) toRender.setTexture(getRotatedTexture(originalTexture, animation.rotation));
-					normalBatch.draw(toRender, (int) Math.floor(position.position.x - toRender.getRegionWidth() / 2), (int) Math.floor(position.position.y - toRender.getRegionHeight() / 2), toRender.getRegionWidth() / 2, toRender.getRegionHeight() / 2, toRender.getRegionWidth(), toRender.getRegionHeight(), 1, 1, -animation.rotation);
+					normalBatch.draw(toRender, Math.round(position.position.x - toRender.getRegionWidth() / 2), Math.round(position.position.y - toRender.getRegionHeight() / 2), toRender.getRegionWidth() / 2, toRender.getRegionHeight() / 2, toRender.getRegionWidth(), toRender.getRegionHeight(), 1, 1, -animation.rotation);
 					toRender.setTexture(originalTexture);
 				}
 			}
