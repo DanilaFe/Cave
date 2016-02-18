@@ -20,6 +20,14 @@ public class CAnimation implements Poolable, Component {
 	 * The rotation of this animation
 	 */
 	public int rotation = 0;
+	/**
+	 * Whether this animation should be flipped horizontally
+	 */
+	public boolean flipHorizontal = false;
+	/**
+	 * Whether this animation should be flipped vertically
+	 */
+	public boolean flipVertical = false;
 
 	@Override
 	public void reset() {
