@@ -371,7 +371,7 @@ public class CaveGame extends ApplicationAdapter {
 				CSpeedDamage speedDamage = pooledEngine.createComponent(CSpeedDamage.class);
 				speedDamage.maxSpeed = 350;
 				speedDamage.damagePerUnit = 10F / 150;
-				CAnimation animation = new CAnimation();
+				CAnimation animation = pooledEngine.createComponent(CAnimation.class);
 				Animation an = new Animation();
 				an.animationParameter = creationManager.animationParams.get("caveTiles");
 				animation.animationQueue.add(an);
