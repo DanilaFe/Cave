@@ -32,7 +32,7 @@ public class WeaponSystem extends IteratingSystem {
 		CBounds weaponBounds = entity.getComponent(CBounds.class);
 
 		weapon.weapon.remainingDuration += deltaTime;
-		WeaponProperties generatedProperties = weapon.weapon.currentChain.attackType.calculateProperties(weapon.weapon);
+		WeaponProperties generatedProperties = weapon.weapon.currentChain.attackType.calculateProperties(weapon.weapon, weaponFollowing.following, entity);
 		weaponBounds.bounds.setSize(generatedProperties.wSize.x, generatedProperties.wSize.y);
 		weaponFollowing.offset.set(generatedProperties.wOffset);
 		weaponDamageCause.damage = generatedProperties.wDamage;
