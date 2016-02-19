@@ -21,7 +21,7 @@ public class LightManager {
 	 * The ambient light in the game
 	 */
 	public float[] ambientLight = new float[]{
-			.1F, .1F, .1F
+			.1F, .1F, .13F
 	};
 	/**
 	 * The list of lights to be rendered
