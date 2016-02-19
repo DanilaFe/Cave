@@ -159,6 +159,7 @@ public class RenderSystem extends IteratingSystem {
 		shaderProgram.setUniformf("u_texOffsetX", (CaveGame.instance.orthoCam.position.x - CaveGame.instance.orthoCam.viewportWidth / 2));
 		shaderProgram.setUniformf("u_texOffsetY", (CaveGame.instance.orthoCam.position.y - CaveGame.instance.orthoCam.viewportHeight / 2));
 		lightManager.sortByDistance(new Vector2(CaveGame.instance.orthoCam.position.x, CaveGame.instance.orthoCam.position.y));
+		shaderProgram.setUniform3fv("u_ambient", lightManager.ambientLight, 0, 3);
 		shaderProgram.setUniformi("u_numLights", (lightManager.maxLights < lightManager.lights.size()) ? lightManager.maxLights : lightManager.lights.size());
 		for(int i = 0; i < lightManager.lights.size() && i < lightManager.maxLights; i++){
 			lightManager.lights.get(i).updateFlicker();

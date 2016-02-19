@@ -18,6 +18,12 @@ public class LightManager {
 	 */
 	public int maxLights = 64;
 	/**
+	 * The ambient light in the game
+	 */
+	public float[] ambientLight = new float[]{
+			.1F, .1F, .1F
+	};
+	/**
 	 * The list of lights to be rendered
 	 */
 	public ArrayList<Light> lights = new ArrayList<Light>();

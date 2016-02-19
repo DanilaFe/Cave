@@ -13,6 +13,7 @@ uniform float u_texOffsetY;
 uniform int u_numLights;
 uniform vec3 u_lightColors[64];
 uniform vec3 u_lightProps[64];
+uniform vec3 u_ambient;
 
 void main() {
 	vec3 totalLights = vec3(0.0, 0.0, 0.0);
@@ -29,6 +30,7 @@ void main() {
 		float diffuse = max(dot(normalVec, lightVec), 0.0);
 		totalLights = totalLights + (u_lightColors[i] * light_percent * diffuse);
 	}
+    totalLights = totalLights + u_ambient;
 	normalize(totalLights);
 	gl_FragColor = (v_color * texture2D(u_texture, v_texCoords)) * vec4(totalLights, 1);
 }
