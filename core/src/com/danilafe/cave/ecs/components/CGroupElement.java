@@ -16,13 +16,9 @@ import com.danilafe.cave.runnable.ECSRunnable;
 public class CGroupElement implements Poolable, Component {
 
 	/**
-	 * The list of entities in the group this element belongs to. This corresponds to the element list.
+	 * The list of entities in the group this element belongs to.
 	 */
 	public ArrayList<Entity> entityList;
-	/**
-	 * The list of GroupElements in the same group as this one.
-	 */
-	public ArrayList<CGroupElement> elementList;
 	/**
 	 * The input button to move to the previous selection
 	 */
@@ -51,7 +47,6 @@ public class CGroupElement implements Poolable, Component {
 	@Override
 	public void reset() {
 		entityList = null;
-		elementList = null;
 		prevKey = 0;
 		nextKey = 0;
 		selected = false;
@@ -71,14 +66,11 @@ public class CGroupElement implements Poolable, Component {
 	 */
 	public static ArrayList<Entity> createGroup(int prevKey, int nextKey, ECSRunnable onSelect, float maxDelta, Entity ...entities){
 		ArrayList<Entity> entityList = new ArrayList<Entity>();
-		ArrayList<CGroupElement> groupElements = new ArrayList<CGroupElement>();
 		for(Entity e : entities){
 			entityList.add(e);
 			CGroupElement groupElement = CaveGame.instance.pooledEngine.createComponent(CGroupElement.class);
-			groupElements.add(groupElement);
 
 			groupElement.entityList = entityList;
-			groupElement.elementList = groupElements;
 			groupElement.maxDelta = maxDelta;
 			groupElement.nextKey = nextKey;
 			groupElement.onSelect = onSelect;
@@ -87,7 +79,7 @@ public class CGroupElement implements Poolable, Component {
 
 			e.add(groupElement);
 		}
-		groupElements.get(0).selected = true;
+		entityList.get(0).getComponent(CGroupElement.class).selected = true;
 		return entityList;
 	}
 

@@ -24,7 +24,7 @@ public class SelectableElementSystem extends IteratingSystem {
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		CGroupElement groupElement = entity.getComponent(CGroupElement.class);
-		int currentIndex = groupElement.elementList.indexOf(groupElement);
+		int currentIndex = groupElement.entityList.indexOf(entity);
 		int newIndex = currentIndex;
 		groupElement.curDelta -= deltaTime;
 		if(groupElement.curDelta < 0) groupElement.curDelta = 0;
@@ -34,12 +34,12 @@ public class SelectableElementSystem extends IteratingSystem {
 			boolean prevPressed = Gdx.input.isKeyPressed(groupElement.prevKey);
 			if(nextPressed && prevPressed) return;
 			CGroupElement newElement = null;
-			if(nextPressed && currentIndex != groupElement.elementList.size() - 1){
-				newElement = groupElement.elementList.get(++newIndex);
+			if(nextPressed && currentIndex != groupElement.entityList.size() - 1){
+				newElement = groupElement.entityList.get(++newIndex).getComponent(CGroupElement.class);
 
 			}
 			else if(prevPressed && groupElement.entityList.indexOf(entity) != 0){
-				newElement = groupElement.elementList.get(--newIndex);
+				newElement = groupElement.entityList.get(--newIndex).getComponent(CGroupElement.class);
 			}
 			if(newElement == null) return;
 
