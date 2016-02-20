@@ -13,9 +13,12 @@ import com.danilafe.cave.ecs.components.CDamageable;
 import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CDisappearing;
 import com.danilafe.cave.ecs.components.CFollow;
+import com.danilafe.cave.ecs.components.CGroupElement;
 import com.danilafe.cave.ecs.components.CHealth;
+import com.danilafe.cave.ecs.components.CInteractive;
 import com.danilafe.cave.ecs.components.CTile;
 import com.danilafe.cave.ecs.components.CWeapon;
+import com.danilafe.cave.ecs.components.CWeaponWielding;
 import com.danilafe.cave.health.DamageData;
 import com.danilafe.cave.item.ItemContainer;
 import com.danilafe.cave.item.ItemParameter;
@@ -111,6 +114,23 @@ public class Utils {
 	 */
 	public static void removeEntity(Entity e) {
 		CaveGame.instance.pooledEngine.removeEntity(e);
+		for(Entity entity : CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CFollow.class).get())) {
+			CFollow followC;
+			if((followC = entity.getComponent(CFollow.class)).following == e) followC.following = null;
+		}
+		for(Entity entity : CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CInteractive.class).get())) {
+			CInteractive interactiveC;
+			if((interactiveC = entity.getComponent(CInteractive.class)).lastInteraction == e) interactiveC.lastInteraction = null;
+			if(interactiveC.currentInteraction == e) interactiveC.currentInteraction = null;
+		}
+		for(Entity entity : CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CGroupElement.class).get())) {
+			CGroupElement groupElementC;
+			if((groupElementC = entity.getComponent(CGroupElement.class)).entityList.contains(e)) groupElementC.entityList.remove(e);
+		}
+		for(Entity entity : CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CWeaponWielding.class).get())){
+			CWeaponWielding weaponWieldingC;
+			if((weaponWieldingC = entity.getComponent(CWeaponWielding.class)).weaponEntity == e) weaponWieldingC.weaponEntity = null;
+		}
 	}
 
 	/**
