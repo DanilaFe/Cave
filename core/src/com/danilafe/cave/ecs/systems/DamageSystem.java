@@ -22,7 +22,7 @@ public class DamageSystem extends FamilySystem {
 	 * Creates a new damage system.
 	 */
 	public DamageSystem() {
-		super(Family.all(CDamageable.class, CBounds.class, CHealth.class).exclude(CDisabled.class).get(), Family.all(CDamageCause.class, CBounds.class).exclude(CDisabled.class).get());
+		super(Family.all(CDamageable.class, CBounds.class).exclude(CDisabled.class).get(), Family.all(CDamageCause.class, CBounds.class).exclude(CDisabled.class).get());
 	}
 
 	@Override
