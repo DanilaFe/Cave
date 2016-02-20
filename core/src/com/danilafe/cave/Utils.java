@@ -284,7 +284,7 @@ public class Utils {
 		CFollow follow = newEntity.getComponent(CFollow.class);
 		follow.following = damageSource;
 		CDisappearing disappearing = newEntity.getComponent(CDisappearing.class);
-		disappearing.remaingTime = createFrom.weaponParameter.duration;
+		disappearing.remaingTime = createFrom.weaponAttacks.duration;
 		CWeapon weapon = newEntity.getComponent(CWeapon.class);
 		Weapon createdWeapon = Weapon.create(createFrom);
 		weapon.weapon = createdWeapon;

@@ -29,5 +29,9 @@ public class ComboChain {
 	 * Room for error between combos
 	 */
 	public float comboWindowMin = 0, comboWindowMax = 0;
+	/**
+	 * The duration of this attack
+	 */
+	public float duration = 0;
 
 }
