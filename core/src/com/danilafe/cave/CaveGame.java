@@ -655,7 +655,12 @@ public class CaveGame extends ApplicationAdapter {
 				health.maxHealth = 10;
 				health.health = 10;
 				CFrictionObject frictionObject = pooledEngine.createComponent(CFrictionObject.class);
+				CAnimation animation = pooledEngine.createComponent(CAnimation.class);
+				Animation an = new Animation();
+				an.animationParameter = creationManager.animationParams.get("battleBox");
+				animation.animationQueue.add(an);
 
+				entity.add(animation);
 				entity.add(frictionObject);
 				entity.add(health);
 				entity.add(unloading);
