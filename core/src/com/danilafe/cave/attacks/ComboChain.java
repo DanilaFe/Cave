@@ -33,5 +33,9 @@ public class ComboChain {
 	 * The duration of this attack
 	 */
 	public float duration = 0;
+	/**
+	 * Whether no other controls should be allowed during this attack's duration
+	 */
+	public boolean lockInput = false;
 
 }
