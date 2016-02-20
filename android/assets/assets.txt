@@ -1,6 +1,7 @@
 [NormalTexture]
 cavetiles.png
 dungeontiles.png
+battlebox.png
 [RegularTexture]
 particles.png
 chest_large.png
