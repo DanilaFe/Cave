@@ -27,6 +27,8 @@ import com.danilafe.cave.ecs.components.CDamageCause;
 import com.danilafe.cave.ecs.components.CDamageable;
 import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CDisappearing;
+import com.danilafe.cave.ecs.components.CFacing;
+import com.danilafe.cave.ecs.components.CFacing.Direction;
 import com.danilafe.cave.ecs.components.CFollow;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
@@ -376,6 +378,8 @@ public class CaveGame extends ApplicationAdapter {
 				Animation an = new Animation();
 				an.animationParameter = creationManager.animationParams.get("caveTiles");
 				animation.animationQueue.add(an);
+				CFacing facing = pooledEngine.createComponent(CFacing.class);
+				entity.add(facing);
 				entity.add(animation);
 				entity.add(speedDamage);
 				entity.add(health);
