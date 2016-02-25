@@ -58,6 +58,8 @@ public class CameraSystem extends FamilySystem {
 				if(position.position.y < camView.camera.position.y - camView.maxOffsetY) camView.truePosition.y = position.position.y + camView.maxOffsetY;
 				if(position.position.y > camView.camera.position.y + camView.maxOffsetY) camView.truePosition.y = position.position.y - camView.maxOffsetY;
 				camView.camera.position.set(camView.truePosition.x, camView.truePosition.y, 0).add(camView.shakeOffset.x, camView.shakeOffset.y, 0).add(camView.worldOffset.x, camView.worldOffset.y, 0);
+				camView.camera.position.x = Math.round(camView.camera.position.x);
+				camView.camera.position.y = Math.round(camView.camera.position.y);
 				camView.camera.update();
 			}
 		}
