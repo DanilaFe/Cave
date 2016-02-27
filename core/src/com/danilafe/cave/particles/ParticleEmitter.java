@@ -71,7 +71,7 @@ public class ParticleEmitter {
 
 	/**
 	 * Updates this emitter.
-	 * @param deltaTime
+	 * @param deltaTime the delta time between steps
 	 */
 	public void update(float deltaTime) {
 		delay -= deltaTime;

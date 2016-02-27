@@ -39,8 +39,8 @@ public class FollowingSystem extends IteratingSystem {
 
 	/**
 	 * Recursively updates positions of all following elements
-	 * @param e
-	 * @param removeFrom
+	 * @param e the entity that's being updated
+	 * @param removeFrom the list of entities that are still to be processed
 	 */
 	public void recursiveFollow(Entity e, Array<Entity> removeFrom){
 		CFollow follow = e.getComponent(CFollow.class);

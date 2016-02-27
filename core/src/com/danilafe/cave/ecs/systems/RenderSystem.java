@@ -188,8 +188,8 @@ public class RenderSystem extends IteratingSystem {
 
 	/**
 	 * Gets (or generates) a texture from the given rotation (rotates normal maps)
-	 * @param sourceTexture
-	 * @param rotation
+	 * @param sourceTexture the texture to generte from
+	 * @param rotation the rotation to use
 	 * @return the texture rotated at the given angle
 	 */
 	public Texture getRotatedTexture(Texture sourceTexture, int rotation){

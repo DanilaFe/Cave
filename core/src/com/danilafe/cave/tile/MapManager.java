@@ -46,7 +46,7 @@ public class MapManager {
 	 * Returns the chunk at the given world position
 	 * @param x the x-position of the chunk
 	 * @param y the y-position of the chunk
-	 * @return
+	 * @return the chunk at the given position
 	 */
 	public Chunk getChunkAt(float x, float y){
 		// Special Cases

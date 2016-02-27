@@ -68,7 +68,7 @@ public class TileAnimation {
 	 * @param tileHeight the height of one frame
 	 * @param timeDelta the delta time between frames
 	 * @param isDifferent whether the tiles have variation based on location
-	 * @return
+	 * @return the tile animation created
 	 */
 	public static TileAnimation create(String textureName, int tileWidth, int tileHeight, float timeDelta, boolean isDifferent){
 		TileAnimation newAnimation = new TileAnimation();

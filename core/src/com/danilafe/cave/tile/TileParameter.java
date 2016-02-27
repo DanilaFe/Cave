@@ -22,6 +22,7 @@ public class TileParameter {
 	 * Creates a new tile from the given properties
 	 * @param aparameter the animations of this tile
 	 * @return the created TileParameter
+	 * @param entityType the type of the entity to create
 	 */
 	public static TileParameter create(TileAnimation aparameter, EntityDescriptor entityType) {
 		TileParameter parameter = new TileParameter();

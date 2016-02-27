@@ -22,7 +22,7 @@ public class Weapon {
 
 	/**
 	 * Creates a new weapon from this weapon descriptor
-	 * @param weaponDescriptor
+	 * @param weaponDescriptor the weapon descriptor to gnerate from
 	 * @return the created weapon
 	 */
 	public static Weapon create(WeaponDecriptor weaponDescriptor){
