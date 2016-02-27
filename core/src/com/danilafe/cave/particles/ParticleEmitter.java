@@ -55,7 +55,7 @@ public class ParticleEmitter {
 	/**
 	 * The type of entity that's spawned as a particle
 	 */
-	public String entityType;
+	public EntityDescriptor entityType;
 	/**
 	 * If true, and the spawned entity has a CMarked component, the emitter will add a "particle" marker to the component.
 	 */
@@ -68,10 +68,6 @@ public class ParticleEmitter {
 	 * The maximum amount over the minimum time this particle will live
 	 */
 	public float maxParticleLifeFluctuation;
-	/**
-	 * The descriptor of the entity type. Used for caching to prevent requesting the entity descriptor multiple times.
-	 */
-	private EntityDescriptor retreivedDescriptor;
 
 	/**
 	 * Updates this emitter.
@@ -80,7 +76,7 @@ public class ParticleEmitter {
 	public void update(float deltaTime) {
 		delay -= deltaTime;
 		while(delay <= 0){
-			if(retreivedDescriptor == null) retreivedDescriptor = CaveGame.instance.creationManager.entityDescriptors.get(entityType);
+			if(entityType == null) return;
 			float addedDelay = (float) (Math.random() * maxDelayFluctuation + minDelay);
 			float direction = (float) (Math.random() * maxDirectionFluctuation + minDirection);
 			float distance = (float) (Math.random() * maxRangeFluctuation + minRange);
@@ -91,7 +87,7 @@ public class ParticleEmitter {
 			offset.setLength(distance);
 			offset.add(position).add(this.offset);
 
-			Entity newParticle = retreivedDescriptor.create(offset.x, offset.y);
+			Entity newParticle = entityType.create(offset.x, offset.y);
 			if(markAsParticle && Family.all(CMarked.class).exclude(CDisabled.class).get().matches(newParticle)) newParticle.getComponent(CMarked.class).marks.put("particle", true);
 			CDisappearing disappearing = CaveGame.instance.pooledEngine.createComponent(CDisappearing.class);
 			disappearing.remaingTime = life;
@@ -101,7 +97,24 @@ public class ParticleEmitter {
 		}
 	}
 
-	public void set(float x, float y, float minDelay, float maxDelayF, float minDistance, float maxDistanceF, float minDir, float maxDirF, float minLife, float maxLifeF, String entityType, boolean markAsParticle, float offsetX, float offsetY){
+	/**
+	 * Sets this emitter to use the given parameters
+	 * @param x the x-position of the emitter
+	 * @param y the y-position of the emitter
+	 * @param minDelay the minimum delay between emissions
+	 * @param maxDelayF the maximum amount by which the minimum delay can increase
+	 * @param minDistance the minimum distances from the emitter
+	 * @param maxDistanceF the maximum amount by which the minimum distance can increase
+	 * @param minDir the minimum direction of particles from the emitter
+	 * @param maxDirF the maximum mount by which the minimum direction can increase
+	 * @param minLife the minimum lifespan of entities
+	 * @param maxLifeF the max fluctuation in the lifespan of entities
+	 * @param entityType the entity parameter of this emitter
+	 * @param markAsParticle whether to mark this entity as a particle
+	 * @param offsetX the x-offset of the emitter
+	 * @param offsetY the y-offset of the emitter
+	 */
+	public void set(float x, float y, float minDelay, float maxDelayF, float minDistance, float maxDistanceF, float minDir, float maxDirF, float minLife, float maxLifeF, EntityDescriptor entityType, boolean markAsParticle, float offsetX, float offsetY){
 		position.set(x, y);
 		this.minDelay = minDelay;
 		maxDelayFluctuation = maxDelayF;

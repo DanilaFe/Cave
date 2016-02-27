@@ -73,6 +73,9 @@ public class RenderSystem extends IteratingSystem {
 	 */
 	public HashMap<Texture, HashMap<Integer, Texture>> rotatedTextures;
 
+	/**
+	 * Creates a new render sytem
+	 */
 	public RenderSystem() {
 		super(Family.all(CAnimation.class, CPosition.class).exclude(CDisabled.class).get());
 		textureBatch = new SpriteBatch();
@@ -183,6 +186,12 @@ public class RenderSystem extends IteratingSystem {
 		textureBuffer.dispose();
 	}
 
+	/**
+	 * Gets (or generates) a texture from the given rotation (rotates normal maps)
+	 * @param sourceTexture
+	 * @param rotation
+	 * @return the texture rotated at the given angle
+	 */
 	public Texture getRotatedTexture(Texture sourceTexture, int rotation){
 		if(rotatedTextures.get(sourceTexture) == null) rotatedTextures.put(sourceTexture, new HashMap<Integer, Texture>());
 		HashMap<Integer, Texture> rotatedVersions = rotatedTextures.get(sourceTexture);

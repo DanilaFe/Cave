@@ -16,7 +16,6 @@ public class DisappearingSystem extends IteratingSystem {
 
 	/**
 	 * Creates a new DisappearingSystem
-	 * @param family
 	 */
 	public DisappearingSystem() {
 		super(Family.all(CDisappearing.class).exclude(CDisabled.class).get());

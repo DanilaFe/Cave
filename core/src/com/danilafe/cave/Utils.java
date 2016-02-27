@@ -64,6 +64,12 @@ public class Utils {
 		return false;
 	}
 
+	/**
+	 * Checks whether the two rectangles' edges are touching
+	 * @param primary the rectangle whose edges are checked
+	 * @param secondary the angle against which is check against
+	 * @return true if edges are in contact
+	 */
 	public static boolean checkEdgeContact(Rectangle primary, Rectangle secondary) {
 		for (int i = 0; i < 4; i++)
 			if (checkEdgeContact(i, primary, secondary))
@@ -163,6 +169,10 @@ public class Utils {
 		}
 	}
 
+	/**
+	 * Updates the tile's animation and orientation based on its surroundings
+	 * @param tile the tile to update
+	 */
 	public static void updateTileNeighbors(Tile tile) {
 		Vector2 worldPos = tile.position.cpy().add(tile.myChunk.position);
 
@@ -227,6 +237,10 @@ public class Utils {
 
 	}
 
+	/**
+	 * Updates all the tiles nearby the given location position
+	 * @param center the position to update around
+	 */
 	public static void updateNearby(Vector2 center){
 		Tile placeholderTile;
 		if((placeholderTile = CaveGame.instance.mapManager.getTile((int) center.x,(int) center.y)) != null) updateTileNeighbors(placeholderTile);
@@ -236,6 +250,15 @@ public class Utils {
 		if((placeholderTile = CaveGame.instance.mapManager.getTile((int) center.x,(int) center.y - Constants.TILE_SIZE)) != null) updateTileNeighbors(placeholderTile);
 	}
 
+	/**
+	 * Shakes the camera.
+	 * @param shake The camerashake component that this is being applied to
+	 * @param delay delay between switching shake directions
+	 * @param maxDelay maximum delay between switching shake directions
+	 * @param distance the distances from the player the shake should go
+	 * @param resetThreshold how small the distance has to become before it's set to 0
+	 * @param distanceDamping by how much distance is reduced
+	 */
 	public static void shake(CCameraShake shake, float delay, float maxDelay, float distance, float resetThreshold, float distanceDamping){
 		shake.delay = delay;
 		shake.maxDelay = maxDelay;
@@ -277,7 +300,7 @@ public class Utils {
 	 * Creates a new weapon entity from the given descriptor. <br>
 	 * @param damageSource the entity who created this weapon
 	 * @param createFrom the weapon descriptor
-	 * @return
+	 * @return the created weapon entity
 	 */
 	public static Entity createWeaponEntity(Entity damageSource, WeaponDecriptor createFrom) {
 		Entity newEntity = createFrom.entityDescriptor.create(0, 0);

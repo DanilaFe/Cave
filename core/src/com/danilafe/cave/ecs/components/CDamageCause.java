@@ -7,17 +7,43 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.danilafe.cave.runnable.ECSRunnable;
 
+/**
+ * A component describing an entity that causes damage
+ * @author vanilla
+ *
+ */
 public class CDamageCause implements Poolable, Component {
 
+	/**
+	 * The damage this entity causes
+	 */
 	public float damage = 0;
+	/**
+	 * The knockback this entity causes
+	 */
 	public float knockback = 0;
+	/**
+	 * Additional knockback from this entity
+	 */
 	public Vector2 additionalKnockback = new Vector2(0, 0);
 
+	/**
+	 * Delay before this entity is able to hit again
+	 */
 	public float delay;
+	/**
+	 * The maximum delay before this entity is able to hit again
+	 */
 	public float maxDelay;
 
+	/**
+	 * ECSRunnable executed when this entity damages something
+	 */
 	public ECSRunnable onDamage;
 
+	/**
+	 * A list of teams this entity hits
+	 */
 	public ArrayList<String> teams = new ArrayList<String>();
 
 	@Override

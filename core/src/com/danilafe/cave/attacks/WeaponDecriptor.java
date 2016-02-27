@@ -23,6 +23,13 @@ public class WeaponDecriptor {
 	 */
 	public EntityDescriptor entityDescriptor = null;
 
+	/**
+	 * Creates a new weapon descriptor from its properties
+	 * @param parameter the weapon parameter
+	 * @param chain the combo chain this weapon starts with
+	 * @param entity the entity descriptor used to create a weapon entity
+	 * @return the created weapon descriptor
+	 */
 	public static WeaponDecriptor create(WeaponParameter parameter, ComboChain chain, EntityDescriptor entity){
 		WeaponDecriptor weaponDescriptor = new WeaponDecriptor();
 		weaponDescriptor.weaponParameter = parameter;

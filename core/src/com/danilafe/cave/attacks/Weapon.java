@@ -20,6 +20,11 @@ public class Weapon {
 	 */
 	public float remainingDuration = 0;
 
+	/**
+	 * Creates a new weapon from this weapon descriptor
+	 * @param weaponDescriptor
+	 * @return the created weapon
+	 */
 	public static Weapon create(WeaponDecriptor weaponDescriptor){
 		Weapon newWeapon = new Weapon();
 		newWeapon.parameter = weaponDescriptor.weaponParameter;

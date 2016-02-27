@@ -26,9 +26,13 @@ public class ComboChain {
 	 */
 	public ECSRunnable onTrigger;
 	/**
-	 * Room for error between combos
+	 * The lower bound of the error room during which this attack can be triggered
 	 */
-	public float comboWindowMin = 0, comboWindowMax = 0;
+	public float comboWindowMin = 0;
+	/**
+	 * The upper bound of the error room during which this attack can be triggered
+	 */
+	public float comboWindowMax = 0;
 	/**
 	 * The duration of this attack
 	 */

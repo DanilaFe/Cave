@@ -101,18 +101,34 @@ public class FamilySystem extends EntitySystem {
 		entitiesB = null;
 	}
 
+	/**
+	 * Executed when an entity from group A is added
+	 * @param e the entity added
+	 */
 	public void entityAAdded(Entity e){
 
 	}
 
+	/**
+	 * Executed when an entity from group A is removed
+	 * @param e the entity added
+	 */
 	public void entityARemoved(Entity e){
 
 	}
 
+	/**
+	 * Executed when an entity from group B is added
+	 * @param e the entity added
+	 */
 	public void entityBAdded(Entity e){
 
 	}
 
+	/**
+	 * Executed when an entity from group B is removed
+	 * @param e the entity added
+	 */
 	public void entityBRemoved(Entity e){
 
 	}

@@ -15,6 +15,9 @@ public class CDisappearing implements Poolable, Component {
 	 * Time remaining before the disappearance
 	 */
 	public float remaingTime = 0;
+	/**
+	 * Executed when this entity disappears
+	 */
 	public ECSRunnable onRemove = null;
 
 	@Override

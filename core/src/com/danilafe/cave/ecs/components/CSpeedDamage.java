@@ -11,8 +11,17 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  */
 public class CSpeedDamage implements Poolable, Component {
 
+	/**
+	 * Previous speed of this entity
+	 */
 	public Vector2 previousSpeed = new Vector2(Float.MAX_VALUE, Float.MAX_VALUE);
+	/**
+	 * Maximum speed change before damage is dealt
+	 */
 	public float maxSpeed = Float.MAX_VALUE;
+	/**
+	 * How much damage is dealt for exceeding the speed limit
+	 */
 	public float damagePerUnit = 0;
 
 	@Override

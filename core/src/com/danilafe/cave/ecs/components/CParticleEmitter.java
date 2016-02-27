@@ -18,7 +18,7 @@ public class CParticleEmitter implements Poolable, Component{
 
 	@Override
 	public void reset() {
-		emitter.entityType = "";
+		emitter = new ParticleEmitter();
 	}
 
 }
