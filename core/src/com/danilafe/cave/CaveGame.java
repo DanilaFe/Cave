@@ -48,6 +48,7 @@ import com.danilafe.cave.ecs.components.CSpeedDamage;
 import com.danilafe.cave.ecs.components.CStepper;
 import com.danilafe.cave.ecs.components.CUnloading;
 import com.danilafe.cave.ecs.components.CWeapon;
+import com.danilafe.cave.ecs.components.CWeaponWielding;
 import com.danilafe.cave.ecs.systems.AccelerationSystem;
 import com.danilafe.cave.ecs.systems.BoundsSystem;
 import com.danilafe.cave.ecs.systems.CameraSystem;
@@ -74,9 +75,11 @@ import com.danilafe.cave.item.ItemParameter;
 import com.danilafe.cave.runnable.ECSRunnable;
 import com.danilafe.cave.tile.ChunkAnchor;
 import com.danilafe.cave.tile.MapManager;
-import com.danilafe.cave.tile.Tile;
 import com.danilafe.cave.tile.TileAnimation;
 import com.danilafe.cave.tile.TileParameter;
+import com.danilafe.cave.world.DefaultLevelManager;
+import com.danilafe.cave.world.LevelData;
+import com.danilafe.cave.world.LevelManager;
 
 /**
  * CaveGame - Main class of Cave.
@@ -263,41 +266,39 @@ public class CaveGame extends ApplicationAdapter {
 		loadAssets();
 		loadCreation();
 
-		TileParameter newTileParam = creationManager.tileParameters.get("placeholderCavetilesParameter");
+		LevelData levelData = new LevelData();
+		LevelManager levelManager = new DefaultLevelManager();
+
 		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderPlayer").create(50, 50));
 		for(int i = 0; i < 10; i ++){
-			Tile newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
-			mapManager.setTile(newTile, Constants.TILE_SIZE * i, 0);
-			newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
-			mapManager.setTile(newTile, Constants.TILE_SIZE * i, 8);
-			newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
-			mapManager.setTile(newTile, Constants.TILE_SIZE * i, 16);
-			newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
-			mapManager.setTile(newTile, Constants.TILE_SIZE * i, 24);
-			newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
-			mapManager.setTile(newTile, 0, Constants.TILE_SIZE * (i));
-			newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
-			mapManager.setTile(newTile, 8, Constants.TILE_SIZE * (i));
-			newTile = Tile.create(newTileParam, (int)(Math.random() * 3));
-			mapManager.setTile(newTile, 72, Constants.TILE_SIZE * (i));
+			levelData.addTile("placeholderCavetilesParameter", Constants.TILE_SIZE * i, 0, (int) (Math.random() * 3));
+			levelData.addTile("placeholderCavetilesParameter", Constants.TILE_SIZE * i, 8, (int) (Math.random() * 3));
+			levelData.addTile("placeholderCavetilesParameter", Constants.TILE_SIZE * i, 16, (int) (Math.random() * 3));
+			levelData.addTile("placeholderCavetilesParameter", 0, Constants.TILE_SIZE * i, (int) (Math.random() * 3));
+			levelData.addTile("placeholderCavetilesParameter", 8, Constants.TILE_SIZE * i, (int) (Math.random() * 3));
+			levelData.addTile("placeholderCavetilesParameter", 72, Constants.TILE_SIZE * i, (int) (Math.random() * 3));
+			levelData.addTile("placeholderCavetilesParameter", 80, Constants.TILE_SIZE * i, (int) (Math.random() * 3));
 		}
-		mapManager.setTile(Tile.create(newTileParam, (int)(Math.random() * 3)), 8, 16);
+		levelData.addTile("placeholderCavetilesParameter", 8, 16, (int) (Math.random() * 3));
 
-		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderJumpBoost").create(64, 24));
+		levelData.addEntity("placeholderJumpBoost", 64, 16);
 
-		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderCrystal").create(16, 32));
-		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderChest").create(72, 80));
-		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderJumpBoost").create(72, 72));
+		levelData.addEntity("placeholderCrystal", 16, 24);
+		levelData.addEntity("placeholderChest", 72, 80);
+		levelData.addEntity("placeholderJumpBoost", 72, 72);
 
-		pooledEngine.addEntity(creationManager.entityDescriptors.get("battleBox").create(32, 75));
+		levelData.addEntity("battleBox", 32, 75);
 
-		for (int i = 0; i < 16; i ++){
-			pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderLightball").create((float) (Math.random() * 160), (float)(Math.random() * 160)));
+		for (int i = 0; i < 64; i ++){
+			levelData.addEntity("placeholderLightball", (float) (Math.random() * 160), (float)(Math.random() * 160));
 		}
 
 		if(Constants.DEBUG){
-			pooledEngine.addEntity(creationManager.entityDescriptors.get("debugger").create(0, 0));
+			levelData.addEntity("debugger", 0, 0);
+
 		}
+
+		levelManager.load(levelData);
 
 	}
 
@@ -334,8 +335,12 @@ public class CaveGame extends ApplicationAdapter {
 						CFrictionObject myFriction = me.getComponent(CFrictionObject.class);
 						CBounds myBounds = me.getComponent(CBounds.class);
 						boolean enableFriction = true;
-						Entity myWeapon;
-						if((myWeapon = me.getComponent(CWeaponWielding.class).weaponEntity) == null || !myWeapon.getComponent(CWeapon.class).weapon.currentChain.lockInput){
+						CWeaponWielding myWielding = null;
+						Entity myWeapon = null;
+						boolean hasWielding = (myWielding = me.getComponent(CWeaponWielding.class)) != null;
+						boolean hasWeapon = (hasWielding && (myWeapon = myWielding.weaponEntity) != null);
+						boolean weaponLocked = (hasWeapon && myWeapon.getComponent(CWeapon.class).weapon.currentChain.lockInput);
+						if(!hasWielding || !(hasWeapon && weaponLocked)){
 							if(Gdx.input.isKeyPressed(Keys.RIGHT) && Math.abs(mySpeed.speed.x) < 75 ) {
 								mySpeed.speed.x += 100F * deltaTime;
 								myFacing.facing = Direction.RIGHT;
@@ -385,6 +390,7 @@ public class CaveGame extends ApplicationAdapter {
 				an.animationParameter = creationManager.animationParams.get("caveTiles");
 				animation.animationQueue.add(an);
 				CFacing facing = pooledEngine.createComponent(CFacing.class);
+
 				entity.add(facing);
 				entity.add(animation);
 				entity.add(speedDamage);
