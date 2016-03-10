@@ -330,19 +330,25 @@ public class CaveGame extends ApplicationAdapter {
 					@Override
 					public void update(Entity me, float deltaTime) {
 						CSpeed mySpeed = me.getComponent(CSpeed.class);
+						CFacing myFacing = me.getComponent(CFacing.class);
 						CFrictionObject myFriction = me.getComponent(CFrictionObject.class);
 						CBounds myBounds = me.getComponent(CBounds.class);
 						boolean enableFriction = true;
-						if(Gdx.input.isKeyPressed(Keys.RIGHT) && Math.abs(mySpeed.speed.x) < 75 ) {
-							mySpeed.speed.x += 100F * deltaTime;
-							enableFriction = false;
-						}
-						if(Gdx.input.isKeyPressed(Keys.LEFT) && Math.abs(mySpeed.speed.x) < 75) {
-							mySpeed.speed.x -= 100F * deltaTime;
-							enableFriction = false;
-						}
-						if(Gdx.input.isKeyPressed(Keys.SPACE) && normalSystem.checkNormalEdge(2, myBounds.bounds)){
-							mySpeed.speed.y += 150;
+						Entity myWeapon;
+						if((myWeapon = me.getComponent(CWeaponWielding.class).weaponEntity) == null || !myWeapon.getComponent(CWeapon.class).weapon.currentChain.lockInput){
+							if(Gdx.input.isKeyPressed(Keys.RIGHT) && Math.abs(mySpeed.speed.x) < 75 ) {
+								mySpeed.speed.x += 100F * deltaTime;
+								myFacing.facing = Direction.RIGHT;
+								enableFriction = false;
+							}
+							if(Gdx.input.isKeyPressed(Keys.LEFT) && Math.abs(mySpeed.speed.x) < 75) {
+								mySpeed.speed.x -= 100F * deltaTime;
+								myFacing.facing = Direction.LEFT;
+								enableFriction = false;
+							}
+							if(Gdx.input.isKeyPressed(Keys.SPACE) && normalSystem.checkNormalEdge(2, myBounds.bounds)){
+								mySpeed.speed.y += 150;
+							}
 						}
 						myFriction.frictionCoefficient.x = (enableFriction) ? 1 : 0;
 					}
