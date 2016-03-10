@@ -10,7 +10,7 @@ import com.badlogic.gdx.Preferences;
  * @author vanilla
  *
  */
-public class KeyBinds {
+public class KeyBinds{
 
 	/**
 	 * Cached preferences
@@ -25,7 +25,6 @@ public class KeyBinds {
 	 * The mapped keys.
 	 */
 	public HashMap<String, Integer> mappedKeys = new HashMap<String, Integer>();
-
 	/**
 	 * Creates a new mapping for the given key.
 	 * @param s the key to map

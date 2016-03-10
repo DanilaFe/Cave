@@ -387,4 +387,29 @@ public class Utils {
 		DataOutputStream dataOutputStream = new DataOutputStream(writeTo);
 		dataOutputStream.writeFloat(f);
 	}
+
+	/**
+	 * Writes the given string to the given output stream
+	 * @param writeTo the stream to write to
+	 * @param s the string to write
+	 * @throws IOException
+	 */
+	public static void writeString(OutputStream writeTo, String s) throws IOException {
+		writeTo.write(s.length());
+		writeTo.write(s.getBytes());
+	}
+
+	/**
+	 * Reads a string from the given input stream
+	 * @param readFrom the stream to read from
+	 * @return the produced string
+	 * @throws IOException
+	 */
+	public static String readString(InputStream readFrom) throws IOException {
+		int length = readFrom.read();
+		byte[] newBuffer = new byte[length];
+		readFrom.read(newBuffer);
+
+		return new String(newBuffer);
+	}
 }
