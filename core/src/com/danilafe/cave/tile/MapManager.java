@@ -226,9 +226,7 @@ public class MapManager {
 			float chunkX = (float) Math.floor(entityPosition.position.x / Constants.CHUNK_SIZE) * Constants.CHUNK_SIZE;
 			float chunkY = (float) Math.floor(entityPosition.position.y / Constants.CHUNK_SIZE) * Constants.CHUNK_SIZE;
 			if(chunkX == chunk.position.x && chunkY == chunk.position.y ){
-				CDisabled disabled = CaveGame.instance.pooledEngine.createComponent(CDisabled.class);
-				disabled.reason = "chunked";
-				e.add(disabled);
+				Utils.chunkEntity(e);
 
 				i = -1;
 				unloadableEntities = CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CUnloading.class, CPosition.class).exclude(CDisabled.class).get());

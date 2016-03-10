@@ -69,6 +69,7 @@ import com.danilafe.cave.ecs.systems.SelectableElementSystem;
 import com.danilafe.cave.ecs.systems.SpeedDamageSystem;
 import com.danilafe.cave.ecs.systems.StepperSystem;
 import com.danilafe.cave.ecs.systems.TileSystem;
+import com.danilafe.cave.ecs.systems.UnloadingSystem;
 import com.danilafe.cave.ecs.systems.WeaponSystem;
 import com.danilafe.cave.item.ItemContainer;
 import com.danilafe.cave.item.ItemParameter;
@@ -179,6 +180,10 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public WeaponSystem weaponSystem;
 	/**
+	 * Unloads entities
+	 */
+	public UnloadingSystem unloadingSystem;
+	/**
 	 * Camera used to look into the game world.
 	 */
 	public OrthographicCamera orthoCam;
@@ -235,6 +240,7 @@ public class CaveGame extends ApplicationAdapter {
 		speedDamageSystem = new SpeedDamageSystem();
 		damageSystem = new DamageSystem();
 		weaponSystem = new WeaponSystem();
+		unloadingSystem = new UnloadingSystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
@@ -259,6 +265,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(damageSystem);
 		pooledEngine.addSystem(speedDamageSystem);
 		pooledEngine.addSystem(weaponSystem);
+		pooledEngine.addSystem(unloadingSystem);
 
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();

@@ -412,4 +412,15 @@ public class Utils {
 
 		return new String(newBuffer);
 	}
+
+	/**
+	 * Disables the entity in the game world
+	 * @param e the entity to disable
+	 */
+	public static void chunkEntity(Entity e) {
+		CDisabled disabled = CaveGame.instance.pooledEngine.createComponent(CDisabled.class);
+		disabled.reason = "chunked";
+		e.add(disabled);
+	}
+
 }
