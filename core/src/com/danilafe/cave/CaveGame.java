@@ -519,7 +519,7 @@ public class CaveGame extends ApplicationAdapter {
 					}
 				};
 				CBounds bounds = pooledEngine.createComponent(CBounds.class);
-				bounds.bounds.setSize(8, 8);
+				bounds.bounds.setSize(Constants.TILE_SIZE, Constants.TILE_SIZE);
 				CInteractive interactive = pooledEngine.createComponent(CInteractive.class);
 				interactive.maxInteractDelay = .5F;
 				interactive.interactKey = Keys.SHIFT_LEFT;
@@ -645,7 +645,7 @@ public class CaveGame extends ApplicationAdapter {
 				CPosition position = pooledEngine.createComponent(CPosition.class);
 				position.position.set(x, y);
 				CBounds bounds = pooledEngine.createComponent(CBounds.class);
-				bounds.bounds.setSize(8, 8).setCenter(x, y);
+				bounds.bounds.setSize(Constants.TILE_SIZE, Constants.TILE_SIZE).setCenter(x, y);
 				CDamageCause damageCause = pooledEngine.createComponent(CDamageCause.class);
 				damageCause.damage = 0;
 				damageCause.additionalKnockback.set(0, 100);
