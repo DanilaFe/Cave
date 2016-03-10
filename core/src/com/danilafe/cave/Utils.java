@@ -1,5 +1,11 @@
 package com.danilafe.cave;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
@@ -313,5 +319,97 @@ public class Utils {
 		weapon.weapon = createdWeapon;
 
 		return newEntity;
+	}
+
+	/**
+	 * Reads a vector from the given input stream
+	 * @param readFrom the stream to read from
+	 * @return the produced vector
+	 * @throws IOException
+	 */
+	public static Vector2 readVector(InputStream readFrom) throws IOException {
+		DataInputStream inputStream = new DataInputStream(readFrom);
+		return new Vector2(inputStream.readFloat(), inputStream.readFloat());
+	}
+
+	/**
+	 * Writes a vector to the given output stream
+	 * @param writeTo the stream to rite to
+	 * @param vec the vector to write
+	 * @throws IOException
+	 */
+	public static void writeVector(OutputStream writeTo, Vector2 vec) throws IOException {
+		DataOutputStream outputStream = new DataOutputStream(writeTo);
+		outputStream.writeFloat(vec.x);
+		outputStream.writeFloat(vec.y);
+	}
+
+	/**
+	 * Reads an integer from the given stream
+	 * @param readFrom the stream to read from
+	 * @return the produced int
+	 * @throws IOException
+	 */
+	public static int readInt(InputStream readFrom) throws IOException {
+		DataInputStream inputStream = new DataInputStream(readFrom);
+		return inputStream.readInt();
+	}
+
+	/**
+	 * Writes an integer to the given stream
+	 * @param writeTo the stream to write to
+	 * @param i the integer to write
+	 * @throws IOException
+	 */
+	public static void writeInt(OutputStream writeTo, int i) throws IOException {
+		DataOutputStream dataOutputStream = new DataOutputStream(writeTo);
+		dataOutputStream.writeInt(i);
+	}
+
+	/**
+	 * Reads a float from the given input stream
+	 * @param readFrom the stream to read from
+	 * @return the produced float
+	 * @throws IOException
+	 */
+	public static float readFloat(InputStream readFrom) throws IOException {
+		DataInputStream inputStream = new DataInputStream(readFrom);
+		return inputStream.readFloat();
+	}
+
+	/**
+	 * Writes the given float to the given stream
+	 * @param writeTo the stream to write to
+	 * @param f the float to write
+	 * @throws IOException
+	 */
+	public static void writeFloat(OutputStream writeTo, float f) throws IOException {
+		DataOutputStream dataOutputStream = new DataOutputStream(writeTo);
+		dataOutputStream.writeFloat(f);
+	}
+
+	/**
+	 * Writes the given string to the given output stream
+	 * @param writeTo the stream to write to
+	 * @param s the string to write
+	 * @throws IOException
+	 */
+	public static void writeString(OutputStream writeTo, String s) throws IOException {
+		writeTo.write(s.length());
+		writeTo.write(s.getBytes());
+	}
+
+	/**
+	 * Reads a string from the given input stream
+	 * @param readFrom the stream to read from
+	 * @return the produced string
+	 * @throws IOException
+	 */
+	public static String readString(InputStream readFrom) throws IOException {
+		int length = readFrom.read();
+		byte[] newBuffer = new byte[length];
+		readFrom.read(newBuffer);
+
+		return new String(newBuffer);
 	}
 }
