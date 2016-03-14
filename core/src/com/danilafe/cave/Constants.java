@@ -32,7 +32,7 @@ public class Constants {
 	 */
 	public static final int CHUNK_SIZE = TILE_SIZE * 8;
 	/**
-	 *
+	 * The size of a GUI unit
 	 */
 	public static final int GUI_UNIT_SIZE = TILE_SIZE;
 

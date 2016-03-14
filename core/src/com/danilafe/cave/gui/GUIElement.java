@@ -2,6 +2,8 @@ package com.danilafe.cave.gui;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * GUIElement used for displaying GUI onto the screen.
  * @author vanilla
@@ -9,6 +11,10 @@ import java.util.ArrayList;
  */
 public class GUIElement {
 
+	/**
+	 * Whether this element is selected
+	 */
+	public boolean selected;
 	/**
 	 * Width of GUI element
 	 */
@@ -29,6 +35,10 @@ public class GUIElement {
 	 * the background texture of this element
 	 */
 	public GUITexture guiTexture;
+	/**
+	 * The position of this element inside the world. Only if it's top level.
+	 */
+	public Vector2 worldPos = new Vector2(0, 0);
 
 	/**
 	 * ArrayList of all children of this element.

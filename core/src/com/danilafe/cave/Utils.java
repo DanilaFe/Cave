@@ -3,6 +3,7 @@ package com.danilafe.cave;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -19,6 +20,7 @@ import com.danilafe.cave.ecs.components.CInteractive;
 import com.danilafe.cave.ecs.components.CTile;
 import com.danilafe.cave.ecs.components.CWeapon;
 import com.danilafe.cave.ecs.components.CWeaponWielding;
+import com.danilafe.cave.gui.GUIElement;
 import com.danilafe.cave.health.DamageData;
 import com.danilafe.cave.item.ItemContainer;
 import com.danilafe.cave.item.ItemParameter;
@@ -291,4 +293,30 @@ public class Utils {
 
 		return newEntity;
 	}
+
+	/**
+	 * Renders the given GUI element onto sprite batch provided (using world coords)
+	 * @param element the element to render
+	 * @param renderTo the batch to render to
+	 */
+	public static void renderGUIElement(GUIElement element, SpriteBatch renderTo) {
+		for(int w = 1; w < element.width - 1; w++){
+			renderTo.draw(element.guiTexture.textureRegion[1][0], element.worldPos.x + w * Constants.GUI_UNIT_SIZE, element.worldPos.y);
+			renderTo.draw(element.guiTexture.textureRegion[1][2], element.worldPos.x + w * Constants.GUI_UNIT_SIZE, element.worldPos.y + (element.height - 1) * Constants.GUI_UNIT_SIZE);
+			for(int h = 1; h < element.height -1; h++){
+				renderTo.draw(element.guiTexture.textureRegion[1][1], element.worldPos.x + w * Constants.GUI_UNIT_SIZE, element.worldPos.y + h * Constants.GUI_UNIT_SIZE);
+			}
+		}
+
+		for(int h = 1; h < element.height - 1; h++){
+			renderTo.draw(element.guiTexture.textureRegion[0][1], element.worldPos.x, element.worldPos.y + h * Constants.GUI_UNIT_SIZE);
+			renderTo.draw(element.guiTexture.textureRegion[0][1], element.worldPos.x + (element.width - 1) * Constants.GUI_UNIT_SIZE, element.worldPos.y + h * Constants.GUI_UNIT_SIZE);
+		}
+
+		renderTo.draw(element.guiTexture.textureRegion[0][0], element.worldPos.x, element.worldPos.y);
+		renderTo.draw(element.guiTexture.textureRegion[2][0], element.worldPos.x + (element.width - 1) * Constants.GUI_UNIT_SIZE, element.worldPos.y);
+		renderTo.draw(element.guiTexture.textureRegion[0][2], element.worldPos.x, element.worldPos.y + (element.height - 1) * Constants.GUI_UNIT_SIZE);
+		renderTo.draw(element.guiTexture.textureRegion[2][2], element.worldPos.x + (element.width - 1) * Constants.GUI_UNIT_SIZE, element.worldPos.y + (element.height - 1) * Constants.GUI_UNIT_SIZE);
+	}
+
 }

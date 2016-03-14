@@ -28,7 +28,6 @@ import com.danilafe.cave.ecs.components.CDamageable;
 import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CDisappearing;
 import com.danilafe.cave.ecs.components.CFacing;
-import com.danilafe.cave.ecs.components.CFacing.Direction;
 import com.danilafe.cave.ecs.components.CFollow;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
@@ -57,6 +56,7 @@ import com.danilafe.cave.ecs.systems.DisappearingSystem;
 import com.danilafe.cave.ecs.systems.EmitterSystem;
 import com.danilafe.cave.ecs.systems.FollowingSystem;
 import com.danilafe.cave.ecs.systems.FrictionSystem;
+import com.danilafe.cave.ecs.systems.GUISystem;
 import com.danilafe.cave.ecs.systems.GravitySystem;
 import com.danilafe.cave.ecs.systems.InteractionSystem;
 import com.danilafe.cave.ecs.systems.ItemSystem;
@@ -176,6 +176,10 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public WeaponSystem weaponSystem;
 	/**
+	 * Handles all the GUI-ey stuff.
+	 */
+	public GUISystem guiSystem;
+	/**
 	 * Camera used to look into the game world.
 	 */
 	public OrthographicCamera orthoCam;
@@ -232,6 +236,7 @@ public class CaveGame extends ApplicationAdapter {
 		speedDamageSystem = new SpeedDamageSystem();
 		damageSystem = new DamageSystem();
 		weaponSystem = new WeaponSystem();
+		guiSystem = new GUISystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
@@ -256,6 +261,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(damageSystem);
 		pooledEngine.addSystem(speedDamageSystem);
 		pooledEngine.addSystem(weaponSystem);
+		pooledEngine.addSystem(guiSystem);
 
 		assetManager = new AssetManager();
 		creationManager = new CreationManager();
