@@ -48,7 +48,6 @@ import com.danilafe.cave.ecs.components.CSpeedDamage;
 import com.danilafe.cave.ecs.components.CStepper;
 import com.danilafe.cave.ecs.components.CUnloading;
 import com.danilafe.cave.ecs.components.CWeapon;
-import com.danilafe.cave.ecs.components.CWeaponWielding;
 import com.danilafe.cave.ecs.systems.AccelerationSystem;
 import com.danilafe.cave.ecs.systems.BoundsSystem;
 import com.danilafe.cave.ecs.systems.CameraSystem;
@@ -342,12 +341,8 @@ public class CaveGame extends ApplicationAdapter {
 						CFrictionObject myFriction = me.getComponent(CFrictionObject.class);
 						CBounds myBounds = me.getComponent(CBounds.class);
 						boolean enableFriction = true;
-						CWeaponWielding myWielding = null;
-						Entity myWeapon = null;
-						boolean hasWielding = (myWielding = me.getComponent(CWeaponWielding.class)) != null;
-						boolean hasWeapon = (hasWielding && (myWeapon = myWielding.weaponEntity) != null);
-						boolean weaponLocked = (hasWeapon && myWeapon.getComponent(CWeapon.class).weapon.currentChain.lockInput);
-						if(!hasWielding || !(hasWeapon && weaponLocked)){
+						CMarked marked = me.getComponent(CMarked.class);
+						if(marked.marks.get("controls_locked") == null || !marked.marks.get("controls_locked")){
 							if(Gdx.input.isKeyPressed(Keys.RIGHT) && Math.abs(mySpeed.speed.x) < 75 ) {
 								mySpeed.speed.x += 100F * deltaTime;
 								myFacing.facing = Direction.RIGHT;
@@ -397,7 +392,9 @@ public class CaveGame extends ApplicationAdapter {
 				an.animationParameter = creationManager.animationParams.get("caveTiles");
 				animation.animationQueue.add(an);
 				CFacing facing = pooledEngine.createComponent(CFacing.class);
+				CMarked makred = pooledEngine.createComponent(CMarked.class);
 
+				entity.add(makred);
 				entity.add(facing);
 				entity.add(animation);
 				entity.add(speedDamage);
@@ -457,7 +454,8 @@ public class CaveGame extends ApplicationAdapter {
 						CBounds myBounds = me.getComponent(CBounds.class);
 						CSpeed mySpeed = me.getComponent(CSpeed.class);
 						for(Entity e : pooledEngine.getEntitiesFor(Family.all(CPosition.class, CSpeed.class, CBounds.class).exclude(CDisabled.class).get())){
-							if(Family.all(CMarked.class).exclude(CDisabled.class).get().matches(e) && e.getComponent(CMarked.class).marks.get("floater").booleanValue()) continue;
+							CMarked marked;
+							if(Family.all(CMarked.class).exclude(CDisabled.class).get().matches(e) && (marked = e.getComponent(CMarked.class)).marks.containsKey("floater") && marked.marks.get("floater")) continue;
 							CBounds otherBounds = e.getComponent(CBounds.class);
 							CSpeed otherSpeed = e.getComponent(CSpeed.class);
 							if(myBounds.bounds.overlaps(otherBounds.bounds)){

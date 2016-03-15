@@ -11,6 +11,7 @@ import com.danilafe.cave.ecs.components.CDamageCause;
 import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CDisappearing;
 import com.danilafe.cave.ecs.components.CFollow;
+import com.danilafe.cave.ecs.components.CMarked;
 import com.danilafe.cave.ecs.components.CWeapon;
 import com.danilafe.cave.ecs.components.CWeaponTriggerable;
 import com.danilafe.cave.ecs.components.CWeaponWielding;
@@ -51,6 +52,7 @@ public class WeaponSystem extends FamilySystem {
 			Entity entity = entitiesB.get(i);
 			CWeaponWielding weaponWielding = entity.getComponent(CWeaponWielding.class);
 			CWeaponTriggerable weaponTriggerable = entity.getComponent(CWeaponTriggerable.class);
+			CMarked marked = entity.getComponent(CMarked.class);
 			if(Gdx.input.isKeyJustPressed(weaponTriggerable.attackKeycode)) {
 				if(weaponWielding.weaponEntity == null) {
 					CaveGame.instance.pooledEngine.addEntity((weaponWielding.weaponEntity = Utils.createWeaponEntity(entity, weaponWielding.weaponData)));
@@ -78,6 +80,7 @@ public class WeaponSystem extends FamilySystem {
 							if(weapon.weapon.currentChain.onTrigger != null) weapon.weapon.currentChain.onTrigger.update(entity, deltaTime);
 							hasTriggered = true;
 						}
+						if(hasTriggered) marked.marks.put("controls_locked", weapon.weapon.currentChain.lockInput);
 					}
 				}
 			}
