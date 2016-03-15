@@ -2,6 +2,7 @@ package com.danilafe.cave.gui;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.danilafe.cave.CaveGame;
 
 /**
  * A texture data class for GUI Elements
@@ -33,5 +34,14 @@ public class GUITexture {
 		GUITexture newTexture = new GUITexture();
 		newTexture.textureRegion = texture.split(texture.getRegionWidth() / 3, texture.getRegionHeight() / 3);
 		return newTexture;
+	}
+
+	/**
+	 * Creates a new GUI texture
+	 * @param textureName the name of the texture file
+	 * @return the produced texture
+	 */
+	public static GUITexture create(String textureName){
+		return create(CaveGame.instance.assetManager.get("textures/" + textureName, Texture.class));
 	}
 }

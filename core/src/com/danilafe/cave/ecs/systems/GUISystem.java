@@ -25,8 +25,10 @@ public class GUISystem extends FamilySystem {
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
-		for(Entity entity : entitiesB)
-			entity.getComponent(CGUIElement.class).guiElement.worldPos.set(entity.getComponent(CPosition.class).position);
+		for(Entity entity : entitiesB){
+			CGUIElement guiElement = entity.getComponent(CGUIElement.class);
+			guiElement.guiElement.worldPos.set(entity.getComponent(CPosition.class).position).add(guiElement.offset);
+		}
 	}
 
 	@Override

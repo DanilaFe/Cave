@@ -34,6 +34,6 @@ public class Constants {
 	/**
 	 * The size of a GUI unit
 	 */
-	public static final int GUI_UNIT_SIZE = TILE_SIZE;
+	public static final int GUI_UNIT_SIZE = TILE_SIZE / 2;
 
 }

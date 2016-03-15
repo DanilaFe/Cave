@@ -36,6 +36,10 @@ public class GUIElement {
 	 */
 	public GUITexture guiTexture;
 	/**
+	 * The background texture of this element if it's selected
+	 */
+	public GUITexture selectedTexture;
+	/**
 	 * The position of this element inside the world. Only if it's top level.
 	 */
 	public Vector2 worldPos = new Vector2(0, 0);
