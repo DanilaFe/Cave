@@ -7,3 +7,5 @@ particles.png
 chest_large.png
 chest_small.png
 crystals.png
+gui_test.png
+gui_window_bg.png
