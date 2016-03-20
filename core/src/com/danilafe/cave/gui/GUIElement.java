@@ -43,7 +43,10 @@ public class GUIElement {
 	 * The position of this element inside the world. Only if it's top level.
 	 */
 	public Vector2 worldPos = new Vector2(0, 0);
-
+	/**
+	 * Executed when this GUI element runs
+	 */
+	public RenderRunnable onRender;
 	/**
 	 * ArrayList of all children of this element.
 	 */
