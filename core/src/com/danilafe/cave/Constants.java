@@ -31,5 +31,9 @@ public class Constants {
 	 * The size (w/h) of one chunk.
 	 */
 	public static final int CHUNK_SIZE = TILE_SIZE * 8;
+	/**
+	 * The size of a GUI unit
+	 */
+	public static final int GUI_UNIT_SIZE = TILE_SIZE / 2;
 
 }

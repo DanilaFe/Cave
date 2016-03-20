@@ -6,6 +6,7 @@ import com.danilafe.cave.animation.AnimationParameter;
 import com.danilafe.cave.attacks.WeaponDecriptor;
 import com.danilafe.cave.attacks.WeaponParameter;
 import com.danilafe.cave.attacks.WeaponPropertiesCalculator;
+import com.danilafe.cave.gui.GUITexture;
 import com.danilafe.cave.item.ItemParameter;
 import com.danilafe.cave.tile.TileAnimation;
 import com.danilafe.cave.tile.TileParameter;
@@ -49,5 +50,9 @@ public class CreationManager {
 	 * Descriptors for entire weapons, including their calculators, parameters and entity descriptors.
 	 */
 	public HashMap<String, WeaponDecriptor> weaponDescriptors = new HashMap<String, WeaponDecriptor>();
+	/**
+	 * Textures used when rendering GUI windows.
+	 */
+	public HashMap<String, GUITexture> guiTextures = new HashMap<String, GUITexture>();
 
 }

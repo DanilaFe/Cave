@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -25,6 +26,8 @@ import com.danilafe.cave.ecs.components.CInteractive;
 import com.danilafe.cave.ecs.components.CTile;
 import com.danilafe.cave.ecs.components.CWeapon;
 import com.danilafe.cave.ecs.components.CWeaponWielding;
+import com.danilafe.cave.gui.GUIElement;
+import com.danilafe.cave.gui.GUITexture;
 import com.danilafe.cave.health.DamageData;
 import com.danilafe.cave.item.ItemContainer;
 import com.danilafe.cave.item.ItemParameter;
@@ -421,6 +424,56 @@ public class Utils {
 		CDisabled disabled = CaveGame.instance.pooledEngine.createComponent(CDisabled.class);
 		disabled.reason = "chunked";
 		e.add(disabled);
+	}
+
+	/**
+	 * Renders the given GUI element onto sprite batch provided (using world coords)
+	 * @param element the element to render
+	 * @param renderTo the batch to render to
+	 */
+	public static void renderGUIElement(GUIElement element, SpriteBatch renderTo) {
+		Vector2 renderVector = element.worldPos.cpy();
+		renderVector.x = Math.round(renderVector.x);
+		renderVector.y = Math.round(renderVector.y);
+		renderGUIElement(element, renderTo, renderVector);
+	}
+
+	/**
+	 * Renders this GUI element at the given position
+	 * @param element the elemnt to render
+	 * @param renderTo the sprite batch to render to
+	 * @param renderVector the position vector (location of GUI element)
+	 */
+	public static void renderGUIElement(GUIElement element, SpriteBatch renderTo, Vector2 renderVector){
+		GUITexture toUse = (element.selected) ? element.selectedTexture : element.guiTexture;
+		if(toUse != null){
+			for(int w = 1; w < element.width - 1; w++){
+				renderTo.draw(toUse.textureRegion[2][1], renderVector.x + w * Constants.GUI_UNIT_SIZE, renderVector.y);
+				renderTo.draw(toUse.textureRegion[0][1], renderVector.x + w * Constants.GUI_UNIT_SIZE, renderVector.y + (element.height - 1) * Constants.GUI_UNIT_SIZE);
+				for(int h = 1; h < element.height -1; h++){
+					renderTo.draw(toUse.textureRegion[1][1], renderVector.x + w * Constants.GUI_UNIT_SIZE, renderVector.y + h * Constants.GUI_UNIT_SIZE);
+				}
+			}
+
+			for(int h = 1; h < element.height - 1; h++){
+				renderTo.draw(toUse.textureRegion[1][0], renderVector.x, renderVector.y + h * Constants.GUI_UNIT_SIZE);
+				renderTo.draw(toUse.textureRegion[1][2], renderVector.x + (element.width - 1) * Constants.GUI_UNIT_SIZE, renderVector.y + h * Constants.GUI_UNIT_SIZE);
+			}
+
+			renderTo.draw(toUse.textureRegion[2][0], renderVector.x, renderVector.y);
+			renderTo.draw(toUse.textureRegion[2][2], renderVector.x + (element.width - 1) * Constants.GUI_UNIT_SIZE, renderVector.y);
+			renderTo.draw(toUse.textureRegion[0][0], renderVector.x, renderVector.y + (element.height - 1) * Constants.GUI_UNIT_SIZE);
+			renderTo.draw(toUse.textureRegion[0][2], renderVector.x + (element.width - 1) * Constants.GUI_UNIT_SIZE, renderVector.y + (element.height - 1) * Constants.GUI_UNIT_SIZE);
+		}
+
+		if(element.onRender != null) element.onRender.render(renderTo, element);
+
+		Vector2 topLeft = renderVector.cpy().add(0, element.height * Constants.GUI_UNIT_SIZE);
+		for(GUIElement guiElement : element.children){
+			renderGUIElement(guiElement, renderTo, topLeft.cpy()
+					.add(guiElement.pos_x * Constants.GUI_UNIT_SIZE,
+							-guiElement.pos_y * Constants.GUI_UNIT_SIZE -guiElement.height * Constants.GUI_UNIT_SIZE));
+		}
 	}
 
 }

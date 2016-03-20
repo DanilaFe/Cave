@@ -1,5 +1,6 @@
 package com.danilafe.cave.ecs.systems;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.ashley.core.Entity;
@@ -23,6 +24,7 @@ import com.danilafe.cave.animation.Animation;
 import com.danilafe.cave.ecs.components.CAnimation;
 import com.danilafe.cave.ecs.components.CDisabled;
 import com.danilafe.cave.ecs.components.CPosition;
+import com.danilafe.cave.gui.GUIElement;
 import com.danilafe.cave.lights.LightManager;
 
 /**
@@ -49,6 +51,10 @@ public class RenderSystem extends IteratingSystem {
 	 */
 	public SpriteBatch screenBatch;
 	/**
+	 * Batch used to render things unaffected by shaders
+	 */
+	public SpriteBatch overlayBatch;
+	/**
 	 * The shader used by the bufferBatch
 	 */
 	public ShaderProgram shaderProgram;
@@ -72,6 +78,10 @@ public class RenderSystem extends IteratingSystem {
 	 * Rotated Textures
 	 */
 	public HashMap<Texture, HashMap<Integer, Texture>> rotatedTextures;
+	/**
+	 * Top-level GUI elements that are to be rendered.
+	 */
+	public ArrayList<GUIElement> renderWindows = new ArrayList<GUIElement>();
 
 	/**
 	 * Creates a new render sytem
@@ -82,6 +92,7 @@ public class RenderSystem extends IteratingSystem {
 		shaderBatch = new SpriteBatch();
 		normalBatch = new SpriteBatch();
 		screenBatch = new SpriteBatch();
+		overlayBatch = new SpriteBatch();
 		shaderProgram = Utils.loadShaders("debug");
 		lightManager = new LightManager();
 		rotatedTextures = new HashMap<Texture, HashMap<Integer, Texture>>();
@@ -180,6 +191,12 @@ public class RenderSystem extends IteratingSystem {
 		shaderBuffer.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		screenBatch.draw(shaderBuffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		screenBatch.end();
+
+		overlayBatch.begin();
+		overlayBatch.setProjectionMatrix(CaveGame.instance.orthoCam.combined);
+		for(GUIElement element : renderWindows)
+			Utils.renderGUIElement(element, overlayBatch);
+		overlayBatch.end();
 
 		shaderBuffer.dispose();
 		mainBuffer.dispose();

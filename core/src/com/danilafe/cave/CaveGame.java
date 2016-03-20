@@ -57,6 +57,7 @@ import com.danilafe.cave.ecs.systems.DisappearingSystem;
 import com.danilafe.cave.ecs.systems.EmitterSystem;
 import com.danilafe.cave.ecs.systems.FollowingSystem;
 import com.danilafe.cave.ecs.systems.FrictionSystem;
+import com.danilafe.cave.ecs.systems.GUISystem;
 import com.danilafe.cave.ecs.systems.GravitySystem;
 import com.danilafe.cave.ecs.systems.InteractionSystem;
 import com.danilafe.cave.ecs.systems.ItemSystem;
@@ -183,6 +184,10 @@ public class CaveGame extends ApplicationAdapter {
 	 */
 	public UnloadingSystem unloadingSystem;
 	/**
+	 * Handles all the GUI-ey stuff.
+	 */
+	public GUISystem guiSystem;
+	/**
 	 * Camera used to look into the game world.
 	 */
 	public OrthographicCamera orthoCam;
@@ -240,6 +245,7 @@ public class CaveGame extends ApplicationAdapter {
 		damageSystem = new DamageSystem();
 		weaponSystem = new WeaponSystem();
 		unloadingSystem = new UnloadingSystem();
+		guiSystem = new GUISystem();
 
 		orthoCam = new OrthographicCamera(Constants.CAMERA_WIDTH, Constants.CAMERA_WIDTH * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
 
@@ -252,6 +258,7 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(followingSystem);
 		pooledEngine.addSystem(boundsSystem);
 		pooledEngine.addSystem(lightSystem);
+		pooledEngine.addSystem(guiSystem);
 		pooledEngine.addSystem(renderSystem);
 		pooledEngine.addSystem(debugRenderSystem);
 		pooledEngine.addSystem(interactionSystem);
