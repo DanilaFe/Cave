@@ -31,7 +31,6 @@ import com.danilafe.cave.ecs.components.CFacing;
 import com.danilafe.cave.ecs.components.CFollow;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
-import com.danilafe.cave.ecs.components.CGUIElement;
 import com.danilafe.cave.ecs.components.CGravity;
 import com.danilafe.cave.ecs.components.CHealth;
 import com.danilafe.cave.ecs.components.CInteractionCause;
@@ -70,8 +69,6 @@ import com.danilafe.cave.ecs.systems.SpeedDamageSystem;
 import com.danilafe.cave.ecs.systems.StepperSystem;
 import com.danilafe.cave.ecs.systems.TileSystem;
 import com.danilafe.cave.ecs.systems.WeaponSystem;
-import com.danilafe.cave.gui.GUIElement;
-import com.danilafe.cave.gui.GUITexture;
 import com.danilafe.cave.item.ItemContainer;
 import com.danilafe.cave.item.ItemParameter;
 import com.danilafe.cave.runnable.ECSRunnable;
@@ -307,20 +304,6 @@ public class CaveGame extends ApplicationAdapter {
 		if(Constants.DEBUG){
 			pooledEngine.addEntity(creationManager.entityDescriptors.get("debugger").create(0, 0));
 		}
-
-		GUITexture guiTexture = GUITexture.create("gui_window_bg.png");
-		GUIElement guiElement = new GUIElement();
-		guiElement.guiTexture = guiTexture;
-		guiElement.selectedTexture = guiTexture;
-		guiElement.worldPos.set(Constants.GUI_UNIT_SIZE * 2, Constants.GUI_UNIT_SIZE * 2);
-		guiElement.width = (int) Math.floor(orthoCam.viewportWidth / Constants.GUI_UNIT_SIZE) / 4 - 2;
-		guiElement.height = (int) Math.floor(orthoCam.viewportHeight / Constants.GUI_UNIT_SIZE) / 4 - 2;
-		guiElement.selected = false;
-		renderSystem.renderWindows.add(guiElement);
-		CGUIElement cgui = pooledEngine.createComponent(CGUIElement.class);
-		cgui.guiElement = guiElement;
-		cgui.offset.set(-4, 8);
-		pooledEngine.getEntitiesFor(Family.all(CCameraShake.class).get()).first().add(cgui);
 
 	}
 
