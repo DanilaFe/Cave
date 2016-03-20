@@ -301,27 +301,48 @@ public class Utils {
 	 * @param renderTo the batch to render to
 	 */
 	public static void renderGUIElement(GUIElement element, SpriteBatch renderTo) {
-		GUITexture toUse = (element.selected) ? element.selectedTexture : element.guiTexture;
 		Vector2 renderVector = element.worldPos.cpy();
 		renderVector.x = Math.round(renderVector.x);
 		renderVector.y = Math.round(renderVector.y);
-		for(int w = 1; w < element.width - 1; w++){
-			renderTo.draw(toUse.textureRegion[2][1], renderVector.x + w * Constants.GUI_UNIT_SIZE, renderVector.y);
-			renderTo.draw(toUse.textureRegion[0][1], renderVector.x + w * Constants.GUI_UNIT_SIZE, renderVector.y + (element.height - 1) * Constants.GUI_UNIT_SIZE);
-			for(int h = 1; h < element.height -1; h++){
-				renderTo.draw(toUse.textureRegion[1][1], renderVector.x + w * Constants.GUI_UNIT_SIZE, renderVector.y + h * Constants.GUI_UNIT_SIZE);
+		renderGUIElement(element, renderTo, renderVector);
+	}
+
+	/**
+	 * Renders this GUI element at the given position
+	 * @param element the elemnt to render
+	 * @param renderTo the sprite batch to render to
+	 * @param renderVector the position vector (location of GUI element)
+	 */
+	public static void renderGUIElement(GUIElement element, SpriteBatch renderTo, Vector2 renderVector){
+		GUITexture toUse = (element.selected) ? element.selectedTexture : element.guiTexture;
+		if(toUse != null){
+			for(int w = 1; w < element.width - 1; w++){
+				renderTo.draw(toUse.textureRegion[2][1], renderVector.x + w * Constants.GUI_UNIT_SIZE, renderVector.y);
+				renderTo.draw(toUse.textureRegion[0][1], renderVector.x + w * Constants.GUI_UNIT_SIZE, renderVector.y + (element.height - 1) * Constants.GUI_UNIT_SIZE);
+				for(int h = 1; h < element.height -1; h++){
+					renderTo.draw(toUse.textureRegion[1][1], renderVector.x + w * Constants.GUI_UNIT_SIZE, renderVector.y + h * Constants.GUI_UNIT_SIZE);
+				}
 			}
+
+			for(int h = 1; h < element.height - 1; h++){
+				renderTo.draw(toUse.textureRegion[1][0], renderVector.x, renderVector.y + h * Constants.GUI_UNIT_SIZE);
+				renderTo.draw(toUse.textureRegion[1][2], renderVector.x + (element.width - 1) * Constants.GUI_UNIT_SIZE, renderVector.y + h * Constants.GUI_UNIT_SIZE);
+			}
+
+			renderTo.draw(toUse.textureRegion[2][0], renderVector.x, renderVector.y);
+			renderTo.draw(toUse.textureRegion[2][2], renderVector.x + (element.width - 1) * Constants.GUI_UNIT_SIZE, renderVector.y);
+			renderTo.draw(toUse.textureRegion[0][0], renderVector.x, renderVector.y + (element.height - 1) * Constants.GUI_UNIT_SIZE);
+			renderTo.draw(toUse.textureRegion[0][2], renderVector.x + (element.width - 1) * Constants.GUI_UNIT_SIZE, renderVector.y + (element.height - 1) * Constants.GUI_UNIT_SIZE);
 		}
 
-		for(int h = 1; h < element.height - 1; h++){
-			renderTo.draw(toUse.textureRegion[1][0], renderVector.x, renderVector.y + h * Constants.GUI_UNIT_SIZE);
-			renderTo.draw(toUse.textureRegion[1][2], renderVector.x + (element.width - 1) * Constants.GUI_UNIT_SIZE, renderVector.y + h * Constants.GUI_UNIT_SIZE);
-		}
+		if(element.onRender != null) element.onRender.render(renderTo, element);
 
-		renderTo.draw(toUse.textureRegion[2][0], renderVector.x, renderVector.y);
-		renderTo.draw(toUse.textureRegion[2][2], renderVector.x + (element.width - 1) * Constants.GUI_UNIT_SIZE, renderVector.y);
-		renderTo.draw(toUse.textureRegion[0][0], renderVector.x, renderVector.y + (element.height - 1) * Constants.GUI_UNIT_SIZE);
-		renderTo.draw(toUse.textureRegion[0][2], renderVector.x + (element.width - 1) * Constants.GUI_UNIT_SIZE, renderVector.y + (element.height - 1) * Constants.GUI_UNIT_SIZE);
+		Vector2 topLeft = renderVector.cpy().add(0, element.height * Constants.GUI_UNIT_SIZE);
+		for(GUIElement guiElement : element.children){
+			renderGUIElement(guiElement, renderTo, topLeft.cpy()
+					.add(guiElement.pos_x * Constants.GUI_UNIT_SIZE,
+							-guiElement.pos_y * Constants.GUI_UNIT_SIZE -guiElement.height * Constants.GUI_UNIT_SIZE));
+		}
 	}
 
 }
