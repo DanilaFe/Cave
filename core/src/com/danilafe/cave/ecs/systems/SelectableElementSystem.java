@@ -47,6 +47,7 @@ public class SelectableElementSystem extends IteratingSystem {
 			newElement.selected = true;
 			if(newElement.onSelect != null) newElement.onSelect.update(groupElement.entityList.get(newIndex), deltaTime);
 			groupElement.selected = false;
+			if(groupElement.onDeselect != null) groupElement.onDeselect.update(entity, deltaTime);
 		}
 	}
 

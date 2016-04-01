@@ -10,6 +10,7 @@ import com.danilafe.cave.gui.GUITexture;
 import com.danilafe.cave.item.ItemParameter;
 import com.danilafe.cave.tile.TileAnimation;
 import com.danilafe.cave.tile.TileParameter;
+import com.danilafe.cave.world.WorldLoadParam;
 
 /**
  * A class to store different creation parameters
@@ -54,5 +55,9 @@ public class CreationManager {
 	 * Textures used when rendering GUI windows.
 	 */
 	public HashMap<String, GUITexture> guiTextures = new HashMap<String, GUITexture>();
+	/**
+	 * World load parameters used to load the world
+	 */
+	public HashMap<String, WorldLoadParam> worldLoadParams = new HashMap<String, WorldLoadParam>();
 
 }

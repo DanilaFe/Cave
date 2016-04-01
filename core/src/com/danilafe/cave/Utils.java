@@ -9,12 +9,15 @@ import java.io.OutputStream;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.attacks.Weapon;
 import com.danilafe.cave.attacks.WeaponDecriptor;
+import com.danilafe.cave.creation.EntityDescriptor;
 import com.danilafe.cave.ecs.components.CCameraShake;
 import com.danilafe.cave.ecs.components.CDamageable;
 import com.danilafe.cave.ecs.components.CDisabled;
@@ -31,7 +34,11 @@ import com.danilafe.cave.gui.GUITexture;
 import com.danilafe.cave.health.DamageData;
 import com.danilafe.cave.item.ItemContainer;
 import com.danilafe.cave.item.ItemParameter;
+import com.danilafe.cave.player.KeyBinds;
+import com.danilafe.cave.player.PlayerStatistic;
 import com.danilafe.cave.tile.Tile;
+import com.danilafe.cave.world.LevelData;
+import com.danilafe.cave.world.WorldLoadParam;
 
 /**
  * Utils class to hold utility methods.
@@ -128,7 +135,6 @@ public class Utils {
 	 *            the entity to remove
 	 */
 	public static void removeEntity(Entity e) {
-		CaveGame.instance.pooledEngine.removeEntity(e);
 		for(Entity entity : CaveGame.instance.pooledEngine.getEntitiesFor(Family.all(CFollow.class).get())) {
 			CFollow followC;
 			if((followC = entity.getComponent(CFollow.class)).following == e) followC.following = null;
@@ -146,6 +152,7 @@ public class Utils {
 			CWeaponWielding weaponWieldingC;
 			if((weaponWieldingC = entity.getComponent(CWeaponWielding.class)).weaponEntity == e) weaponWieldingC.weaponEntity = null;
 		}
+		CaveGame.instance.pooledEngine.removeEntity(e);
 	}
 
 	/**
@@ -466,6 +473,7 @@ public class Utils {
 			renderTo.draw(toUse.textureRegion[0][2], renderVector.x + (element.width - 1) * Constants.GUI_UNIT_SIZE, renderVector.y + (element.height - 1) * Constants.GUI_UNIT_SIZE);
 		}
 
+		element.renderPosition.set(renderVector);
 		if(element.onRender != null) element.onRender.render(renderTo, element);
 
 		Vector2 topLeft = renderVector.cpy().add(0, element.height * Constants.GUI_UNIT_SIZE);
@@ -474,6 +482,76 @@ public class Utils {
 					.add(guiElement.pos_x * Constants.GUI_UNIT_SIZE,
 							-guiElement.pos_y * Constants.GUI_UNIT_SIZE -guiElement.height * Constants.GUI_UNIT_SIZE));
 		}
+	}
+
+	/**
+	 * Stores default key binding values into the keyBinds object
+	 * @param keyBinds the keyBinds to write to
+	 */
+	public static void defaultKeyBinds(KeyBinds keyBinds){
+		keyBinds.setKey("left", Keys.LEFT);
+		keyBinds.setKey("right", Keys.RIGHT);
+		keyBinds.setKey("jump", Keys.SPACE);
+		keyBinds.setKey("melee", Keys.Z);
+	}
+
+	/**
+	 * Create a player file at the given location
+	 * @param file the file to use
+	 * @return the created player data
+	 */
+	public static PlayerStatistic createPlayerStat(FileHandle file){
+		PlayerStatistic playerStatitic = new PlayerStatistic();
+		playerStatitic.name = file.name();
+		defaultKeyBinds(playerStatitic.keyBinds);
+		try {
+			playerStatitic.fullSave(file.write(false));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return playerStatitic;
+	}
+
+	/**
+	 * Loads all the data used for initial world creation.
+	 */
+	public static void loadWorld(WorldLoadParam worldLoadParam){
+		worldLoadParam.levelManager.load(worldLoadParam.levelData);
+		CaveGame.instance.pooledEngine
+		.addEntity(CaveGame.instance.creationManager.entityDescriptors.get("placeholderPlayer")
+				.create(worldLoadParam.playerPosition.x, worldLoadParam.playerPosition.y));
+	}
+
+	/**
+	 * Creates a new player from the given player statistic
+	 * @param x the x-positon of the player
+	 * @param y the y-position of the player
+	 * @param playerStat the player statistic to use
+	 */
+	public static void createPlayer(float x, float y, PlayerStatistic playerStat){
+		EntityDescriptor playerDesc = CaveGame.instance.creationManager.entityDescriptors.get("placeholderPlayer");
+		CaveGame.instance.pooledEngine.addEntity(playerDesc.create(x, y));
+	}
+
+	public static LevelData generateWorld(float x, float y){
+		LevelData newLevelData = new LevelData();
+
+		float offset = (float) (Math.PI * Math.random() * 2);
+
+		for(int i = 0; i < x; i+= Constants.TILE_SIZE){
+			int numTiles = (int) Math.round((Math.sin(i) + 2) * 2) + 2;
+			System.out.println(numTiles);
+			for(int t = 0; t < numTiles; t++){
+				newLevelData.addTile("placeholderCavetilesParameter", i, t * Constants.TILE_SIZE + offset, (int) (Math.random() * 3));
+			}
+			if(Math.random() < .15D) newLevelData.addEntity("placeholderCrystal", i, numTiles * Constants.TILE_SIZE);
+		}
+
+		for(int i = 0; i < 16; i++){
+			newLevelData.addEntity("placeholderLightball", (float) Math.random() * x, (float) Math.random() * y);
+		}
+
+		return newLevelData;
 	}
 
 }

@@ -9,3 +9,5 @@ chest_small.png
 crystals.png
 gui_test.png
 gui_window_bg.png
+gui_window_bg_select.png
+symbol_question.png

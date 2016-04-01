@@ -36,6 +36,10 @@ public class CGroupElement implements Poolable, Component {
 	 */
 	public ECSRunnable onSelect;
 	/**
+	 * Runnable to execute when this element is no longer selected
+	 */
+	public ECSRunnable onDeselect;
+	/**
 	 * The delay between switching component
 	 */
 	public float maxDelta = 0;

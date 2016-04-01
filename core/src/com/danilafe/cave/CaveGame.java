@@ -1,5 +1,6 @@
 package com.danilafe.cave;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,7 +33,9 @@ import com.danilafe.cave.ecs.components.CFacing.Direction;
 import com.danilafe.cave.ecs.components.CFollow;
 import com.danilafe.cave.ecs.components.CFrictionCause;
 import com.danilafe.cave.ecs.components.CFrictionObject;
+import com.danilafe.cave.ecs.components.CGUIElement;
 import com.danilafe.cave.ecs.components.CGravity;
+import com.danilafe.cave.ecs.components.CGroupElement;
 import com.danilafe.cave.ecs.components.CHealth;
 import com.danilafe.cave.ecs.components.CInteractionCause;
 import com.danilafe.cave.ecs.components.CInteractive;
@@ -71,8 +74,12 @@ import com.danilafe.cave.ecs.systems.StepperSystem;
 import com.danilafe.cave.ecs.systems.TileSystem;
 import com.danilafe.cave.ecs.systems.UnloadingSystem;
 import com.danilafe.cave.ecs.systems.WeaponSystem;
+import com.danilafe.cave.gui.GUIElement;
+import com.danilafe.cave.gui.GUITexture;
+import com.danilafe.cave.gui.components.PlayerSelector;
 import com.danilafe.cave.item.ItemContainer;
 import com.danilafe.cave.item.ItemParameter;
+import com.danilafe.cave.player.PlayerStatistic;
 import com.danilafe.cave.runnable.ECSRunnable;
 import com.danilafe.cave.tile.ChunkAnchor;
 import com.danilafe.cave.tile.MapManager;
@@ -81,6 +88,7 @@ import com.danilafe.cave.tile.TileParameter;
 import com.danilafe.cave.world.DefaultLevelManager;
 import com.danilafe.cave.world.LevelData;
 import com.danilafe.cave.world.LevelManager;
+import com.danilafe.cave.world.WorldLoadParam;
 
 /**
  * CaveGame - Main class of Cave.
@@ -215,6 +223,10 @@ public class CaveGame extends ApplicationAdapter {
 	 * The map manger used to load / unload chunks
 	 */
 	public MapManager mapManager = new MapManager();
+	/**
+	 * The data of the player currently in-game
+	 */
+	public PlayerStatistic playerStatistic = null;
 
 	@Override
 	public void create () {
@@ -254,8 +266,8 @@ public class CaveGame extends ApplicationAdapter {
 		pooledEngine.addSystem(normalSystem);
 		pooledEngine.addSystem(frictionSystem);
 		pooledEngine.addSystem(positionSystem);
-		pooledEngine.addSystem(cameraSystem);
 		pooledEngine.addSystem(followingSystem);
+		pooledEngine.addSystem(cameraSystem);
 		pooledEngine.addSystem(boundsSystem);
 		pooledEngine.addSystem(lightSystem);
 		pooledEngine.addSystem(guiSystem);
@@ -279,39 +291,48 @@ public class CaveGame extends ApplicationAdapter {
 		loadAssets();
 		loadCreation();
 
-		LevelData levelData = new LevelData();
-		LevelManager levelManager = new DefaultLevelManager();
+		pooledEngine.addEntity(creationManager.entityDescriptors.get("debugger").create(0, 0));
 
-		pooledEngine.addEntity(creationManager.entityDescriptors.get("placeholderPlayer").create(50, 50));
-		for(int i = 0; i < 10; i ++){
-			levelData.addTile("placeholderCavetilesParameter", Constants.TILE_SIZE * i, 0, (int) (Math.random() * 3));
-			levelData.addTile("placeholderCavetilesParameter", Constants.TILE_SIZE * i, 8, (int) (Math.random() * 3));
-			levelData.addTile("placeholderCavetilesParameter", Constants.TILE_SIZE * i, 16, (int) (Math.random() * 3));
-			levelData.addTile("placeholderCavetilesParameter", 0, Constants.TILE_SIZE * i, (int) (Math.random() * 3));
-			levelData.addTile("placeholderCavetilesParameter", 8, Constants.TILE_SIZE * i, (int) (Math.random() * 3));
-			levelData.addTile("placeholderCavetilesParameter", 72, Constants.TILE_SIZE * i, (int) (Math.random() * 3));
-			levelData.addTile("placeholderCavetilesParameter", 80, Constants.TILE_SIZE * i, (int) (Math.random() * 3));
+		Entity windowEntity = creationManager.entityDescriptors.get("basicWindow").create(Constants.CAMERA_WIDTH / 2, orthoCam.viewportHeight / 2);
+		CGUIElement guiElement = windowEntity.getComponent(CGUIElement.class);
+		guiElement.guiElement.width = 20;
+		guiElement.guiElement.height = 16;
+		pooledEngine.addEntity(windowEntity);
+
+		ArrayList<Entity> elementGroup = new ArrayList<Entity>();
+
+		for(int i = 1; i <= 3; i++){
+			Entity selectorElement = creationManager.entityDescriptors.get("selectableElement").create(0, 0);
+			CGUIElement selectorGuiElement = selectorElement.getComponent(CGUIElement.class);
+			selectorGuiElement.guiElement = new PlayerSelector(i);
+			selectorGuiElement.guiElement.pos_x = 1;
+			selectorGuiElement.guiElement.selected = i == 1;
+			selectorGuiElement.guiElement.pos_y = 1 + (i - 1) * (PlayerSelector.DEFAULT_HEIGHT + 1);
+			CGroupElement groupElement = selectorElement.getComponent(CGroupElement.class);
+			groupElement.entityList = elementGroup;
+			groupElement.maxDelta = 1F / 8;
+			groupElement.nextKey = Keys.DOWN;
+			groupElement.prevKey = Keys.UP;
+			groupElement.selected = i == 1;
+			groupElement.onSelect = new ECSRunnable() {
+				@Override
+				public void update(Entity me, float deltaTime) {
+					me.getComponent(CGUIElement.class).guiElement.selected = true;
+				}
+			};
+			groupElement.onDeselect = new ECSRunnable() {
+
+				@Override
+				public void update(Entity me, float deltaTime) {
+					me.getComponent(CGUIElement.class).guiElement.selected = false;
+				}
+			};
+			elementGroup.add(selectorElement);
+			pooledEngine.addEntity(selectorElement);
+			guiElement.guiElement.children.add(selectorGuiElement.guiElement);
 		}
-		levelData.addTile("placeholderCavetilesParameter", 8, 16, (int) (Math.random() * 3));
 
-		levelData.addEntity("placeholderJumpBoost", 64, 16);
 
-		levelData.addEntity("placeholderCrystal", 16, 24);
-		levelData.addEntity("placeholderChest", 72, 80);
-		levelData.addEntity("placeholderJumpBoost", 72, 72);
-
-		levelData.addEntity("battleBox", 32, 75);
-
-		for (int i = 0; i < 64; i ++){
-			levelData.addEntity("placeholderLightball", (float) (Math.random() * 160), (float)(Math.random() * 160));
-		}
-
-		if(Constants.DEBUG){
-			levelData.addEntity("debugger", 0, 0);
-
-		}
-
-		levelManager.load(levelData);
 
 	}
 
@@ -322,6 +343,13 @@ public class CaveGame extends ApplicationAdapter {
 		creationManager.animationParams.put("caveTiles", AnimationParameter.create("cavetiles.png", true, 8, 8, 0));
 		creationManager.animationParams.put("battleBox", AnimationParameter.create("battlebox.png", true, 8, 8, 0));
 		creationManager.animationParams.put("crystals", AnimationParameter.create("crystals.png", true, 8, 8, 0));
+		/*
+		 * GUI Textures
+		 */
+		GUITexture windowTexture = GUITexture.create("gui_window_bg.png");
+		creationManager.guiTextures.put("windowTexture", windowTexture);
+		GUITexture windowTextureSelected = GUITexture.create("gui_window_bg_select.png");
+		creationManager.guiTextures.put("windowTextureSelected", windowTextureSelected);
 		/*
 		 * Entities
 		 */
@@ -722,6 +750,67 @@ public class CaveGame extends ApplicationAdapter {
 			}
 		};
 		creationManager.entityDescriptors.put("placeholderWeaponBase", weaponEntityDescritor);
+		EntityDescriptor basicWindow = new EntityDescriptor() {
+
+			@Override
+			public Entity create(float x, float y) {
+				Entity entity = pooledEngine.createEntity();
+				GUITexture guiTexture = creationManager.guiTextures.get("windowTexture");
+				GUIElement guiElement = GUIElement.create(false, 0, 0, 0, 0, guiTexture, guiTexture, x, y, null);
+				CGUIElement guiElementC = pooledEngine.createComponent(CGUIElement.class);
+				guiElementC.topLevel = true;
+				guiElementC.guiElement = guiElement;
+				CPosition position = pooledEngine.createComponent(CPosition.class);
+				position.position.set(x, y);
+				CCameraView cameraView = pooledEngine.createComponent(CCameraView.class);
+				cameraView.camera = orthoCam;
+				CMarked makred = pooledEngine.createComponent(CMarked.class);
+				makred.marks.put("selectPlayerGui", true);
+
+				entity.add(makred);
+				entity.add(cameraView);
+				entity.add(position);
+				entity.add(guiElementC);
+				return entity;
+			}
+		};
+		creationManager.entityDescriptors.put("basicWindow", basicWindow);
+		EntityDescriptor selectableElement = new EntityDescriptor() {
+			@Override
+			public Entity create(float x, float y) {
+				Entity entity = pooledEngine.createEntity();
+				CGUIElement guielement = pooledEngine.createComponent(CGUIElement.class);
+				guielement.topLevel = false;
+				CPosition position = pooledEngine.createComponent(CPosition.class);
+				CGroupElement groupElement = pooledEngine.createComponent(CGroupElement.class);
+				CStepper stepper = new CStepper();
+				stepper.runnable = new ECSRunnable() {
+					@Override
+					public void update(Entity me, float deltaTime) {
+						if(me.getComponent(CGroupElement.class).selected && Gdx.input.isKeyPressed(Keys.ENTER)) {
+							PlayerSelector mPlayerSelector = (PlayerSelector) me.getComponent(CGUIElement.class).guiElement;
+							playerStatistic = (mPlayerSelector.playerStatitic == null) ?
+									Utils.createPlayerStat(Gdx.files.local("player_" + mPlayerSelector.playerId) ) :
+										mPlayerSelector.playerStatitic;
+									for(Entity entity : pooledEngine.getEntitiesFor(Family.all(CMarked.class).exclude(CDisabled.class).get())){
+										if(entity.getComponent(CMarked.class).marks.get("selectPlayerGui")) Utils.removeEntity(entity);
+									}
+									ArrayList<Entity> toDelete = (ArrayList<Entity>) me.getComponent(CGroupElement.class).entityList.clone();
+									for(Entity entity : toDelete) Utils.removeEntity(entity);
+
+									Utils.loadWorld(creationManager.worldLoadParams.get("genWorld"));
+						}
+					}
+				};
+
+				entity.add(stepper);
+				entity.add(groupElement);
+				entity.add(position);
+				entity.add(guielement);
+				return entity;
+			}
+		};
+		creationManager.entityDescriptors.put("selectableElement", selectableElement);
 		/*
 		 * Tile animations
 		 */
@@ -732,6 +821,54 @@ public class CaveGame extends ApplicationAdapter {
 		 */
 		TileParameter cavetilesParameter = TileParameter.create(cavetilesAnimation, placeholderWall);
 		creationManager.tileParameters.put("placeholderCavetilesParameter", cavetilesParameter);
+
+		/*
+		 * World Parameters
+		 */
+		/*
+		 * ===========================
+		 * ===========================
+		 */
+		LevelData levelData = new LevelData();
+		LevelManager levelManager = new DefaultLevelManager();
+
+		for(int i = 0; i < 10; i ++){
+			levelData.addTile("placeholderCavetilesParameter", Constants.TILE_SIZE * i, 0, (int) (Math.random() * 3));
+			levelData.addTile("placeholderCavetilesParameter", Constants.TILE_SIZE * i, 8, (int) (Math.random() * 3));
+			levelData.addTile("placeholderCavetilesParameter", Constants.TILE_SIZE * i, 16, (int) (Math.random() * 3));
+			levelData.addTile("placeholderCavetilesParameter", 0, Constants.TILE_SIZE * i, (int) (Math.random() * 3));
+			levelData.addTile("placeholderCavetilesParameter", 8, Constants.TILE_SIZE * i, (int) (Math.random() * 3));
+			levelData.addTile("placeholderCavetilesParameter", 72, Constants.TILE_SIZE * i, (int) (Math.random() * 3));
+			levelData.addTile("placeholderCavetilesParameter", 80, Constants.TILE_SIZE * i, (int) (Math.random() * 3));
+		}
+		levelData.addTile("placeholderCavetilesParameter", 8, 16, (int) (Math.random() * 3));
+
+		levelData.addEntity("placeholderJumpBoost", 64, 16);
+
+		levelData.addEntity("placeholderCrystal", 16, 24);
+		levelData.addEntity("placeholderChest", 72, 80);
+		levelData.addEntity("placeholderJumpBoost", 72, 72);
+
+		levelData.addEntity("battleBox", 32, 75);
+
+		for (int i = 0; i < 16; i ++){
+			levelData.addEntity("placeholderLightball", (float) (Math.random() * 160), (float)(Math.random() * 160));
+
+		}
+		WorldLoadParam worldLoadParam = new WorldLoadParam();
+		worldLoadParam.levelData = levelData;
+		worldLoadParam.levelManager = levelManager;
+		worldLoadParam.playerPosition.set(50, 50);
+		creationManager.worldLoadParams.put("testingWorld", worldLoadParam);
+		/*
+		 * ===========================
+		 * ===========================
+		 */
+		WorldLoadParam genWorldParam = new WorldLoadParam();
+		genWorldParam.levelData = Utils.generateWorld(1024, 1024);
+		genWorldParam.levelManager = new DefaultLevelManager();
+		genWorldParam.playerPosition.set(64, 64);
+		creationManager.worldLoadParams.put("genWorld", genWorldParam);
 
 	}
 
