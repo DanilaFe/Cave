@@ -65,7 +65,9 @@ public class PlayerSelector extends GUIElement {
 		if(playerFile.exists()) {
 			try {
 				playerStatitic = new PlayerStatistic();
+				System.out.println(playerFile.name());
 				playerStatitic.load(playerFile.read());
+				System.out.println("Loaded");
 			} catch (IOException e) { e.printStackTrace(); }
 		}
 		GUITexture texture = CaveGame.instance.creationManager.guiTextures.get("windowTexture");

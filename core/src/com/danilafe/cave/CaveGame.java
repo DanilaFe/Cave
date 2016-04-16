@@ -14,8 +14,16 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.danilafe.cave.animation.Animation;
 import com.danilafe.cave.animation.AnimationParameter;
+import com.danilafe.cave.attacks.ComboChain;
+import com.danilafe.cave.attacks.Weapon;
+import com.danilafe.cave.attacks.WeaponData;
+import com.danilafe.cave.attacks.WeaponDecriptor;
+import com.danilafe.cave.attacks.WeaponParameter;
+import com.danilafe.cave.attacks.WeaponProperties;
+import com.danilafe.cave.attacks.WeaponPropertiesCalculator;
 import com.danilafe.cave.creation.CreationManager;
 import com.danilafe.cave.creation.EntityDescriptor;
 import com.danilafe.cave.ecs.components.CAcceleration;
@@ -51,6 +59,8 @@ import com.danilafe.cave.ecs.components.CSpeedDamage;
 import com.danilafe.cave.ecs.components.CStepper;
 import com.danilafe.cave.ecs.components.CUnloading;
 import com.danilafe.cave.ecs.components.CWeapon;
+import com.danilafe.cave.ecs.components.CWeaponTriggerable;
+import com.danilafe.cave.ecs.components.CWeaponWielding;
 import com.danilafe.cave.ecs.systems.AccelerationSystem;
 import com.danilafe.cave.ecs.systems.BoundsSystem;
 import com.danilafe.cave.ecs.systems.CameraSystem;
@@ -467,7 +477,13 @@ public class CaveGame extends ApplicationAdapter {
 				CItemContainer itemContainer = pooledEngine.createComponent(CItemContainer.class);
 				itemContainer.container = new ItemContainer();
 				itemContainer.container.maxItems = 9;
+				CWeaponWielding weaponWielding = pooledEngine.createComponent(CWeaponWielding.class);
+				weaponWielding.weaponData = creationManager.weaponDescriptors.get("slimeAttack");
+				CWeaponTriggerable weaponTriggerable = pooledEngine.createComponent(CWeaponTriggerable.class);
+				weaponTriggerable.attackKeycode = playerStatistic.keyBinds.getKeycodeFor("melee");
 				
+				entity.add(weaponTriggerable);
+				entity.add(weaponWielding);
 				entity.add(itemContainer);
 				entity.add(makred);
 				entity.add(facing);
@@ -832,13 +848,13 @@ public class CaveGame extends ApplicationAdapter {
 							playerStatistic = (mPlayerSelector.playerStatitic == null) ?
 									Utils.createPlayerStat(Gdx.files.local("player_" + mPlayerSelector.playerId) ) :
 										mPlayerSelector.playerStatitic;
-									for(Entity entity : pooledEngine.getEntitiesFor(Family.all(CMarked.class).exclude(CDisabled.class).get())){
-										if(entity.getComponent(CMarked.class).marks.get("selectPlayerGui")) Utils.removeEntity(entity);
-									}
-									ArrayList<Entity> toDelete = (ArrayList<Entity>) me.getComponent(CGroupElement.class).entityList.clone();
-									for(Entity entity : toDelete) Utils.removeEntity(entity);
+							for(Entity entity : pooledEngine.getEntitiesFor(Family.all(CMarked.class).exclude(CDisabled.class).get())){
+								if(entity.getComponent(CMarked.class).marks.get("selectPlayerGui")) Utils.removeEntity(entity);
+							}
+							ArrayList<Entity> toDelete = (ArrayList<Entity>) me.getComponent(CGroupElement.class).entityList.clone();
+							for(Entity entity : toDelete) Utils.removeEntity(entity);
 
-									Utils.loadWorld(creationManager.worldLoadParams.get("testingWorld"));
+							Utils.loadWorld(creationManager.worldLoadParams.get("testingWorld"));
 						}
 					}
 				};
@@ -910,6 +926,45 @@ public class CaveGame extends ApplicationAdapter {
 		 * ===========================
 		 * ===========================
 		 */
+		WeaponPropertiesCalculator slimeAttackCalculatr = new WeaponPropertiesCalculator() {
+			@Override
+			public WeaponProperties calculateProperties(Weapon weapon, Entity sourceEntity, Entity weaponEntity) {
+				WeaponProperties properties = new WeaponProperties();
+				CFacing facing = sourceEntity.getComponent(CFacing.class);
+				properties.wDamage = weapon.parameter.wDamage;
+				properties.wDelay = weapon.parameter.wDelay;
+				properties.wKnockback = weapon.parameter.wKnockback;
+				float duration_percent = 1 - (weapon.remainingDuration / weapon.currentChain.duration);
+				float offset = (float) Math.sin(Math.PI * duration_percent);
+				properties.wOffset.set(3 * ((facing.facing == Direction.LEFT) ? -1 : 1) * offset, 0);
+				properties.wSize.set(weapon.parameter.wSize);
+				return properties;
+			}
+		};
+		ComboChain slimeComboChain = new ComboChain();
+		slimeComboChain.attackType = slimeAttackCalculatr;
+		slimeComboChain.comboChain.put(0, slimeComboChain);
+		slimeComboChain.duration = .5F;
+		slimeComboChain.comboWindowMax = 0;
+		slimeComboChain.comboWindowMin = 0;
+		slimeComboChain.lockInput = true;
+		WeaponParameter weaponProperties = new WeaponParameter();
+		weaponProperties.wDamage = 5;
+		weaponProperties.wDelay = .5F;
+		weaponProperties.wKnockback = 100;
+		weaponProperties.wSize = new Vector2(8, 8);
+		creationManager.weaponDescriptors.put("slimeAttack", WeaponDecriptor.create(weaponProperties, slimeComboChain, new EntityDescriptor() {	
+			@Override
+			public Entity create(float x, float y) {
+				EntityDescriptor entityDescriptor = creationManager.entityDescriptors.get("placeholderWeaponBase");
+				Entity e = entityDescriptor.create(x, y);
+				CDamageCause cause = e.getComponent(CDamageCause.class);
+				cause.teams.add("environment");
+				cause.teams.add("enemy");
+				
+				return e;
+			}
+		}));
 
 	}
 

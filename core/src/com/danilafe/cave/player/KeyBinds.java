@@ -74,6 +74,7 @@ public class KeyBinds{
 		Preferences pref = getPreferences(characterName);
 		for(String key : pref.get().keySet()){
 			mappedKeys.put(key, pref.getInteger(key));
+			System.out.println("Loaded key " + key);
 		}
 	}
 

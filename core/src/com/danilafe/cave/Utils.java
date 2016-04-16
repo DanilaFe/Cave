@@ -417,6 +417,7 @@ public class Utils {
 	 */
 	public static String readString(InputStream readFrom) throws IOException {
 		int length = readFrom.read();
+		System.out.println("length: " + length);
 		byte[] newBuffer = new byte[length];
 		readFrom.read(newBuffer);
 
@@ -507,7 +508,7 @@ public class Utils {
 		playerStatitic.name = file.name();
 		defaultKeyBinds(playerStatitic.keyBinds);
 		try {
-			playerStatitic.fullSave(file.write(false));
+			playerStatitic.save(file.write(false));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
