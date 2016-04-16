@@ -295,7 +295,7 @@ public class CaveGame extends ApplicationAdapter {
 
 		Entity windowEntity = creationManager.entityDescriptors.get("basicWindow").create(Constants.CAMERA_WIDTH / 2, orthoCam.viewportHeight / 2);
 		CGUIElement guiElement = windowEntity.getComponent(CGUIElement.class);
-		guiElement.guiElement.width = 20;
+		guiElement.guiElement.width = 6;
 		guiElement.guiElement.height = 16;
 		pooledEngine.addEntity(windowEntity);
 
@@ -428,7 +428,11 @@ public class CaveGame extends ApplicationAdapter {
 				animation.animationQueue.add(an);
 				CFacing facing = pooledEngine.createComponent(CFacing.class);
 				CMarked makred = pooledEngine.createComponent(CMarked.class);
-
+				CItemContainer itemContainer = pooledEngine.createComponent(CItemContainer.class);
+				itemContainer.container = new ItemContainer();
+				itemContainer.container.maxItems = 9;
+				
+				entity.add(itemContainer);
 				entity.add(makred);
 				entity.add(facing);
 				entity.add(animation);
