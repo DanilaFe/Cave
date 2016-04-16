@@ -11,3 +11,6 @@ gui_test.png
 gui_window_bg.png
 gui_window_bg_select.png
 symbol_question.png
+slime_green_move_left.png
+slime_green_jump.png
+thing_a_giantmouth.png

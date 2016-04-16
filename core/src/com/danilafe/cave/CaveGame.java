@@ -343,6 +343,8 @@ public class CaveGame extends ApplicationAdapter {
 		creationManager.animationParams.put("caveTiles", AnimationParameter.create("cavetiles.png", true, 8, 8, 0));
 		creationManager.animationParams.put("battleBox", AnimationParameter.create("battlebox.png", true, 8, 8, 0));
 		creationManager.animationParams.put("crystals", AnimationParameter.create("crystals.png", true, 8, 8, 0));
+		creationManager.animationParams.put("slimeMove", AnimationParameter.create("slime_green_move_left.png", true, 16, 8, 1F / 10));
+		creationManager.animationParams.put("slimeJump", AnimationParameter.create("slime_green_jump.png", false, 16, 8, 1F / 10));
 		/*
 		 * GUI Textures
 		 */
@@ -369,6 +371,8 @@ public class CaveGame extends ApplicationAdapter {
 				CFrictionObject frictionObject = pooledEngine.createComponent(CFrictionObject.class);
 				CStepper stepper = pooledEngine.createComponent(CStepper.class);
 				stepper.runnable = new ECSRunnable() {
+					AnimationParameter slimeJump = creationManager.animationParams.get("slimeJump");
+					AnimationParameter slimeMove = creationManager.animationParams.get("slimeMove");
 					@Override
 					public void update(Entity me, float deltaTime) {
 						CSpeed mySpeed = me.getComponent(CSpeed.class);
@@ -377,6 +381,8 @@ public class CaveGame extends ApplicationAdapter {
 						CBounds myBounds = me.getComponent(CBounds.class);
 						boolean enableFriction = true;
 						CMarked marked = me.getComponent(CMarked.class);
+						CAnimation animation = me.getComponent(CAnimation.class);
+						Animation currentAnimation = animation.animationQueue.animationQueue.peek();
 						if(marked.marks.get("controls_locked") == null || !marked.marks.get("controls_locked")){
 							if(Gdx.input.isKeyPressed(Keys.RIGHT) && Math.abs(mySpeed.speed.x) < 75 ) {
 								mySpeed.speed.x += 100F * deltaTime;
@@ -391,6 +397,36 @@ public class CaveGame extends ApplicationAdapter {
 							if(Gdx.input.isKeyPressed(Keys.SPACE) && normalSystem.checkNormalEdge(2, myBounds.bounds)){
 								mySpeed.speed.y += 150;
 							}
+						}
+						if(!normalSystem.checkNormalEdge(2, myBounds.bounds)){
+							if(!currentAnimation.animationParameter.equals(slimeJump)){
+								Animation an = new Animation();
+								an.animationParameter = slimeJump;
+								animation.animationQueue.animationQueue.push(an);
+							} 
+							
+							int maxIndex = slimeJump.textures.length * slimeJump.textures[0].length - 1;
+							int halfIndex = (maxIndex + 1) / 2 + 2;
+							if(mySpeed.speed.y > 0) {
+								if(currentAnimation.texIndex > halfIndex){
+									currentAnimation.texIndex = halfIndex;
+								} else if(currentAnimation.texIndex < 5) {
+									currentAnimation.texIndex = 5;
+								}
+							} else {
+								if(currentAnimation.texIndex < halfIndex || currentAnimation.texIndex > maxIndex - 3){
+									currentAnimation.texIndex = halfIndex;
+								}
+							}
+							
+						} else {
+							if(!currentAnimation.animationParameter.equals(slimeMove)){
+								Animation an = new Animation();
+								an.animationParameter = slimeMove;
+								animation.animationQueue.animationQueue.push(an);
+							}
+							
+							animation.flipHorizontal = (mySpeed.speed.x > 0);
 						}
 						myFriction.frictionCoefficient.x = (enableFriction) ? 1 : 0;
 					}
@@ -424,7 +460,7 @@ public class CaveGame extends ApplicationAdapter {
 				speedDamage.damagePerUnit = 10F / 150;
 				CAnimation animation = pooledEngine.createComponent(CAnimation.class);
 				Animation an = new Animation();
-				an.animationParameter = creationManager.animationParams.get("caveTiles");
+				an.animationParameter = creationManager.animationParams.get("slimeMove");
 				animation.animationQueue.add(an);
 				CFacing facing = pooledEngine.createComponent(CFacing.class);
 				CMarked makred = pooledEngine.createComponent(CMarked.class);
@@ -802,7 +838,7 @@ public class CaveGame extends ApplicationAdapter {
 									ArrayList<Entity> toDelete = (ArrayList<Entity>) me.getComponent(CGroupElement.class).entityList.clone();
 									for(Entity entity : toDelete) Utils.removeEntity(entity);
 
-									Utils.loadWorld(creationManager.worldLoadParams.get("genWorld"));
+									Utils.loadWorld(creationManager.worldLoadParams.get("testingWorld"));
 						}
 					}
 				};
@@ -864,15 +900,16 @@ public class CaveGame extends ApplicationAdapter {
 		worldLoadParam.levelManager = levelManager;
 		worldLoadParam.playerPosition.set(50, 50);
 		creationManager.worldLoadParams.put("testingWorld", worldLoadParam);
-		/*
-		 * ===========================
-		 * ===========================
-		 */
+		
 		WorldLoadParam genWorldParam = new WorldLoadParam();
 		genWorldParam.levelData = Utils.generateWorld(1024, 1024);
 		genWorldParam.levelManager = new DefaultLevelManager();
 		genWorldParam.playerPosition.set(64, 64);
 		creationManager.worldLoadParams.put("genWorld", genWorldParam);
+		/*
+		 * ===========================
+		 * ===========================
+		 */
 
 	}
 
