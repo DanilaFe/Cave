@@ -493,6 +493,8 @@ public class Utils {
 		keyBinds.setKey("right", Keys.RIGHT);
 		keyBinds.setKey("jump", Keys.SPACE);
 		keyBinds.setKey("melee", Keys.Z);
+		keyBinds.setKey("magic", Keys.X);
+		keyBinds.setKey("inv", Keys.Q);
 	}
 
 	/**
@@ -533,6 +535,12 @@ public class Utils {
 		CaveGame.instance.pooledEngine.addEntity(playerDesc.create(x, y));
 	}
 
+	/**
+	 * Generates a world.
+	 * @param x the width of the world
+	 * @param y the height of the world
+	 * @return the generated world's data
+	 */
 	public static LevelData generateWorld(float x, float y){
 		LevelData newLevelData = new LevelData();
 
