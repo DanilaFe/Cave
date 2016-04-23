@@ -301,8 +301,6 @@ public class CaveGame extends ApplicationAdapter {
 		loadAssets();
 		loadCreation();
 
-		pooledEngine.addEntity(creationManager.entityDescriptors.get("debugger").create(0, 0));
-
 		Entity windowEntity = creationManager.entityDescriptors.get("basicWindow").create(Constants.CAMERA_WIDTH / 2, orthoCam.viewportHeight / 2);
 		CGUIElement guiElement = windowEntity.getComponent(CGUIElement.class);
 		guiElement.guiElement.width = 6;
@@ -733,6 +731,9 @@ public class CaveGame extends ApplicationAdapter {
 									Utils.shake(shake, .01F, .025F, 10, 1, .7F);
 								}
 							}
+							if(Gdx.input.isKeyJustPressed(Keys.R)){
+								pooledEngine.getEntitiesFor(Family.all(CCameraShake.class).get()).first().getComponent(CPosition.class).position.set(64, 64);
+							}
 						}
 					}
 				};
@@ -905,6 +906,7 @@ public class CaveGame extends ApplicationAdapter {
 		levelData.addEntity("placeholderChest", 72, 80);
 		levelData.addEntity("placeholderJumpBoost", 72, 72);
 
+		levelData.addEntity("debugger", 0, 0);
 		levelData.addEntity("battleBox", 32, 75);
 
 		for (int i = 0; i < 16; i ++){

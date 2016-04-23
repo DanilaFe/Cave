@@ -560,6 +560,8 @@ public class Utils {
 			newLevelData.addEntity("placeholderLightball", (float) Math.random() * x / 2, (float) Math.random() * y / 4);
 		}
 
+		newLevelData.addEntity("debugger", 0, 0);
+		
 		return newLevelData;
 	}
 
