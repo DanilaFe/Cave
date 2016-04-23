@@ -556,8 +556,8 @@ public class Utils {
 			if(Math.random() < .15D) newLevelData.addEntity("placeholderCrystal", i, numTiles * Constants.TILE_SIZE);
 		}
 
-		for(int i = 0; i < 16; i++){
-			newLevelData.addEntity("placeholderLightball", (float) Math.random() * x, (float) Math.random() * y);
+		for(int i = 0; i < 128; i++){
+			newLevelData.addEntity("placeholderLightball", (float) Math.random() * x / 2, (float) Math.random() * y / 4);
 		}
 
 		return newLevelData;

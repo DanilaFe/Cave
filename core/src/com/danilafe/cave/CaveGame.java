@@ -854,7 +854,7 @@ public class CaveGame extends ApplicationAdapter {
 							ArrayList<Entity> toDelete = (ArrayList<Entity>) me.getComponent(CGroupElement.class).entityList.clone();
 							for(Entity entity : toDelete) Utils.removeEntity(entity);
 
-							Utils.loadWorld(creationManager.worldLoadParams.get("testingWorld"));
+							Utils.loadWorld(creationManager.worldLoadParams.get("genWorld"));
 						}
 					}
 				};
