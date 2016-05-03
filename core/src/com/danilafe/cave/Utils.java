@@ -417,7 +417,6 @@ public class Utils {
 	 */
 	public static String readString(InputStream readFrom) throws IOException {
 		int length = readFrom.read();
-		System.out.println("length: " + length);
 		byte[] newBuffer = new byte[length];
 		readFrom.read(newBuffer);
 
@@ -549,7 +548,6 @@ public class Utils {
 
 		for(int i = 0; i < x; i+= Constants.TILE_SIZE){
 			int numTiles = (int) Math.round((Math.sin(i) + 2) * 2) + 2;
-			System.out.println(numTiles);
 			for(int t = 0; t < numTiles; t++){
 				newLevelData.addTile("placeholderCavetilesParameter", i, t * Constants.TILE_SIZE + offset, (int) (Math.random() * 3));
 			}
