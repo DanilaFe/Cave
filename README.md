@@ -1,5 +1,5 @@
 # Cave Prototype
-[Screenshot](http://i.imgur.com/0DjGWVW.png)
+![Screenshot](http://i.imgur.com/0DjGWVW.png)
 
 A simple implementation of a platformer written in Java / LibGDX using the Ashley entity component system. Very unfinished
 ## About
