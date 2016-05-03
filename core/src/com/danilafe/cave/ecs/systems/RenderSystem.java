@@ -116,9 +116,8 @@ public class RenderSystem extends IteratingSystem {
 	public void update(float deltaTime) {
 		int orthoCamWidth = Math.round(CaveGame.instance.orthoCam.viewportWidth);
 		int orthoCamHeight = Math.round(CaveGame.instance.orthoCam.viewportHeight);
-		int downscale = (int) Math.round(Math.ceil((float) Gdx.graphics.getWidth() / 480));
-		int bufferSizeW = Gdx.graphics.getWidth() / downscale;
-		int bufferSizeH = Gdx.graphics.getHeight() / downscale;
+		int bufferSizeW = orthoCamWidth; 
+		int bufferSizeH = orthoCamHeight; 
 
 		mainBuffer = new FrameBuffer(Format.RGBA8888, bufferSizeW, bufferSizeH, false);
 		mainBuffer.begin();
@@ -130,7 +129,7 @@ public class RenderSystem extends IteratingSystem {
 		textureBatch.end();
 		mainBuffer.end();
 
-		textureBuffer = new FrameBuffer(Format.RGBA8888, bufferSizeW, bufferSizeH, false);
+		textureBuffer = new FrameBuffer(Format.RGBA8888, bufferSizeW * 2, bufferSizeH * 2, false);
 		textureBuffer.begin();
 		Gdx.gl.glClearColor(.5F, .5F, 1F, 1);
 		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
@@ -154,11 +153,11 @@ public class RenderSystem extends IteratingSystem {
 		textureBuffer.end();
 
 
-		shaderBuffer = new FrameBuffer(Format.RGBA8888, bufferSizeW, bufferSizeH, false);
+		shaderBuffer = new FrameBuffer(Format.RGBA8888, bufferSizeW * 2, bufferSizeH * 2, false);
 		shaderBuffer.begin();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
-		shaderBatch.getProjectionMatrix().setToOrtho2D(0, 0, shaderBuffer.getWidth(), shaderBuffer.getHeight());
+		shaderBatch.getProjectionMatrix().setToOrtho2D(0, 0, bufferSizeW, bufferSizeH);
 		shaderBatch.begin();
 		Texture normalTexture = textureBuffer.getColorBufferTexture();
 		Texture regularTexture = mainBuffer.getColorBufferTexture();
